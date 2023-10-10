@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EgressController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SolicitudController;
+// use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\IncomeSolicitudController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\IncomeDonorController;
@@ -37,9 +37,7 @@ use App\Http\Controllers\SolicitudPedidoController;
 |
 */
 
-Route::get('login', function () {
-    return redirect('admin/login');
-})->name('login');
+
 
 Route::get('/', function () {
     return redirect('admin');
@@ -342,11 +340,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::get('incomes/selectarticle/{id?}', [IncomeController::class, 'ajax_article'])->name('ajax_article');
     Route::get('incomes/selectpresentacion/{id?}', [IncomeController::class, 'ajax_presentacion'])->name('ajax_presentacion');
 
-
-    //SOLICITUD DE EGRESO MEDIANTE VISTA
-    Route::get('solicitudes/modalidadcompra/{id?}', [SolicitudController::class, 'ajax_modalidadcompra'])->name('ajax_modalidadcompra'); 
-    Route::get('solicitudes/articulosolicitud/{id?}', [SolicitudController::class, 'ajax_articulo'])->name('ajax_solicitudes_articulo');
-    Route::get('solicitudes/articuloautollenar/{id?}', [SolicitudController::class, 'ajax_autollenar_articulo'])->name('ajax_autollenar_articulo');
+    //No existe
+    // //SOLICITUD DE EGRESO MEDIANTE VISTA
+    // Route::get('solicitudes/modalidadcompra/{id?}', [SolicitudController::class, 'ajax_modalidadcompra'])->name('ajax_modalidadcompra'); 
+    // Route::get('solicitudes/articulosolicitud/{id?}', [SolicitudController::class, 'ajax_articulo'])->name('ajax_solicitudes_articulo');
+    // Route::get('solicitudes/articuloautollenar/{id?}', [SolicitudController::class, 'ajax_autollenar_articulo'])->name('ajax_autollenar_articulo');
 
 
     
@@ -403,6 +401,10 @@ Route::get('/admin/clear-cache', function() {
     return redirect('/admin')->with(['message' => 'Cache eliminada.', 'alert-type' => 'success']);
 })->name('clear.cache');
 
-Auth::routes();
+Auth::routes(['register'=>false]);
+
+Route::get('login', function () {
+    return redirect('admin/login');
+})->name('login');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

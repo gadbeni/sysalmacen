@@ -50,6 +50,7 @@ class Loggin
             //Para ver si no existe la personas con contrato no accedera al sistema
             if(!$obj->getWorker($user->funcionario_id) && !auth()->user()->hasRole('admin'))
             {
+                Auth::logout();
                 return redirect()->route('notpeople');
             }
 
