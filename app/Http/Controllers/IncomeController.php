@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\SucursalUser;
 use App\Models\InventarioAlmacen;
 use App\Models\SucursalSubAlmacen;
+use Luecano\NumeroALetras\NumeroALetras; // Para convertir numeros a su equivalente en palabras
 
 class IncomeController extends Controller
 {
@@ -201,8 +202,12 @@ class IncomeController extends Controller
         
         $proveedor = Provider::find($factura->provider_id);
 
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
+        // para convertir letras a numeros
         
-        return view('almacenes.income.report',compact('sol','factura', 'detalle', 'sucursal', 'modalidad', 'unidad', 'proveedor'));
+        
+        return view('almacenes.income.report',compact('sol','factura', 'detalle', 'sucursal', 'modalidad', 'unidad', 'proveedor','formatter'));
         // return view('income.view', compact('sol','factura', 'detalle', 'sucursal', 'modalidad', 'unidad'));
     }
 
