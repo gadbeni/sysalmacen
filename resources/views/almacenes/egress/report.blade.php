@@ -92,6 +92,7 @@
        
     </table>
     <div class="row" style="font-size: 9pt">
+        
         <p style="text-align: right">Total Detalle de Egreso: {{NumerosEnLetras::convertir($total,'Bolivianos',true)}}</p>
     </div>
 
