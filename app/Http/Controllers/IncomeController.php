@@ -85,10 +85,7 @@ class IncomeController extends Controller
         $sucursal = $user->sucursal_id;
         $gestion = InventarioAlmacen::where('status', 1)->where('sucursal_id', $sucursal)->where('deleted_at', null)->first();
     
-        $query_filter = [
-            'sucursal_id' => $sucursal,
-            'subSucursal_id' => $user->subSucursal_id,
-        ];
+        $query_filter = 'sucursal_id = '.$sucursal.' and subSucursal_id = '. $user->subSucursal_id;
     
         if (Auth::user()->hasRole('admin')) {
             $query_filter = 1;
