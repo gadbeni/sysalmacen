@@ -31,6 +31,7 @@ use App\Models\Partida;
 use App\Models\SolicitudEgreso;
 use App\Models\Unit;
 use Illuminate\Support\Arr;
+use Luecano\NumeroALetras\NumeroALetras; // Para convertir numeros a su equivalente en palabras
 
 class ReportAlmacenController extends Controller
 {
@@ -613,8 +614,12 @@ class ReportAlmacenController extends Controller
         
         $date = Carbon::now();
         $sucursal = Sucursal::find($request->sucursal_id);
-
+        // para convertir letras a numeros
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
+        // para convertir letras a numeros
         $query_type = 1;
+        
         if($request->type_id != 'TODO')
         {
             $query_type = 'sc.subSucursal_id = '. $request->type_id;
@@ -647,7 +652,7 @@ class ReportAlmacenController extends Controller
 
       
         if($request->print==1){
-            return view('almacenes.report.article.stock.print', compact('data', 'sucursal'));
+            return view('almacenes.report.article.stock.print', compact('data', 'sucursal','formatter'));
         }
         if($request->print==2)
         {
@@ -737,6 +742,11 @@ class ReportAlmacenController extends Controller
         $query_partida ='';
 
         $query_type = 1;
+
+        // para convertir letras a numeros
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
+        // para convertir letras a numeros
         if($request->type_id != 'TODO')
         {
             $query_type = 'cp.subSucursal_id = '. $request->type_id;
@@ -805,7 +815,7 @@ class ReportAlmacenController extends Controller
         }
 
         if($request->print==1){
-            return view('almacenes.report.article.incomeOffice.print', compact('data', 'sucursal',  'message', 'messagePartida', 'finish', 'start'));
+            return view('almacenes.report.article.incomeOffice.print', compact('data', 'sucursal',  'message', 'messagePartida', 'finish', 'start','formatter'));
         }
         if($request->print==2)
         {
@@ -861,6 +871,10 @@ class ReportAlmacenController extends Controller
         $query_partida ='';
 
         $query_type = 1;
+        // numeros a letras
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
+        // numeros a letras
         if($request->type_id != 'TODO')
         {
             $query_type = 'se.subSucursal_id = '. $request->type_id;
@@ -926,7 +940,7 @@ class ReportAlmacenController extends Controller
         }
 
         if($request->print==1){
-            return view('almacenes.report.article.egressOffice.print', compact('data', 'sucursal', 'start', 'finish', 'message', 'messagePartida'));
+            return view('almacenes.report.article.egressOffice.print', compact('data', 'sucursal', 'start', 'finish', 'message', 'messagePartida','formatter'));
         }
         if($request->print==2)
         {
@@ -965,6 +979,12 @@ class ReportAlmacenController extends Controller
         $date = Carbon::now();
         $sucursal = Sucursal::find($request->sucursal_id);
         $query_type = 1;
+
+        // para convertir letras a numeros
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
+        // para convertir letras a numeros
+
         if($request->type_id != 'TODO')
         {
             $query_type = 'sc.subSucursal_id = '. $request->type_id;
@@ -1002,7 +1022,7 @@ class ReportAlmacenController extends Controller
         // dd($data->sum('totalbs'));
       
         if($request->print==1){
-            return view('almacenes.report.partida.incomearticle.print', compact('data', 'partida', 'finish', 'start'));
+            return view('almacenes.report.partida.incomearticle.print', compact('data', 'partida', 'finish', 'start','formatter'));
         }
         if($request->print==2)
         {
