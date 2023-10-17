@@ -328,4 +328,23 @@ class UserController extends Controller
         return SucursalSubAlmacen::where('sucursal_id', $id)
             ->where('deleted_at', null)->get();
     }
+
+    //<- sessions
+    public function showSessions(){
+        $sessions = DB::table('sessions')
+        ->where('user_id', auth()->id())
+        ->orderBy('last_activity', 'DESC')
+        ->get();
+        
+        return view('sessions', ['sessions' => $sessions]);
+    }
+    public function deleteSession(Request $request){
+        DB::table('sessions')
+        ->where('id', $request->id)
+        ->where('user_id', auth()->id())
+        ->delete();
+
+        return redirect()->route('sessions');
+    }
+    //sessions->
 }

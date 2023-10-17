@@ -42,6 +42,15 @@ use App\Http\Controllers\SolicitudPedidoController;
 Route::get('/', function () {
     return redirect('admin');
 });
+ 
+// Route::middleware('auth')->group(function() {
+//     Route::post('/delete-session', function(Request $request) {
+//         DB::table('sessions')
+//             ->where('id', $request->id)
+//             ->where('user_id', auth()->id())
+//             ->delete();
+//     });
+// });
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('logins');
 
@@ -54,6 +63,11 @@ Route::get('/contact', [MaintenanceController::class , 'contact'])->name('contac
 
 Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Voyager::routes();
+
+    //<- sesiones
+    Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions');
+    Route::delete('/usuario/sesion/',[UserController::class,'deleteSession'])->name('delete_session');
+    //sesiones ->
 
     Route::resource('usuario', UserController::class);
     Route::post('usuarios/desactivar', [UserController::class, 'desactivar'])->name('almacen_desactivar');
