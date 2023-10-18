@@ -68,6 +68,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions');
     Route::delete('/usuario/sesion/',[UserController::class,'deleteSession'])->name('delete_session');
     //sesiones ->
+    Route::put('/usario/change-password/{user}',[UserController::class,'changePassword'])->name('change_password');
 
     Route::resource('usuario', UserController::class);
     Route::post('usuarios/desactivar', [UserController::class, 'desactivar'])->name('almacen_desactivar');

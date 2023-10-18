@@ -20,14 +20,25 @@
                         <h2 class="page-title">
                             <i class="fa fa-id-card"></i>Cambio de contraseña
                         </h2>
-                        <form action="">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <form action="{{route('change_password',Auth::user())}}" method="post">
+                            @csrf
+                            @method('PUT')
                             <div class="form-group">
-                                <label for="">Name:</label>
-                                <input type="password" class="form-control" id="">
+                                <label for="">Nueva Contraseña:</label>
+                                <input type="password" name="password" class="form-control" id="" required>
                             </div>
                             <div class="form-group">
-                                <label for="">Password:</label>
-                                <input type="password" class="form-control" id="">
+                                <label for="">Confirmar Contraseña:</label>
+                                <input type="password" name="password_confirmation"" class="form-control" id="" required>
                             </div>
                             <input type="submit" class="btn btn-primary" value="Cambiar contraseña">
                         </form>

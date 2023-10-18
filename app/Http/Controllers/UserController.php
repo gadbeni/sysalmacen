@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Contract;
 use App\Models\SucursalSubAlmacen;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -347,4 +349,26 @@ class UserController extends Controller
         return redirect()->route('sessions');
     }
     //sessions->
+    //<- cambio de contraseña
+    public function changePassword(Request $request,User $user){
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:8|confirmed', // La regla "confirmed" verifica que la contraseña coincida con la confirmación.
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        //octener session actual
+        $currentSessionId= session()->getId();
+        // elimina las sesiones excepto la actual.
+        DB::table('sessions')
+        ->where('user_id',$user->id)
+        ->where('id','!=',$currentSessionId)
+        ->delete();
+        
+        $user->update([
+            'password' => bcrypt($request->input('password'))
+        ]);
+        return redirect('/');
+    }
+    // cambio de contraseña ->
 }
