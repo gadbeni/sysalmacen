@@ -277,6 +277,11 @@ class UserController extends Controller
             if ($request->password != '') {
                 $user->password = bcrypt($request->password);
                 $user->save();
+
+                //Eliminar las sesiones del usuario por cambio de contraseña
+                DB::table('sessions')
+                ->where('user_id',$user->id)
+                ->delete();
             }
             if ($request->role_id) {
                 // return 1;
