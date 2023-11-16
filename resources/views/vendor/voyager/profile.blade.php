@@ -25,15 +25,18 @@
                         <div class="form-group">
                             <label class="h4">Nombre</label>
                             <p>{{Auth::user()->name}}</p>
+                            <hr>
                         </div>
                         <div class="form-group">
                             <label class="h4">Email</label>
                             <p>{{Auth::user()->email}}</p>
+                            <hr>
                         </div>
                         @if (Auth::user()->direction)
                         <div class="form-group">
                             <label class="h4">Dirección Administrativa</label>
                             <p>{{Auth::user()->direction->nombre}}</p>
+                            <hr>
                         </div>
                         @endif
                         @if (Auth::user()->unit)

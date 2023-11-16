@@ -34,13 +34,13 @@
                             @method('PUT')
                             <div class="form-group">
                                 <label for="">Nueva Contraseña:</label>
-                                <input type="password" name="password" class="form-control" id="" required>
+                                <input style="max-width: 500px;" type="password" name="password" class="form-control" id="" required>
                             </div>
                             <div class="form-group">
                                 <label for="">Confirmar Contraseña:</label>
-                                <input type="password" name="password_confirmation"" class="form-control" id="" required>
+                                <input style="max-width: 500px;" type="password" name="password_confirmation"" class="form-control" id="" required>
                             </div>
-                            <input type="submit" class="btn btn-primary" value="Cambiar contraseña">
+                            <input type="submit" class="btn btn-success" value="Cambiar contraseña">
                         </form>
                     </div>
                     <hr>
@@ -51,11 +51,19 @@
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
                                 <thead>
-                                    <tr class="">
-                                        <th scope="col">Dispositivo</th>
-                                        <th scope="col">Dirección IP</th>
-                                        <th scope="col">Ultima Actividad</th>
-                                        <th scope="col">Acciones</th>
+                                    <tr>
+                                        <th scope="col" style="background-color: #2ecc71;color:aliceblue">
+                                            Dispositivo
+                                        </th>
+                                        <th scope="col" style="background-color: #2ecc71;color:aliceblue">
+                                            Dirección IP
+                                        </th>
+                                        <th scope="col" style="background-color: #2ecc71;color:aliceblue">
+                                            Ultima Actividad
+                                        </th>
+                                        <th scope="col" style="background-color: #2ecc71;color:aliceblue">
+                                            Acciones
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
