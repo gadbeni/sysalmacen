@@ -29,7 +29,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form action="{{route('change_password',Auth::user())}}" method="post">
+                        <form action="{{route('change_password')}}" method="post">
                             @csrf
                             @method('PUT')
                             <div class="form-group">

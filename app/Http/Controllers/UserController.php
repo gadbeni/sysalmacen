@@ -11,6 +11,7 @@ use App\Models\Contract;
 use App\Models\SucursalSubAlmacen;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -356,6 +357,7 @@ class UserController extends Controller
     //sessions->
     //<- cambio de contraseña
     public function changePassword(Request $request,User $user){
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'password' => 'required|min:8|confirmed', // La regla "confirmed" verifica que la contraseña coincida con la confirmación.
         ]);
