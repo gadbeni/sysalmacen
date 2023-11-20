@@ -346,11 +346,18 @@ class UserController extends Controller
         
         return view('sessions', ['sessions' => $sessions]);
     }
-    public function deleteSession(Request $request){
-        DB::table('sessions')
-        ->where('id', $request->id)
-        ->where('user_id', auth()->id())
-        ->delete();
+    
+    public function deleteSession(Request $request)
+    {
+        $sessionId = $request->id;
+        $currentSessionId = session()->getId();
+
+        if ($sessionId != $currentSessionId) {
+            DB::table('sessions')
+                ->where('id', $sessionId)
+                ->where('user_id', auth()->id())
+                ->delete();
+        }
 
         return redirect()->route('sessions');
     }

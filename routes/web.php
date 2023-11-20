@@ -65,7 +65,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Voyager::routes();
 
     //<- sesiones
-    Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions');
+    Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions')->middleware('auth');
     Route::delete('/usuario/sesion/',[UserController::class,'deleteSession'])->name('delete_session');
     //sesiones ->
     Route::put('/usario/change-password/',[UserController::class,'changePassword'])->name('change_password');
