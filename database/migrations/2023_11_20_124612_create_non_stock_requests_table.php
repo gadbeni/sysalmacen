@@ -21,7 +21,9 @@ class CreateNonStockRequestsTable extends Migration
             $table->date('date_request');//fecha de solicitud
             $table->string('gestion', 10);
             $table->string('nro_request'); //numero de solicitud
+            $table->integer('direction_id'); //id de la direccion
             $table->string('direction_name')->nullable(); //nombre de la direccion
+            $table->integer('unit_id'); //id de la unidad|
             $table->string('unit_name')->nullable(); //nombre de la unidad
             $table->string('job')->nullable(); //trabajo actual del usuario
             $table->enum('status',['pendiente','enviado','aprobado','rechazado'])->default('pendiente'); //estado
