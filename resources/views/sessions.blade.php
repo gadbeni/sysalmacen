@@ -13,36 +13,79 @@
 @section('content')
 <div class="page-content browse container-fluid">
     <div class="row">
+        <div class="col-lg-7">
+            <div class="panel panel-bordered">
+                <div class="panel-heading">
+                    <h2 class="page-title">
+                        <i class="fa fa-id-card"></i>Datos
+                    </h2>
+                </div>
+                <div class="panel-body">
+                    <div class="">
+                        <div class="form-group">
+                            <label class="h4">Nombre</label>
+                            <p>{{Auth::user()->name}}</p>
+                        </div>
+                        <div class="form-group">
+                            <hr>
+                            <label class="h4">Email</label>
+                            <p>{{Auth::user()->email}}</p>
+                        </div>
+                        @if (Auth::user()->direction)
+                        <div class="form-group">
+                            <hr>
+                            <label class="h4">Dirección Administrativa</label>
+                            <p>{{Auth::user()->direction->nombre}}</p>
+                        </div>
+                        @endif
+                        @if (Auth::user()->unit)
+                        <div class="form-group">
+                            <hr>
+                            <label class="h4">Unidad Administrativa</label>
+                            <p>{{Auth::user()->unit->nombre}}</p>
+                        </div>
+                        @endif                    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="panel panel-bordered">
+                <div class="panel-heading">
+                    <h2 class="page-title">
+                        <i class="fa fa-id-card"></i>Cambio de contraseña
+                    </h2>
+                </div>
+                <div class="panel-body">
+                    
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{route('change_password')}}" method="post">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label for="">Nueva Contraseña:</label>
+                            <input style="max-width: 700px;" type="password" name="password" class="form-control" id="" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Confirmar Contraseña:</label>
+                            <input style="max-width: 700px;" type="password" name="password_confirmation"" class="form-control" id="" required>
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Cambiar contraseña">
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="panel panel-bordered">
                 <div class="panel-body">
-                    <div>
-                        <h2 class="page-title">
-                            <i class="fa fa-id-card"></i>Cambio de contraseña
-                        </h2>
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        <form action="{{route('change_password')}}" method="post">
-                            @csrf
-                            @method('PUT')
-                            <div class="form-group">
-                                <label for="">Nueva Contraseña:</label>
-                                <input style="max-width: 500px;" type="password" name="password" class="form-control" id="" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Confirmar Contraseña:</label>
-                                <input style="max-width: 500px;" type="password" name="password_confirmation"" class="form-control" id="" required>
-                            </div>
-                            <input type="submit" class="btn btn-success" value="Cambiar contraseña">
-                        </form>
-                    </div>
                     <hr>
                     <div>
                         <h2 class="page-title">

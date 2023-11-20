@@ -1,55 +1,27 @@
 @extends('voyager::master')
-@section('page_title', 'Perfil')
-@section('page_header')
-    <div class="container-fluid">
-        <div class="row">
-            <h1 class="page-title">
-                <i class="voyager-person"></i>Perfil - Usuario
-            </h1>
-        </div>
 
-    </div>
-@endsection
+@section('css')
+    <style>
+        .user-email {
+            font-size: .85rem;
+            margin-bottom: 1.5em;
+        }
+    </style>
+@stop
+
 @section('content')
-<div class="page-content browse container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-bordered" style="">
-                <div class="panel-heading">
-                    <h2 class="page-title">
-                        <i class="fa fa-id-card"></i>Datos
-                    </h2>
-                </div>
-                <div class="panel-body">
-                    <div class="">
-                        <div class="form-group">
-                            <label class="h4">Nombre</label>
-                            <p>{{Auth::user()->name}}</p>
-                            <hr>
-                        </div>
-                        <div class="form-group">
-                            <label class="h4">Email</label>
-                            <p>{{Auth::user()->email}}</p>
-                            <hr>
-                        </div>
-                        @if (Auth::user()->direction)
-                        <div class="form-group">
-                            <label class="h4">Dirección Administrativa</label>
-                            <p>{{Auth::user()->direction->nombre}}</p>
-                            <hr>
-                        </div>
-                        @endif
-                        @if (Auth::user()->unit)
-                        <div class="form-group">
-                            <label class="h4">Unidad Administrativa</label>
-                            <p>{{Auth::user()->unit->nombre}}</p>
-                        </div>
-                        @endif                    
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div style="background-size:cover; background-image: url({{ Voyager::image( Voyager::setting('admin.bg_image'), voyager_asset('/images/bg.jpg')) }}); background-position: center center;position:absolute; top:0; left:0; width:100%; height:300px;"></div>
+    <div style="height:160px; display:block; width:100%"></div>
+    <div style="position:relative; z-index:9; text-align:center;">
+        <img src="@if( !filter_var(Auth::user()->avatar, FILTER_VALIDATE_URL)){{ Voyager::image( Auth::user()->avatar ) }}@else{{ Auth::user()->avatar }}@endif"
+             class="avatar"
+             style="border-radius:50%; width:150px; height:150px; border:5px solid #fff;"
+             alt="{{ Auth::user()->name }} avatar">
+        <h4>{{ ucwords(Auth::user()->name) }}</h4>
+        <div class="user-email text-muted">{{ ucwords(Auth::user()->email) }}</div>
+        <p>{{ Auth::user()->bio }}</p>
+        {{-- @if ($route != '') --}}
+            <a href="{{route('sessions')}}" class="btn btn-primary">Seguridad Usuario</a>
+        {{-- @endif --}}
     </div>
-</div>
-
-@endsection
+@stop
