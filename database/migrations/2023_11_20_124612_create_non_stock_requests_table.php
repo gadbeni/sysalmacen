@@ -26,7 +26,7 @@ class CreateNonStockRequestsTable extends Migration
             $table->integer('unit_id'); //id de la unidad|
             $table->string('unit_name')->nullable(); //nombre de la unidad
             $table->string('job')->nullable(); //trabajo actual del usuario
-            $table->enum('status',['pendiente','enviado','aprobado','rechazado'])->default('pendiente'); //estado
+            $table->enum('status',['pendiente','enviado','entregado','aprobado','rechazado','eliminado'])->default('pendiente'); //estado
             $table->date('date_status')->nullable();//fecha de actualizacion estado
             $table->foreignId('statusUser_id')->nullable()->constrained('users');//usuario que actualiza el estado
             $table->timestamps();

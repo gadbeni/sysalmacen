@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 // use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\IncomeSolicitudController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\NonStock\NonStockRequestController;
 use App\Http\Controllers\IncomeDonorController;
 use App\Http\Controllers\EgressDonorController;
 use App\Http\Controllers\NotificationController;
@@ -94,7 +95,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::post('inbox/rechazar', [SolicitudBandejaController::class, 'rechazarSolicitud'])->name('inbox.rechazar');
     Route::post('inbox/aprobar', [SolicitudBandejaController::class, 'aprobarSolicitud'])->name('inbox.aprobar');
 
-
+    //Non-stock
+    Route::resource('nonstock', NonStockRequestController::class);
 
 
     
