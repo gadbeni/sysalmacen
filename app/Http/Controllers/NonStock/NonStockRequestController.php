@@ -4,6 +4,9 @@ namespace App\Http\Controllers\NonStock;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Sucursal;
+use App\Models\SucursalSubAlmacen;
+use App\Models\NonStock\NonStockRequest;
 
 class NonStockRequestController extends Controller
 {
@@ -32,7 +35,11 @@ class NonStockRequestController extends Controller
         if (!auth()->user()->hasPermission('browse_outbox')) {
             abort('401');
         }
-        return view('almacenes.nonstock.create');
+        $user = auth()->user();
+        $sucursal = Sucursal::findOrFail($user->sucursal_id);
+        $subalmacen = SucursalSubAlmacen::where('sucursal_id', $sucursal->id)->where('deleted_at', null)->get();
+        $funcionario = $this->getWorker($user->funcionario_id);
+        return view('almacenes.nonstock.create',compact('funcionario','sucursal','subalmacen'));
     }
 
     /**

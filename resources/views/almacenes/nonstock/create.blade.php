@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <h1 id="subtitle" class="page-title">
-            <i class="voyager-basket"></i> Solicitud de Inexistencia
+            <i class="fa fa-file-text"></i> Solicitud de Inexistencia
         </h1>
         <a href="{{ route('nonstock.index') }}" class="btn btn-warning btn-add-new">
             <i class="fa-solid fa-file"></i> <span>Volver</span>
@@ -18,18 +18,15 @@
         <div class="panel panel-bordered">
             <div class="panel-body">
                 <div class="row">
-
-                </div>
-                <div class="row">
                     <div class="col-lg-7">
                         <label for="customer_id">Almacen:</label>          
                         <div class="form-group">
                             <div class="form-line">
                                 <select name="sucursal_id" class="form-control select2" required>
-                                    <option value="">-- Seleccione --</option>
-                                    {{-- @if ($sucursal)
+                                    {{-- <option value="">-- Seleccione --</option> --}}
+                                    @if ($sucursal)
                                         <option value="{{$sucursal->id}}">{{$sucursal->nombre}}</option>                                                    
-                                    @endif --}}
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -40,15 +37,45 @@
                             <div class="form-line">
                                 <select name="subSucursal_id" id="subSucursal_id" class="form-control select2" required>
                                     <option value="" selected disabled>--Seleccione una opción--</option>
-                                    {{-- @foreach ($sub as $item)
+                                    @foreach ($subalmacen as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row"></div>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <label for="">Solicitante</label>
+                        <p>
+                            <small>
+                                {{auth()->user()->name}}
+                                @if ($funcionario)
+                                - {{$funcionario->cargo}}
+                                @endif     
+                            </small>
+                        </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <label for="">Fecha de solicitud</label>
+                        <p><small>{{\Carbon\Carbon::now()->format('d/m/Y h:i:s')}}</small></p>
+                    </div>
+                </div>
+                <div class="row">
+                    @if (auth()->user()->direction)
+                        <div class="col-lg-6">
+                            <label for="">Dirección</label>
+                            <p><small>{{auth()->user()->direction->nombre}}</small></p>
+                        </div>
+                    @endif
+                    @if (auth()->user()->unit)
+                        <div class="col-lg-6">
+                            <label for="">Unidad</label>
+                            <p><small>{{auth()->user()->unit->nombre}}</small></p>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -76,12 +103,15 @@
                                         <span class="num-fila">1</span>
                                     </td>
                                     <td>
-                                        <select name="article_id[]" id="article_id" class="form-control select2" required>
+                                        <input id="article_name" type="text" name="article_name[]" class="form-control" required>
+                                        <input type="hidden" id="article_id">
+                                        
+                                        {{-- <select name="article_id[]" id="article_id" class="form-control select2" required>
                                             <option value="" selected disabled>--Seleccione una opción--</option>
-                                            {{-- @foreach ($articles as $item)
+                                            @foreach ($articles as $item)
                                                 <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                            @endforeach --}}
-                                        </select>
+                                            @endforeach
+                                        </select> --}}
                                     </td>
                                     <td>
                                         <select name="unit_id[]" id="unit_id" class="form-control select2" required>
@@ -198,4 +228,6 @@
         });
     }
 </Script>
+<script>
+</script>
 @endsection
