@@ -13,143 +13,149 @@
 </div>
 @endsection
 @section('content')
-<div>
-    <div class="container-fluid">
+<form action="{{ route('nonstock.store') }}" method="POST">
+    @csrf
+    <div>
+        <div class="container-fluid">
+            <div class="panel panel-bordered">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <label for="customer_id">Almacen:</label>          
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select name="sucursal_id" class="form-control select2" required>
+                                        {{-- <option value="">-- Seleccione --</option> --}}
+                                        @if ($sucursal)
+                                            <option value="{{$sucursal->id}}">{{$sucursal->nombre}}</option>                                                    
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <label for="customer_id">Tipo Almacen:</label>          
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select name="subSucursal_id" id="subSucursal_id" class="form-control select2" required>
+                                        <option value="" selected disabled>--Seleccione una opción--</option>
+                                        @foreach ($subalmacen as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>                                                    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <label for="">Solicitante</label>
+                            <p>
+                                <small>
+                                    {{auth()->user()->name}}
+                                    @if ($funcionario)
+                                    - {{$funcionario->cargo}}
+                                    @endif     
+                                </small>
+                            </p>
+                        </div>
+                        <div class="col-lg-5">
+                            <label for="">Fecha de solicitud</label>
+                            <p><small>{{\Carbon\Carbon::now()->format('d/m/Y h:i:s')}}</small></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (auth()->user()->direction)
+                            <div class="col-lg-6">
+                                <label for="">Dirección</label>
+                                <p><small>{{auth()->user()->direction->nombre}}</small></p>
+                            </div>
+                        @endif
+                        @if (auth()->user()->unit)
+                            <div class="col-lg-6">
+                                <label for="">Unidad</label>
+                                <p><small>{{auth()->user()->unit->nombre}}</small></p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- form articles -->
         <div class="panel panel-bordered">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-lg-7">
-                        <label for="customer_id">Almacen:</label>          
-                        <div class="form-group">
-                            <div class="form-line">
-                                <select name="sucursal_id" class="form-control select2" required>
-                                    {{-- <option value="">-- Seleccione --</option> --}}
-                                    @if ($sucursal)
-                                        <option value="{{$sucursal->id}}">{{$sucursal->nombre}}</option>                                                    
-                                    @endif
-                                </select>
-                            </div>
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table id="tblArticles" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>N#</th>
+                                        <th>Articulo (Descripción)</th>
+                                        <th>Unidad</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Precio referencial</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="article-container">
+                                    <datalist id="articleList">
+                                        {{-- <option value="Articulo 1"> --}}
+                                    </datalist>
+                                    <datalist id="presentationList">
+    
+                                    </datalist>
+                                    <tr data-id="1" class="fila">
+                                        <td>
+                                            <span class="num-fila">1</span>
+                                        </td>
+                                        <td>
+                                            <input id="article_name" list="articleList" type="text" name="article_name[]" class="article_input form-control" required>
+                                            
+                                            {{-- <select name="article_id[]" id="article_id" class="form-control select2" required>
+                                                <option value="" selected disabled>--Seleccione una opción--</option>
+                                                @foreach ($articles as $item)
+                                                    <option value="{{$item->id}}">{{$item->name}}</option>                                                    
+                                                @endforeach
+                                            </select> --}}
+                                        </td>
+                                        <td>
+                                            <input id="presentation" type="text" list="presentationList" name="unit_presentation[]" class="presentation-input form-control" required>
+                                            {{-- <select name="unit_id[]" id="unit_id" class="form-control select2" required>
+                                                <option value="" selected disabled>--Seleccione una opción--</option>
+                                                @foreach ($units as $item)
+                                                    <option value="{{$item->id}}">{{$item->name}}</option>                                                    
+                                                @endforeach
+                                            </select> --}}
+                                        </td>
+                                        <td>
+                                            <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="1"><i class="voyager-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button id="add-row" type="button" class="btn btn-success btn-sm btn-add-row"><i class="voyager-plus"></i>Más</button>
                         </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <label for="customer_id">Tipo Almacen:</label>          
-                        <div class="form-group">
-                            <div class="form-line">
-                                <select name="subSucursal_id" id="subSucursal_id" class="form-control select2" required>
-                                    <option value="" selected disabled>--Seleccione una opción--</option>
-                                    @foreach ($subalmacen as $item)
-                                        <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-7">
-                        <label for="">Solicitante</label>
-                        <p>
-                            <small>
-                                {{auth()->user()->name}}
-                                @if ($funcionario)
-                                - {{$funcionario->cargo}}
-                                @endif     
-                            </small>
-                        </p>
-                    </div>
-                    <div class="col-lg-5">
-                        <label for="">Fecha de solicitud</label>
-                        <p><small>{{\Carbon\Carbon::now()->format('d/m/Y h:i:s')}}</small></p>
-                    </div>
-                </div>
-                <div class="row">
-                    @if (auth()->user()->direction)
-                        <div class="col-lg-6">
-                            <label for="">Dirección</label>
-                            <p><small>{{auth()->user()->direction->nombre}}</small></p>
-                        </div>
-                    @endif
-                    @if (auth()->user()->unit)
-                        <div class="col-lg-6">
-                            <label for="">Unidad</label>
-                            <p><small>{{auth()->user()->unit->nombre}}</small></p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- form articles -->
-    <div class="panel panel-bordered">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <table id="tblArticles" class="table table-bordered table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>N#</th>
-                                    <th>Articulo (Descripción)</th>
-                                    <th>Unidad</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio Unitario</th>
-                                    <th>Precio referencial</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="article-container">
-                                <datalist id="articleList">
-                                    {{-- <option value="Articulo 1"> --}}
-                                </datalist>
-                                <datalist id="presentationList">
-
-                                </datalist>
-                                <tr data-id="1" class="fila">
-                                    <td>
-                                        <span class="num-fila">1</span>
-                                    </td>
-                                    <td>
-                                        <input id="article_name" list="articleList" type="text" name="article_name[]" class="article_input form-control" required>
-                                        
-                                        {{-- <select name="article_id[]" id="article_id" class="form-control select2" required>
-                                            <option value="" selected disabled>--Seleccione una opción--</option>
-                                            @foreach ($articles as $item)
-                                                <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                            @endforeach
-                                        </select> --}}
-                                    </td>
-                                    <td>
-                                        <input id="presentation" type="text" list="presentationList" name="unit_presentation[]" class="presentation-input form-control" required>
-                                        {{-- <select name="unit_id[]" id="unit_id" class="form-control select2" required>
-                                            <option value="" selected disabled>--Seleccione una opción--</option>
-                                            @foreach ($units as $item)
-                                                <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                            @endforeach
-                                        </select> --}}
-                                    </td>
-                                    <td>
-                                        <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="1"><i class="voyager-trash"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <button id="add-row" type="button" class="btn btn-success btn-sm btn-add-row"><i class="voyager-plus"></i>Más</button>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- end form articles -->
+        <div class="container-fluid">
+            <button type="submit" class="btn btn-primary" >Guardar</button>
+        </div>
     </div>
-
-</div>
+</form>
 @endsection
 
 @section('javascript')

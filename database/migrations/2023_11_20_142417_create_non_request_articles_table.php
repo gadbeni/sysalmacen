@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNonRequestArticleTable extends Migration
+class CreateNonRequestArticlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateNonRequestArticleTable extends Migration
      */
     public function up()
     {
-        Schema::create('non_request_article', function (Blueprint $table) {
+        Schema::create('non_request_articles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('non_request_id')->constrained('non_stock_requests');
             $table->foreignId('non_article_id')->constrained('non_stock_articles');
@@ -32,6 +32,6 @@ class CreateNonRequestArticleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('non_request_article');
+        Schema::dropIfExists('non_request_articles');
     }
 }
