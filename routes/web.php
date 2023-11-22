@@ -95,8 +95,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::post('inbox/rechazar', [SolicitudBandejaController::class, 'rechazarSolicitud'])->name('inbox.rechazar');
     Route::post('inbox/aprobar', [SolicitudBandejaController::class, 'aprobarSolicitud'])->name('inbox.aprobar');
 
-    //Non-stock
+    //:::::::::::::::::::::::::::::: PRODUCTOS INEXISTENCIA Non-stock
     Route::resource('nonstock', NonStockRequestController::class);
+    Route::get('get-articles-nonstock/ajax/list', [NonStockRequestController::class, 'getArticlesNames'])->name('get-articlesnames-nonstock.list');
+    Route::get('get-presentation-nonstock/ajax/list', [NonStockRequestController::class, 'getPresentationNames'])->name('get-presentations-nonstock.list');
 
 
     

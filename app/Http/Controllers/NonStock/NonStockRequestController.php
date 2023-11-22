@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\NonStock;
 
 use App\Http\Controllers\Controller;
+use App\Models\NonStock\NonStockArticle;
+use App\Models\NonStock\ArticlePresentation;
 use Illuminate\Http\Request;
 use App\Models\Sucursal;
 use App\Models\SucursalSubAlmacen;
@@ -96,5 +98,40 @@ class NonStockRequestController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getArticlesNames()
+    {   
+        /**
+         * @var NonStockArticle $articles
+         * @return \Illuminate\Http\JsonResponse
+         * 
+         * Esta funcion retorna los nombres de los articulos inexistencia non_stock
+         */
+        $articles = NonStockArticle::all();
+        $articlesNames = $articles->map(function($article){
+            return [
+                'id' => $article->id,
+                'name' => $article->name_description,
+            ];
+        });
+        return response()->json($articlesNames);
+    }
+    public function getPresentationNames()
+    {
+        /**
+         * @var ArticlePresentation $presentations
+         * @return \Illuminate\Http\JsonResponse
+         * 
+         * Esta funcion retorna los nombres de las presentaciones de los articulos inexistencia non_stock
+         */
+        $presentations = ArticlePresentation::all();
+        $presentationsNames = $presentations->map(function($presentation){
+            return [
+                'id' => $presentation->id,
+                'name' => $presentation->name_presentation,
+            ];
+        });
+        return response()->json($presentationsNames);
     }
 }

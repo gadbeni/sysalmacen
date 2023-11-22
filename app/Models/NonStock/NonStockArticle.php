@@ -12,6 +12,5 @@ class NonStockArticle extends Model
     protected $fillable = [
         'registerUser_id',
         'name_description',
-        'article_presentation_id',
     ];
 }

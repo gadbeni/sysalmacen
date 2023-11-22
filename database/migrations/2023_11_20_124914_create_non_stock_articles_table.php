@@ -25,7 +25,6 @@ class CreateNonStockArticlesTable extends Migration
             $table->id();
             $table->foreignId('registerUser_id')->constrained('users');//usuario que registra el articulo
             $table->string('name_description');
-            $table->foreignId('article_presentation_id')->constrained('article_presentations');//presentacion del articulo
             $table->timestamps();
         });
     }

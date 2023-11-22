@@ -12,6 +12,9 @@ class NonRequestArticle extends Model
     protected $fillable = [
         'non_request_id',
         'non_article_id',
+        'article_presentation_id',
         'quantity',
+        'unit_price',
+        'reference_price',
     ];
 }

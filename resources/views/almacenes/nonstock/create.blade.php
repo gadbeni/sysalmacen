@@ -101,14 +101,15 @@
                                 <datalist id="articleList">
                                     {{-- <option value="Articulo 1"> --}}
                                 </datalist>
+                                <datalist id="presentationList">
+
+                                </datalist>
                                 <tr data-id="1" class="fila">
                                     <td>
                                         <span class="num-fila">1</span>
                                     </td>
                                     <td>
                                         <input id="article_name" list="articleList" type="text" name="article_name[]" class="form-control" required>
-                                        <input type="" id="article_id">
-                                        
                                         
                                         {{-- <select name="article_id[]" id="article_id" class="form-control select2" required>
                                             <option value="" selected disabled>--Seleccione una opción--</option>
@@ -118,12 +119,13 @@
                                         </select> --}}
                                     </td>
                                     <td>
-                                        <select name="unit_id[]" id="unit_id" class="form-control select2" required>
+                                        <input id="presentation" type="text" list="presentationList" name="unit_presentation[]" class="form-control" required>
+                                        {{-- <select name="unit_id[]" id="unit_id" class="form-control select2" required>
                                             <option value="" selected disabled>--Seleccione una opción--</option>
-                                            {{-- @foreach ($units as $item)
+                                            @foreach ($units as $item)
                                                 <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                            @endforeach --}}
-                                        </select>
+                                            @endforeach
+                                        </select> --}}
                                     </td>
                                     <td>
                                         <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
@@ -232,47 +234,46 @@
         });
     }
 </Script>
+
+
 <script>
-    let articles = [
-        {
-            id: 1,
-            name: 'Hamburgesa',
-        },
-        {
-            id: 2,
-            name: 'Hambuerguesa dobble',
-        },
-        {
-            id: 3,
-            name: 'Jabonsillo',
-        },
-        {
-            id: 4,
-            name: 'Jabonsote',
-        },
-    ];
-    let searchInput = document.getElementById('article_name');
-    let articleList = document.getElementById('articleList');
-    let article_id = document.getElementById('article_id');
-
-    searchInput.addEventListener('input', (e) => {
-        let value = e.target.value;
-        let html = '';
-        if (value.length > 3) {
-            articles.forEach(article => {
-                if(article.name.toLowerCase().includes(value.toLowerCase())) {
-                    html += `<option data_id="${article.id}" value="${article.name}">`;
-                }
-            });
-        }
-        
-        articleList.innerHTML = html;
+    $(document).ready(function () {
+        $('#article_name').on('input', function(){
+            var query = $(this).val();
+            if(query.length > 3) {
+                $.ajax({
+                    url:"{{ route('get-articlesnames-nonstock.list') }}",
+                    type:"GET",
+                    data:{'query':query},
+                    success:function (data) {
+                        var datalist = $('#articleList');
+                        datalist.empty();
+                        data.forEach(article => {
+                            datalist.append(`<option data_id="${article.id}" value="${article.name}">`);
+                        });
+                    }
+                })
+            }
+        });
     });
-
-    searchInput.addEventListener('change', function() {
-        let op = articleList.querySelector(`option[value="${this.value}"]`);
-        id = op.getAttribute('data_id');
-        article_id.value = id;
-    });
+    $(document).ready(function(){
+        $('#presentation').on('input', function(){
+            var query = $(this).val();
+            if(query.length > 3) {
+                $.ajax({
+                    url:"{{ route('get-presentations-nonstock.list') }}",
+                    type:"GET",
+                    data:{'query':query},
+                    success:function (data) {
+                        var datalist = $('#presentationList');
+                        datalist.empty();
+                        data.forEach(presentation => {
+                            datalist.append(`<option data_id="${presentation.id}" value="${presentation.name}">`);
+                        });
+                    }
+                })
+            }
+        });
+    })
 </script>
 @endsection
