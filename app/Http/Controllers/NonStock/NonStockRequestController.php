@@ -100,7 +100,7 @@ class NonStockRequestController extends Controller
         //
     }
 
-    public function getArticlesNames()
+    public function getArticlesNames(Request $request)
     {   
         /**
          * @var NonStockArticle $articles
@@ -108,7 +108,9 @@ class NonStockRequestController extends Controller
          * 
          * Esta funcion retorna los nombres de los articulos inexistencia non_stock
          */
-        $articles = NonStockArticle::all();
+
+        $query = $request->input('query');
+        $articles = NonStockArticle::where('name_description', 'LIKE', "%$query%")->get();
         $articlesNames = $articles->map(function($article){
             return [
                 'id' => $article->id,
@@ -117,7 +119,7 @@ class NonStockRequestController extends Controller
         });
         return response()->json($articlesNames);
     }
-    public function getPresentationNames()
+    public function getPresentationNames(Request $request)
     {
         /**
          * @var ArticlePresentation $presentations
@@ -125,7 +127,8 @@ class NonStockRequestController extends Controller
          * 
          * Esta funcion retorna los nombres de las presentaciones de los articulos inexistencia non_stock
          */
-        $presentations = ArticlePresentation::all();
+        $query = $request->input('query');
+        $presentations = ArticlePresentation::where('name_presentation', 'LIKE', "%$query%")->get();
         $presentationsNames = $presentations->map(function($presentation){
             return [
                 'id' => $presentation->id,

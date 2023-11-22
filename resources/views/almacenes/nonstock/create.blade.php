@@ -109,7 +109,7 @@
                                         <span class="num-fila">1</span>
                                     </td>
                                     <td>
-                                        <input id="article_name" list="articleList" type="text" name="article_name[]" class="form-control" required>
+                                        <input id="article_name" list="articleList" type="text" name="article_name[]" class="article_input form-control" required>
                                         
                                         {{-- <select name="article_id[]" id="article_id" class="form-control select2" required>
                                             <option value="" selected disabled>--Seleccione una opción--</option>
@@ -119,7 +119,7 @@
                                         </select> --}}
                                     </td>
                                     <td>
-                                        <input id="presentation" type="text" list="presentationList" name="unit_presentation[]" class="form-control" required>
+                                        <input id="presentation" type="text" list="presentationList" name="unit_presentation[]" class="presentation-input form-control" required>
                                         {{-- <select name="unit_id[]" id="unit_id" class="form-control select2" required>
                                             <option value="" selected disabled>--Seleccione una opción--</option>
                                             @foreach ($units as $item)
@@ -177,20 +177,10 @@
                 <span class="num-fila">${num}</span>
             </td>
             <td>
-                <select name="article_id[]" id="article_id" class="form-control select2" required>
-                    <option value="" selected disabled>--Seleccione una opción--</option>
-                    {{-- @foreach ($articles as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                    @endforeach --}}
-                </select>
+                <input list="articleList" type="text" name="article_name[]" class="article_input form-control" required>
             </td>
             <td>
-                <select name="unit_id[]" id="unit_id" class="form-control select2" required>
-                    <option value="" selected disabled>--Seleccione una opción--</option>
-                    {{-- @foreach ($units as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                    @endforeach --}}
-                </select>
+                <input type="text" list="presentationList" name="unit_presentation[]" class="presentation-input form-control" required>
             </td>
             <td>
                 <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
@@ -237,8 +227,30 @@
 
 
 <script>
+    // $(document).ready(function () {
+    //     $('.article_input').each(function() {
+    //         $(this).on('input', function(){
+    //             var query = $(this).val();
+    //             if(query.length > 3) {
+    //                 $.ajax({
+    //                     url:"{{ route('get-articlesnames-nonstock.list') }}",
+    //                     type:"GET",
+    //                     data:{'query':query},
+    //                     success:function (data) {
+    //                         var datalist = $('#articleList');
+    //                         datalist.empty();
+    //                         data.forEach(article => {
+    //                             datalist.append(`<option data_id="${article.id}" value="${article.name}">`);
+    //                         });
+    //                     }
+    //                 })
+    //             }
+    //         });
+    //     })
+        
+    // });
     $(document).ready(function () {
-        $('#article_name').on('input', function(){
+        $(document).on('input', '.article_input', function(){
             var query = $(this).val();
             if(query.length > 3) {
                 $.ajax({
@@ -256,8 +268,10 @@
             }
         });
     });
+
+
     $(document).ready(function(){
-        $('#presentation').on('input', function(){
+        $(document).on('input','.presentation-input', function(){
             var query = $(this).val();
             if(query.length > 3) {
                 $.ajax({
@@ -275,5 +289,24 @@
             }
         });
     })
+    // $(document).ready(function(){
+    //     $('#presentation').on('input', function(){
+    //         var query = $(this).val();
+    //         if(query.length > 3) {
+    //             $.ajax({
+    //                 url:"{{ route('get-presentations-nonstock.list') }}",
+    //                 type:"GET",
+    //                 data:{'query':query},
+    //                 success:function (data) {
+    //                     var datalist = $('#presentationList');
+    //                     datalist.empty();
+    //                     data.forEach(presentation => {
+    //                         datalist.append(`<option data_id="${presentation.id}" value="${presentation.name}">`);
+    //                     });
+    //                 }
+    //             })
+    //         }
+    //     });
+    // })
 </script>
 @endsection
