@@ -98,13 +98,17 @@
                                 </tr>
                             </thead>
                             <tbody id="article-container">
+                                <datalist id="articleList">
+                                    {{-- <option value="Articulo 1"> --}}
+                                </datalist>
                                 <tr data-id="1" class="fila">
                                     <td>
                                         <span class="num-fila">1</span>
                                     </td>
                                     <td>
-                                        <input id="article_name" type="text" name="article_name[]" class="form-control" required>
-                                        <input type="hidden" id="article_id">
+                                        <input id="article_name" list="articleList" type="text" name="article_name[]" class="form-control" required>
+                                        <input type="" id="article_id">
+                                        
                                         
                                         {{-- <select name="article_id[]" id="article_id" class="form-control select2" required>
                                             <option value="" selected disabled>--Seleccione una opción--</option>
@@ -229,5 +233,46 @@
     }
 </Script>
 <script>
+    let articles = [
+        {
+            id: 1,
+            name: 'Hamburgesa',
+        },
+        {
+            id: 2,
+            name: 'Hambuerguesa dobble',
+        },
+        {
+            id: 3,
+            name: 'Jabonsillo',
+        },
+        {
+            id: 4,
+            name: 'Jabonsote',
+        },
+    ];
+    let searchInput = document.getElementById('article_name');
+    let articleList = document.getElementById('articleList');
+    let article_id = document.getElementById('article_id');
+
+    searchInput.addEventListener('input', (e) => {
+        let value = e.target.value;
+        let html = '';
+        if (value.length > 3) {
+            articles.forEach(article => {
+                if(article.name.toLowerCase().includes(value.toLowerCase())) {
+                    html += `<option data_id="${article.id}" value="${article.name}">`;
+                }
+            });
+        }
+        
+        articleList.innerHTML = html;
+    });
+
+    searchInput.addEventListener('change', function() {
+        let op = articleList.querySelector(`option[value="${this.value}"]`);
+        id = op.getAttribute('data_id');
+        article_id.value = id;
+    });
 </script>
 @endsection
