@@ -82,78 +82,66 @@
             </div>
         </div>
         <!-- form articles -->
-        <div class="panel panel-bordered">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="table-responsive">
-                            <table id="tblArticles" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>N#</th>
-                                        <th>Articulo (Descripción)</th>
-                                        <th>Unidad</th>
-                                        <th>Cantidad</th>
-                                        <th>Precio Unitario</th>
-                                        <th>Precio referencial</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="article-container">
-                                    <datalist id="articleList">
-                                        {{-- <option value="Articulo 1"> --}}
-                                    </datalist>
-                                    <datalist id="presentationList">
-    
-                                    </datalist>
-                                    <tr data-id="1" class="fila">
-                                        <td>
-                                            <span class="num-fila">1</span>
-                                        </td>
-                                        <td>
-                                            <input id="article_name" list="articleList" type="text" name="article_name[]" class="article_input form-control" required>
-                                            
-                                            {{-- <select name="article_id[]" id="article_id" class="form-control select2" required>
-                                                <option value="" selected disabled>--Seleccione una opción--</option>
-                                                @foreach ($articles as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                                @endforeach
-                                            </select> --}}
-                                        </td>
-                                        <td>
-                                            <input id="presentation" type="text" list="presentationList" name="unit_presentation[]" class="presentation-input form-control" required>
-                                            {{-- <select name="unit_id[]" id="unit_id" class="form-control select2" required>
-                                                <option value="" selected disabled>--Seleccione una opción--</option>
-                                                @foreach ($units as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>                                                    
-                                                @endforeach
-                                            </select> --}}
-                                        </td>
-                                        <td>
-                                            <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="1"><i class="voyager-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button id="add-row" type="button" class="btn btn-success btn-sm btn-add-row"><i class="voyager-plus"></i>Más</button>
+        <div class="container-fluid">
+            <div class="panel panel-bordered">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table id="tblArticles" class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>N#</th>
+                                            <th>Articulo (Descripción)</th>
+                                            <th>Unidad</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio Unitario</th>
+                                            <th>Precio referencial</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="article-container">
+                                        <datalist id="articleList">
+                                            {{-- <option value="Articulo 1"> --}}
+                                        </datalist>
+                                        <datalist id="presentationList">
+        
+                                        </datalist>
+                                        <tr data-id="1" class="fila">
+                                            <td>
+                                                <span class="num-fila">1</span>
+                                            </td>
+                                            <td>
+                                                <input id="article_name" list="articleList" type="text" name="article_name[]" class="article_input form-control" required>
+                                            </td>
+                                            <td>
+                                                <input id="presentation" type="text" list="presentationList" name="unit_presentation[]" class="presentation-input form-control" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="1"><i class="voyager-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                            <button id="add-row" type="button" class="btn btn-success btn-sm btn-add-row"><i class="voyager-plus" style="font-size: 1.5rem"></i></button>
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-success btn-block">Guardar</button>
                 </div>
             </div>
         </div>
         <!-- end form articles -->
-        <div class="container-fluid">
-            <button type="submit" class="btn btn-primary" >Guardar</button>
-        </div>
     </div>
 </form>
 @endsection

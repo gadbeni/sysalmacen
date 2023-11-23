@@ -103,6 +103,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     // status non-stock
     Route::post('nonstock/send', [NonStockRequestController::class, 'sendNonStock'])->name('nonstock.send');
     Route::post('nonstock/delete', [NonStockRequestController::class, 'deleteNonStock'])->name('nonstock.delete');
+    // inboxes non-stock
+    
+
     
     //........................  INCOME
     Route::resource('income', IncomeController::class);

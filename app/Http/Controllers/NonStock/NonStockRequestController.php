@@ -13,7 +13,6 @@ use App\Models\SucursalSubAlmacen;
 use Carbon\Carbon;
 
 use App\Models\InventarioAlmacen;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NonStockRequestController extends Controller
 {
@@ -22,8 +21,6 @@ class NonStockRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-    use SoftDeletes;
 
     public function index()
     {
@@ -82,10 +79,14 @@ class NonStockRequestController extends Controller
 
         $nonStockRequest->date_status = Carbon::now();
 
-        $nonStockRequest->save();
+        
         //----------- ArticlePresentation ----------------
         $articlePresentationsIds = [];
         $presentations = $request->input('unit_presentation');
+        if($presentations == null){
+            return redirect()->route('nonstock.index')->with('error','No se ha registrado la solicitud de articulos de inexistencia, no se ha seleccionado ninguna presentacion');
+        }
+        $nonStockRequest->save();
         foreach($presentations as $presentation){
             $articlePresentation = ArticlePresentation::firstOrCreate(['name_presentation' => $presentation]);
             array_push($articlePresentationsIds, $articlePresentation->id);
@@ -126,6 +127,9 @@ class NonStockRequestController extends Controller
     public function show($id)
     {
         //
+        $nonStockRequest = NonStockRequest::findOrFail($id);
+        $nonRequestArticles = NonRequestArticle::where('non_request_id', $nonStockRequest->id)->get();
+        return view('almacenes.nonstock.report', compact('nonStockRequest', 'nonRequestArticles'));
     }
 
     /**
@@ -225,10 +229,9 @@ class NonStockRequestController extends Controller
                     ->orWhere('nro_request', 'like', '%' . $search . '%')
                     ->orWhere('id', 'like', '%' . $search . '%')
                     ->orWhere('unit_name', 'like', '%' . $search . '%')
-                    ->orWhere('direction_name', 'like', '%' . $search . '%')
-                    ->orWhere('deleted_at',NULL);
+                    ->orWhere('direction_name', 'like', '%' . $search . '%');
             }
-        });
+        })->whereNull('deleted_at');
 
         //filter
         switch($type){
@@ -250,6 +253,7 @@ class NonStockRequestController extends Controller
         return view('almacenes.nonstock.tablelist', compact('data', 'gestion'));
         
     }
+    //--------------------- status ---------------------
     public function sendNonStock(Request $request)
     {
         /**
@@ -274,99 +278,98 @@ class NonStockRequestController extends Controller
          */
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
         $nonStockRequest->status = 'eliminado';
+        $nonStockRequest->deleted_at = Carbon::now();
         $nonStockRequest->save();
-        $nonStockRequest->delete();
         return redirect()->route('nonstock.index')->with('success','Se ha eliminado la solicitud de articulos de inexistencia con exito');
     }
-    // public function list(){
+    public function approveNonStock(Request $request)
+    {
+        /**
+         * @var NonStockRequest $nonStockRequest
+         * @return \Illuminate\Http\RedirectResponse
+         * 
+         * Esta funcion aprueba la solicitud de articulos de inexistencia non_stock
+         */
+        $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
+        $nonStockRequest->status = 'aprobado';
+        $nonStockRequest->save();
+        return redirect()->route('nonstock.index')->with('success','Se ha aprobado la solicitud de articulos de inexistencia con exito');
+    }
+    public function rejectNonStock(Request $request)
+    {
+        /**
+         * @var NonStockRequest $nonStockRequest
+         * @return \Illuminate\Http\RedirectResponse
+         * 
+         * Esta funcion rechaza la solicitud de articulos de inexistencia non_stock
+         */
+        $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
+        $nonStockRequest->status = 'rechazado';
+        $nonStockRequest->save();
+        return redirect()->route('nonstock.index')->with('success','Se ha rechazado la solicitud de articulos de inexistencia con exito');
+    }
 
-    //     $search = request('search') ?? null;
-    //     $type = request('type') ?? null;
-    //     $paginate = request('paginate') ?? 10;
+    //-------------------- admin inboxes --------------------
+    public function inboxIndex(){
+        if (!auth()->user()->hasPermission('browse_inbox')) {
+            abort('401');
+        }
+        return view('almacenes.nonstock.nonstock-inbox.browse');
+    }
+    public function inboxList(){
+        /**
+         * 
+         */
+        $search = request('search') ?? null;
+        $type = request('type') ?? null;
+        $paginate = request('paginate') ?? 10;
 
-    //     // return $type; 
+        $user = auth()->user();
+        $gestion = InventarioAlmacen::where('status', 1)->where('sucursal_id', $user->sucursal_id)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada
 
-    //     $user = Auth::user();
-        
-    //     $gestion = InventarioAlmacen::where('status', 1)->where('sucursal_id', $user->sucursal_id)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada
-        
+        $query_filter = 'registerUser_id = '.$user->id;
 
+        if(auth()->user()->hasRole('admin'))
+        {
+            $query_filter =1;
+        }
 
-    //     $query_filter = 'people_id = '.$user->funcionario_id;
-        
-    //     if(Auth::user()->hasRole('admin'))
-    //     {
-    //         $query_filter =1;
-    //     }        
-        
-    //     switch($type)
-    //     {
-    //         case 'eliminado':
-    //             $data =  SolicitudPedido::with(['solicitudDetalle'])
-    //                 ->where(function($query) use ($search){
-    //                     if($search){
-    //                         $query->OrWhereRaw($search ? "gestion like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "nropedido like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "id like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "unidad_name like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "direccion_name like '%$search%'" : 1);
-    //                     }
-    //                 })
-    //                 ->where('status', 'eliminado')
-    //                 ->whereRaw($query_filter)
-    //                 ->orderBy('id', 'DESC')->paginate($paginate);
-    //                 break;
-    //         case 'entregado':
-    //             $data =  SolicitudPedido::with(['solicitudDetalle'])
-    //                 ->where(function($query) use ($search){
-    //                     if($search){
-    //                         $query->OrWhereRaw($search ? "gestion like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "nropedido like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "id like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "unidad_name like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "direccion_name like '%$search%'" : 1);
-    //                     }
-    //                 })
-    //                 ->where('deleted_at', NULL)
-    //                 ->whereRaw("(status = 'Entregado' or status = 'pendienteeliminacion') and ".$query_filter)
-    //                 // ->whereRaw($query_filter)
-    //                 ->orderBy('id', 'DESC')->paginate($paginate);
-    //                 break;
-    //         case 'rechazado':
-    //             $data =  SolicitudPedido::with(['solicitudDetalle'])
-    //                 ->where(function($query) use ($search){
-    //                     if($search){
-    //                         $query->OrWhereRaw($search ? "gestion like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "nropedido like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "id like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "unidad_name like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "direccion_name like '%$search%'" : 1);
-    //                     }
-    //                 })
-    //                 ->where('deleted_at', NULL)
-    //                 ->where('status', 'Rechazado')
-    //                 ->whereRaw($query_filter)
-    //                 ->orderBy('id', 'DESC')->paginate($paginate);
-    //                 break;
-    //         case 'pendiente':
-    //             $data =  SolicitudPedido::with(['solicitudDetalle'])
-    //                 ->where(function($query) use ($search){
-    //                     if($search){
-    //                         $query->OrWhereRaw($search ? "gestion like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "nropedido like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "id like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "unidad_name like '%$search%'" : 1)
-    //                         ->OrWhereRaw($search ? "direccion_name like '%$search%'" : 1);
-    //                     }
-    //                 })
-    //                 ->where('deleted_at', NULL)
-    //                 ->whereRaw("(status = 'Pendiente' or status = 'Enviado' or status = 'Aprobado') and ".$query_filter)
-    //                 // ->whereRaw($query_filter)
-    //                 ->orderBy('id', 'DESC')->paginate($paginate);
-    //                 break;
-            
-    //     }
+        //data
+        $data = NonStockRequest::where(function($query) use ($search){
+            if ($search) {
+                $query->where('gestion', 'like', '%' . $search . '%')
+                    ->orWhere('nro_request', 'like', '%' . $search . '%')
+                    ->orWhere('id', 'like', '%' . $search . '%')
+                    ->orWhere('unit_name', 'like', '%' . $search . '%')
+                    ->orWhere('direction_name', 'like', '%' . $search . '%');
+            }
+        })->whereNull('deleted_at');
 
-    //     return view('almacenes.outbox.list', compact('data', 'gestion'));
-    // }
+        //filter
+        switch($type){
+            case 'pendiente':
+                $data = $data->where('status', 'pendiente');
+                break;
+            case 'enviado':
+                $data = $data->where('status', 'enviado');
+                break;
+            case 'aprobado':
+                $data = $data->where('status', 'aprobado');
+                break;
+            case 'rechazado':
+                $data = $data->where('status', 'rechazado');
+                break;
+        }
+        $data = $data->whereRaw($query_filter)->orderBy('id', 'DESC')->paginate($paginate);
+        // $data = $data->orderBy('id', 'DESC')->paginate($paginate);
+        return view('almacenes.nonstock.nonstock-inbox.list', compact('data', 'gestion'));
+    }
+    public function inboxShow($id){
+        /**
+         * 
+         */
+        $nonStockRequest = NonStockRequest::findOrFail($id);
+        $nonRequestArticles = NonRequestArticle::where('non_request_id', $nonStockRequest->id)->get();
+        return view('almacenes.nonstock.nonstock-inbox.read', compact('nonStockRequest', 'nonRequestArticles'));
+    }
 }

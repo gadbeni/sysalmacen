@@ -72,11 +72,11 @@
                                 @endif
 
 
-                                {{-- @if( $item->status != 'pendiente' && auth()->user()->hasPermission('print_outbox'))
-                                    <a href="{{route('outbox.show',$item->id)}}" title="Imprimir solicitud" target="_blank" class="btn btn-sm btn-dark view">
+                                @if( $item->status != 'pendiente' && auth()->user()->hasPermission('print_outbox'))
+                                    <a href="{{route('nonstock.show',$item->id)}}" title="Imprimir solicitud" target="_blank" class="btn btn-sm btn-dark view">
                                         <i class="glyphicon glyphicon-print"></i>
                                     </a>   
-                                @endif --}}
+                                @endif
 
                                 {{-- @if ($item->status == 'pendienteeliminacion')
                                     <a data-toggle="modal" data-id="{{$item->id}}" data-target="#myModalConfirmarEliminacion" title="Imprimir solicitud" class="btn btn-sm btn-success view">
