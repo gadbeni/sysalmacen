@@ -4,6 +4,7 @@ namespace App\Models\NonStock;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Sucursal;
 
 class NonStockRequest extends Model
 {
@@ -25,4 +26,9 @@ class NonStockRequest extends Model
         'date_status',
         'statusUser_id',
     ];
+    //Establece la relacion con la tabla sucursal
+    public function sucursal()
+    {
+        return $this->belongsTo(Sucursal::class, 'sucursal_id');
+    }
 }

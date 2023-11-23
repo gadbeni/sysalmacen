@@ -99,8 +99,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::resource('nonstock', NonStockRequestController::class);
     Route::get('get-articles-nonstock/ajax/list', [NonStockRequestController::class, 'getArticlesNames'])->name('get-articlesnames-nonstock.list');
     Route::get('get-presentation-nonstock/ajax/list', [NonStockRequestController::class, 'getPresentationNames'])->name('get-presentations-nonstock.list');
-
-
+    Route::get('get-table-list/ajax/list', [NonStockRequestController::class, 'getTableList'])->name('get-nonstock.list');
+    // status non-stock
+    Route::post('nonstock/send', [NonStockRequestController::class, 'sendNonStock'])->name('nonstock.send');
+    Route::post('nonstock/delete', [NonStockRequestController::class, 'deleteNonStock'])->name('nonstock.delete');
     
     //........................  INCOME
     Route::resource('income', IncomeController::class);
