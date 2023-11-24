@@ -43,6 +43,10 @@ class NonStockRequestController extends Controller
         if (!auth()->user()->hasPermission('browse_outbox')) {
             abort('401');
         }
+        $gestion = InventarioAlmacen::where('status', 1)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada 
+        if($gestion == null){
+            return redirect()->route('nonstock.index')->with('error','No se puede realizar la solicitud de articulos de inexistencia, no hay gestion activa');
+        }
         $user = auth()->user();
         $sucursal = Sucursal::findOrFail($user->sucursal_id);
         $subalmacen = SucursalSubAlmacen::where('sucursal_id', $sucursal->id)->where('deleted_at', null)->get();
@@ -62,6 +66,14 @@ class NonStockRequestController extends Controller
         try{
             $user = auth()->user();
             $funcionario = $this->getWorker($user->funcionario_id);
+            $gestion = InventarioAlmacen::where('status', 1)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada
+            if($gestion == null){
+                return redirect()->route('nonstock.index')->with('error','No se puede realizar la solicitud de articulos de inexistencia, no hay gestion activa');
+            }
+            $unidad = $user->unit;
+            $nro_request = NonStockRequest::where('gestion', $gestion->gestion)->where('unit_id',$unidad->id)->where('deleted_at', null)->count()+1;
+            // $format = "%{$}{$length}{$type}";
+            $nro_request_final = "FI-".$unidad->sigla."-".sprintf("%04d", $nro_request)."/".$gestion->gestion;
             //----------- NonStockRequest ----------------
             $nonStockRequest = new NonStockRequest();
             $nonStockRequest->sucursal_id = $user->sucursal_id;
@@ -69,8 +81,8 @@ class NonStockRequestController extends Controller
             $nonStockRequest->registerUser_id = $user->id;
 
             $nonStockRequest->date_request = Carbon::now();
-            $nonStockRequest->gestion = Carbon::now()->year;
-            $nonStockRequest->nro_request = "1001"; 
+            $nonStockRequest->gestion = $gestion->gestion;
+            $nonStockRequest->nro_request = $nro_request_final; 
             $nonStockRequest->job = $funcionario->cargo;
             $nonStockRequest->direction_id = $user->direccionAdministrativa_id;
             $nonStockRequest->direction_name = $user->direction->nombre;
@@ -301,6 +313,8 @@ class NonStockRequestController extends Controller
          */
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
         $nonStockRequest->status = 'aprobado';
+        $nonStockRequest->date_status = Carbon::now();
+        $nonStockRequest->statusUser_id = auth()->user()->id;
         $nonStockRequest->save();
         return redirect()->route('nonstock.inbox')->with('success','Se ha aprobado la solicitud de articulos de inexistencia con exito');
     }
@@ -314,6 +328,8 @@ class NonStockRequestController extends Controller
          */
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
         $nonStockRequest->status = 'rechazado';
+        $nonStockRequest->date_status = Carbon::now();
+        $nonStockRequest->statusUser_id = auth()->user()->id;
         $nonStockRequest->save();
         return redirect()->route('nonstock.inbox')->with('success','Se ha rechazado la solicitud de articulos de inexistencia con exito');
     }
