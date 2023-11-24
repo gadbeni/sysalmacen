@@ -7,7 +7,7 @@
         <div class="container-fluid">
             <div class="row">
                 <h1 id="subtitle" class="page-title">
-                    <i class="voyager-basket"></i> Detalle Solicitud
+                    <i class="fa fa-file-text-o"></i> Detalle Solicitud (Inexistencia)
                 </h1>
                 <a href="{{ route('nonstock.inbox') }}" class="btn btn-warning btn-add-new">
                     <i class="fa-solid fa-file"></i> <span>Volver</span>

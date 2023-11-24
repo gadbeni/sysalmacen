@@ -11,13 +11,18 @@
                         <i class="voyager-plus"></i> <span>Nuevo</span>
                     </a>
                     <a href="{{ route('outbox.index') }}" class="btn btn-warning">
-                        <i class="fa fa-file-text"></i> <span>Volver a pedidos</span>
+                        <i class="fa fa-arrow-circle-left"></i> <span>Volver a pedidos</span>
                     </a>
             </div>
         </div>
 @endsection
 @section('content')
 <div class="page-content browse container-fluid">
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-bordered">

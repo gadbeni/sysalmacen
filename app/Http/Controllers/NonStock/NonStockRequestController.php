@@ -45,7 +45,7 @@ class NonStockRequestController extends Controller
         }
         $gestion = InventarioAlmacen::where('status', 1)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada 
         if($gestion == null){
-            return redirect()->route('nonstock.index')->with('error','No se puede realizar la solicitud de articulos de inexistencia, no hay gestion activa');
+            return redirect()->route('nonstock.index')->with(['message' => 'No se puede realizar la solicitud de articulos de inexistencia, no hay gestion activa', 'alert-type' => 'error']);
         }
         $user = auth()->user();
         $sucursal = Sucursal::findOrFail($user->sucursal_id);
@@ -125,12 +125,12 @@ class NonStockRequestController extends Controller
                 $nonRequestArticle->save();
             }
             DB::commit(); //Commit to DataBase       
-            return redirect()->route('nonstock.index')->with('success','Se ha registrado la solicitud de articulos de inexistencia con exito');
+            return redirect()->route('nonstock.index')->with(['message' => 'Se ha registrado la solicitud de articulos de inexistencia con exito', 'alert-type' => 'success']);
 
 
         }catch(\Exception $e){
             DB::rollback();
-            return redirect()->route('nonstock.index')->with('error','No se ha registrado la solicitud de articulos de inexistencia, ha ocurrido un error');
+            return redirect()->route('nonstock.index')->withwith(['message' => 'No se ha registrado la solicitud de articulos de inexistencia, ha ocurrido un error', 'alert-type' => 'error']);
         }
         
         

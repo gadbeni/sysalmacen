@@ -7,8 +7,11 @@
         <div class="row">
             <!-- <div class="c"> -->
                 <h1 id="subtitle" class="page-title">
-                    <i class="icon fa-regular fa-clipboard"></i> Solicitudes
+                    <i class="fa fa-file-text"></i> Solicitudes Inexistencias
                 </h1>
+                <a href="{{ route('inbox.index') }}" class="btn btn-warning">
+                    <i class="fa fa-arrow-circle-left"></i> <span>Volver</span>
+                </a>
     
         </div>
     </div>
