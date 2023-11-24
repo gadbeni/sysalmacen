@@ -5,10 +5,13 @@
         <div class="container-fluid">
             <div class="row">
                     <h1 id="subtitle" class="page-title">
-                        <i class="fa fa-file-text"></i> Solicitud de Inexistencia
+                        <i class="fa fa-file-text"></i> Form Inexistencia
                     </h1>
                     <a href="{{ route('nonstock.create') }}" class="btn btn-success btn-add-new">
                         <i class="voyager-plus"></i> <span>Nuevo</span>
+                    </a>
+                    <a href="{{ route('outbox.index') }}" class="btn btn-warning">
+                        <i class="fa fa-file-text"></i> <span>Volver a pedidos</span>
                     </a>
             </div>
         </div>

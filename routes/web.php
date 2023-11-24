@@ -104,8 +104,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::post('nonstock/send', [NonStockRequestController::class, 'sendNonStock'])->name('nonstock.send');
     Route::post('nonstock/delete', [NonStockRequestController::class, 'deleteNonStock'])->name('nonstock.delete');
     // inboxes non-stock
-    
-
+    Route::get('non/inbox', [NonStockRequestController::class, 'inboxIndex'])->name('nonstock.inbox');
+    Route::get('non/inbox/ajax/list', [NonStockRequestController::class, 'getInboxList'])->name('nonstock.inbox.list');
+    Route::get('non/inbox/view/{id?}', [NonStockRequestController::class, 'inboxShow'])->name('nonstock.inbox.view');
+    //--
+    Route::post('non/inbox/accept', [NonStockRequestController::class, 'approveNonStock'])->name('nonstock.inbox.accept');
+    Route::post('non/inbox/reject', [NonStockRequestController::class, 'rejectNonStock'])->name('nonstock.inbox.reject');
     
     //........................  INCOME
     Route::resource('income', IncomeController::class);

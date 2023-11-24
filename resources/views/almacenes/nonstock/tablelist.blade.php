@@ -50,7 +50,7 @@
                             @if ($item->status == 'aprobado')
                                 <label class="label label-primary">Aprobado</label>
                             @endif
-                            @if ($item->status == 'echazado')
+                            @if ($item->status == 'rechazado')
                                 <label class="label label-danger">Rechazado</label>
                             @endif
                             @if ($item->status == 'Entregado')

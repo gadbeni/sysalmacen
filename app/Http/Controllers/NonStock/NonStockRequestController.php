@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\Sucursal;
 use App\Models\SucursalSubAlmacen;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\InventarioAlmacen;
 
@@ -57,67 +58,75 @@ class NonStockRequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // $articleName = $request->input('article_name');
-        // $article = Article::firstOrCreate(['name' => $articleName]);
-        $user = auth()->user();
-        $funcionario = $this->getWorker($user->funcionario_id);
-        //----------- NonStockRequest ----------------
-        $nonStockRequest = new NonStockRequest();
-        $nonStockRequest->sucursal_id = $user->sucursal_id;
-        $nonStockRequest->subSucursal_id = $request->input('subSucursal_id');
-        $nonStockRequest->registerUser_id = $user->id;
+        DB::beginTransaction(); //Start transaction!
+        try{
+            $user = auth()->user();
+            $funcionario = $this->getWorker($user->funcionario_id);
+            //----------- NonStockRequest ----------------
+            $nonStockRequest = new NonStockRequest();
+            $nonStockRequest->sucursal_id = $user->sucursal_id;
+            $nonStockRequest->subSucursal_id = $request->input('subSucursal_id');
+            $nonStockRequest->registerUser_id = $user->id;
 
-        $nonStockRequest->date_request = Carbon::now();
-        $nonStockRequest->gestion = Carbon::now()->year;
-        $nonStockRequest->nro_request = "1001"; 
-        $nonStockRequest->job = $funcionario->cargo;
-        $nonStockRequest->direction_id = $user->direccionAdministrativa_id;
-        $nonStockRequest->direction_name = $user->direction->nombre;
-        $nonStockRequest->unit_id = $user->unidadAdministrativa_id;
-        $nonStockRequest->unit_name = $user->unit->nombre;
+            $nonStockRequest->date_request = Carbon::now();
+            $nonStockRequest->gestion = Carbon::now()->year;
+            $nonStockRequest->nro_request = "1001"; 
+            $nonStockRequest->job = $funcionario->cargo;
+            $nonStockRequest->direction_id = $user->direccionAdministrativa_id;
+            $nonStockRequest->direction_name = $user->direction->nombre;
+            $nonStockRequest->unit_id = $user->unidadAdministrativa_id;
+            $nonStockRequest->unit_name = $user->unit->nombre;
 
-        $nonStockRequest->date_status = Carbon::now();
+            $nonStockRequest->date_status = Carbon::now();
 
-        
+            $nonStockRequest->save();
         //----------- ArticlePresentation ----------------
-        $articlePresentationsIds = [];
-        $presentations = $request->input('unit_presentation');
-        if($presentations == null){
-            return redirect()->route('nonstock.index')->with('error','No se ha registrado la solicitud de articulos de inexistencia, no se ha seleccionado ninguna presentacion');
-        }
-        $nonStockRequest->save();
-        foreach($presentations as $presentation){
-            $articlePresentation = ArticlePresentation::firstOrCreate(['name_presentation' => $presentation]);
-            array_push($articlePresentationsIds, $articlePresentation->id);
-        }
-        // ----------- NonStockArticle ---------------
-        $nonStockArticlesIds = [];
-        $articles = $request->input('article_name');
-        foreach($articles as $article){
-            $nonStockArticle = NonStockArticle::firstOrCreate(
-                ['name_description' => $article],
-                ['registerUser_id' => $user->id]
-            );
-            array_push($nonStockArticlesIds, $nonStockArticle->id);
-        }
-        // ----------- NonRequestArticle -------------
-        $quantities =  $request->input('quantity');
-        $prices = $request->input('price');
-        $price_refs = $request->input('price_ref');
-        for($i = 0; $i < count($articles); $i++){
-            $nonRequestArticle = new NonRequestArticle();
-            $nonRequestArticle->non_request_id = $nonStockRequest->id;
-            $nonRequestArticle->non_article_id = $nonStockArticlesIds[$i];
-            $nonRequestArticle->article_presentation_id = $articlePresentationsIds[$i];
-            $nonRequestArticle->quantity = $quantities[$i];
-            $nonRequestArticle->unit_price = $prices[$i];
-            $nonRequestArticle->reference_price = $price_refs[$i];
-            $nonRequestArticle->save();
-        }        
-        return redirect()->route('nonstock.index')->with('success','Se ha registrado la solicitud de articulos de inexistencia con exito');
-    }
+            $articlePresentationsIds = [];
+            $presentations = $request->input('unit_presentation');
+            
+            foreach($presentations as $presentation){
+                $articlePresentation = ArticlePresentation::firstOrCreate(['name_presentation' => $presentation]);
+                array_push($articlePresentationsIds, $articlePresentation->id);
+            }
+            // ----------- NonStockArticle ---------------
+            $nonStockArticlesIds = [];
+            $articles = $request->input('article_name');
+            foreach($articles as $article){
+                $nonStockArticle = NonStockArticle::firstOrCreate(
+                    ['name_description' => $article],
+                    ['registerUser_id' => $user->id]
+                );
+                array_push($nonStockArticlesIds, $nonStockArticle->id);
+            }
+            // ----------- NonRequestArticle -------------
+            $quantities =  $request->input('quantity');
+            $prices = $request->input('price');
+            $price_refs = $request->input('price_ref');
+            for($i = 0; $i < count($articles); $i++){
+                $nonRequestArticle = new NonRequestArticle();
+                $nonRequestArticle->non_request_id = $nonStockRequest->id;
+                $nonRequestArticle->non_article_id = $nonStockArticlesIds[$i];
+                $nonRequestArticle->article_presentation_id = $articlePresentationsIds[$i];
+                $nonRequestArticle->quantity = $quantities[$i];
+                $nonRequestArticle->unit_price = $prices[$i];
+                $nonRequestArticle->reference_price = $price_refs[$i];
+                $nonRequestArticle->save();
+            }
+            DB::commit(); //Commit to DataBase       
+            return redirect()->route('nonstock.index')->with('success','Se ha registrado la solicitud de articulos de inexistencia con exito');
 
+
+        }catch(\Exception $e){
+            DB::rollback();
+            return redirect()->route('nonstock.index')->with('error','No se ha registrado la solicitud de articulos de inexistencia, ha ocurrido un error');
+        }
+        
+        
+        
+        
+        
+        
+    }
     /**
      * Display the specified resource.
      *
@@ -293,7 +302,7 @@ class NonStockRequestController extends Controller
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
         $nonStockRequest->status = 'aprobado';
         $nonStockRequest->save();
-        return redirect()->route('nonstock.index')->with('success','Se ha aprobado la solicitud de articulos de inexistencia con exito');
+        return redirect()->route('nonstock.inbox')->with('success','Se ha aprobado la solicitud de articulos de inexistencia con exito');
     }
     public function rejectNonStock(Request $request)
     {
@@ -306,17 +315,17 @@ class NonStockRequestController extends Controller
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
         $nonStockRequest->status = 'rechazado';
         $nonStockRequest->save();
-        return redirect()->route('nonstock.index')->with('success','Se ha rechazado la solicitud de articulos de inexistencia con exito');
+        return redirect()->route('nonstock.inbox')->with('success','Se ha rechazado la solicitud de articulos de inexistencia con exito');
     }
 
     //-------------------- admin inboxes --------------------
-    public function inboxIndex(){
+    public function inboxIndex(Request $request){
         if (!auth()->user()->hasPermission('browse_inbox')) {
             abort('401');
         }
         return view('almacenes.nonstock.nonstock-inbox.browse');
     }
-    public function inboxList(){
+    public function getInboxList(){
         /**
          * 
          */
@@ -326,8 +335,8 @@ class NonStockRequestController extends Controller
 
         $user = auth()->user();
         $gestion = InventarioAlmacen::where('status', 1)->where('sucursal_id', $user->sucursal_id)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada
-
-        $query_filter = 'registerUser_id = '.$user->id;
+        
+        $query_filter = 'sucursal_id = '.$user->sucursal_id;
 
         if(auth()->user()->hasRole('admin'))
         {
@@ -347,10 +356,11 @@ class NonStockRequestController extends Controller
 
         //filter
         switch($type){
-            case 'pendiente':
-                $data = $data->where('status', 'pendiente');
+            case 'todo':
+                $data = $data->where('status', '!=', 'eliminado')
+                    ->where('status', '!=', 'pendiente');
                 break;
-            case 'enviado':
+            case 'pendiente':
                 $data = $data->where('status', 'enviado');
                 break;
             case 'aprobado':
@@ -361,9 +371,9 @@ class NonStockRequestController extends Controller
                 break;
         }
         $data = $data->whereRaw($query_filter)->orderBy('id', 'DESC')->paginate($paginate);
-        // $data = $data->orderBy('id', 'DESC')->paginate($paginate);
         return view('almacenes.nonstock.nonstock-inbox.list', compact('data', 'gestion'));
     }
+
     public function inboxShow($id){
         /**
          * 

@@ -9,10 +9,10 @@
                 <h1 id="subtitle" class="page-title">
                     <i class="voyager-basket"></i> Detalle Solicitud
                 </h1>
-                <a href="{{ route('inbox.index') }}" class="btn btn-warning btn-add-new">
+                <a href="{{ route('nonstock.inbox') }}" class="btn btn-warning btn-add-new">
                     <i class="fa-solid fa-file"></i> <span>Volver</span>
                 </a>
-                @if ($data->status == 'Enviado')
+                @if ($nonStockRequest->status == 'enviado')
                     <a data-toggle="modal" data-target="#modal-rechazar" title="Rechazar Solicitud" class="btn btn-sm btn-dark view">
                         <i class="fa-solid fa-thumbs-down"></i> <span class="hidden-xs hidden-sm">Rechazar</span>
                     </a> 
@@ -38,7 +38,7 @@
                                             <label class="panel-title">Almacen</label>
                                         </div>
                                         <div class="panel-body" style="padding-top:0;">
-                                            <p><small>{{strtoupper($data->sucursal->nombre)}}</small></p>
+                                            <p><small>{{strtoupper($nonStockRequest->sucursal->nombre)}}</small></p>
                                         </div>
                                         <hr style="margin:0;">
                                     </div>
@@ -47,7 +47,7 @@
                                             <label class="panel-title">Nro Solicitud</label>
                                         </div>
                                         <div class="panel-body" style="padding-top:0;">
-                                            <p><small>{{strtoupper($data->nropedido)}}</small></p>
+                                            <p><small>{{strtoupper($nonStockRequest->nro_request)}}</small></p>
                                         </div>
                                         <hr style="margin:0;">
                                     </div>
@@ -56,7 +56,7 @@
                                             <label class="panel-title">Solicitante</label>
                                         </div>
                                         <div class="panel-body" style="padding-top:0;">
-                                            <p><small>{{strtoupper($data->first_name.' '.$data->last_name.' - '.$data->job)}} </small></p>
+                                            <p><small>{{strtoupper($nonStockRequest->user->name.' - '.$nonStockRequest->job)}} </small></p>
                                         </div>
                                         <hr style="margin:0;">
                                     </div>
@@ -65,7 +65,7 @@
                                             <label class="panel-title">Fecha de Solicitud</label>
                                         </div>
                                         <div class="panel-body" style="padding-top:0;">
-                                            <p><small>{{date('d/m/Y H:i:s', strtotime($data->fechasolicitud))}}</small></p>
+                                            <p><small>{{date('d/m/Y H:i:s', strtotime($nonStockRequest->date_request))}}</small></p>
                                         </div>
                                         <hr style="margin:0;">
                                     </div>
@@ -74,7 +74,7 @@
                                             <label class="panel-title">Dirección</label>
                                         </div>
                                         <div class="panel-body" style="padding-top:0;">
-                                            <p><small>{{$data->direccion_name}}</small></p>
+                                            <p><small>{{$nonStockRequest->direction_name}}</small></p>
                                         </div>
                                         <hr style="margin:0;">
                                     </div>
@@ -83,7 +83,7 @@
                                             <label class="panel-title">Unidad</label>
                                         </div>
                                         <div class="panel-body" style="padding-top:0;">
-                                            <p><small>{{$data->unidad_name}}</small></p>
+                                            <p><small>{{$nonStockRequest->unit_name}}</small></p>
                                         </div>
                                         <hr style="margin:0;">
                                     </div>
@@ -94,34 +94,30 @@
                                             <table id="dataTableStyle" class="table table-bordered table-striped table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 50px; text-align: center">N°</th>                                                 
-                                                        <th style="text-align: center">PARTIDA</th>
-                                                        <th style="text-align: center">DETALLE</th>
-                                                        <th style="text-align: center">UNIDAD</th>                
+                                                        <th style="width: 50px; text-align: center">N°</th>
+                                                        <th style="text-align: center">DESCRIPCIÓN</th>
+                                                        <th style="text-align: center">UNIDAD</th>
                                                         <th width="150px" style="text-align: center">CANTIDAD SOLICITADA</th>
-                                                        @if ($data->status == 'Entregado')
+                                                        <th width="150px" style="text-align: center">PRECIO UNITARIO</th>
+                                                        <th width="150px" style="text-align: center">PRECIO REFERENCIAL</th>
+                                                        @if ($nonStockRequest->status == 'entregado')
                                                             <th width="150px" style="text-align: center">CANTIDAD ENTREGADA</th>  
                                                         @endif               
                                                     </tr>
                                                 </thead>    
                                                 <tbody>
-                                                    @php
-                                                        $numeroitems =1;
-                                                    @endphp
-                                                    @foreach ($data->solicitudDetalle as $item)
+                                                    @foreach ($nonRequestArticles as $item)
                                                         <tr>
-                                                            <td style="text-align: right">{{$numeroitems}}</td>
-                                                            <td style="text-align: left">{{$item->article->partida->codigo}} - {{$item->article->partida->nombre}}</td>
-                                                            <td style="text-align: left">{{strtoupper($item->article->nombre)}}</td>
-                                                            <td style="text-align: center">{{strtoupper($item->article->presentacion)}}</td>
-                                                            <td style="text-align: right">{{number_format($item->cantsolicitada, 2, ',', ' ')}}</td>
-                                                            @if ($data->status == 'Entregado')
-                                                                <td style="text-align: right">{{number_format($item->cantentregada, 2, ',', ' ')}}</td>
+                                                            <td style="text-align: right">{{$loop->iteration}}</td>
+                                                            <td style="text-align: left">{{strtoupper($item->nonStockArticle->name_description)}}</td>
+                                                            <td style="text-align: center">{{strtoupper($item->articlePresentation->name_presentation)}}</td>
+                                                            <td style="text-align: right">{{number_format($item->quantity, 0, ',', ' ')}}</td>
+                                                            <td style="text-align: right">{{number_format($item->unit_price, 2, ',', ' ')}}</td>
+                                                            <td style="text-align: right">{{number_format($item->reference_price, 2, ',', ' ')}}</td>
+                                                            @if ($nonStockRequest->status == 'entregado')
+                                                                {{-- <td style="text-align: right">{{number_format($item->cantentregada, 2, ',', ' ')}}</td> --}}
                                                             @endif  
                                                         </tr>
-                                                        <?php
-                                                            $numeroitems++;
-                                                        ?>
                                                     @endforeach
                                                 </tbody>                                        
                                             </table>
@@ -139,13 +135,13 @@
             <div class="modal fade" tabindex="-1" id="modal-rechazar" role="dialog">
                 <div class="modal-dialog modal-dark">
                     <div class="modal-content">
-                        {!! Form::open(['route' => 'inbox.rechazar', 'method' => 'POST']) !!}
+                        {!! Form::open(['route' => 'nonstock.inbox.reject', 'method' => 'POST']) !!}
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title"><i class="fa-solid fa-thumbs-down"></i> Rechazar Solicitud</h4>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" name="id" id="id" value="{{$data->id}}">
+                            <input type="hidden" name="id" id="id" value="{{$nonStockRequest->id}}">
                             <div class="text-center" style="text-transform:uppercase">
                                 <i class="fa-solid fa-thumbs-down" style="color: #4d4c4b; font-size: 5em;"></i>
                                 <br>
@@ -169,13 +165,13 @@
             <div class="modal modal-success fade" tabindex="-1" id="myModalAprobar" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        {!! Form::open(['route' => 'inbox.aprobar', 'method' => 'post']) !!}
+                        {!! Form::open(['route' => 'nonstock.inbox.accept', 'method' => 'post']) !!}
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title"><i class="fa-solid fa-file"></i> Aprobar Solicitud</h4>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" name="id" id="id" value="{{$data->id}}">
+                            <input type="hidden" name="id" id="id" value="{{$nonStockRequest->id}}">
         
                             <div class="text-center" style="text-transform:uppercase">
                                 <i class="fa-solid fa-file" style="color: rgb(134, 127, 127); font-size: 5em;"></i>

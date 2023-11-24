@@ -23,18 +23,18 @@
                 @forelse ($data as $item)
                     <tr style="text-align: center">
                         <td>{{$item->id}}</td>
-                        <td style="text-align: center">{{strtoupper($item->first_name.' '.$item->last_name.' - '.$item->job)}}</td>                        
+                        <td style="text-align: center">{{strtoupper($item->user->name.' - '.$item->job)}}</td>                        
 
                         <td style="text-align: center">
                             <p><small>Gestion: {{$item->gestion}}</small></p>
-                            <p><small>{{$item->unidad_name}}</small></p>
-                            <p><small>{{$item->direccion_name}}</small></p>
+                            <p><small>{{$item->unit_name}}</small></p>
+                            <p><small>{{$item->direction_name}}</small></p>
                         </td>
                         <td>
-                            <p><small>{{$item->nropedido}}</small></p>
+                            <p><small>{{$item->nro_request}}</small></p>
                         </td>
 
-                        <td>{{date('d/m/Y', strtotime($item->fechasolicitud))}}</td>
+                        <td>{{date('d/m/Y', strtotime($item->date_request))}}</td>
                         <td style="text-align: center">{{date('d/m/Y H:i:s', strtotime($item->created_at))}}<br><small>{{\Carbon\Carbon::parse($item->created_at)->diffForHumans()}}.</small></td>
 
 
@@ -43,38 +43,29 @@
                             <td style="text-align: center"><label class="label label-dark">{{$item->sucursal->nombre}}</label></td>
                         @endif
                         <td style="text-align: center">
-                            @if ($item->status == 'Enviado')
+                            @if ($item->status == 'enviado')
                                 <label class="label label-warning">Pendiente</label>
                             @endif
-                            @if ($item->status == 'Rechazado')
-                                <label class="label label-dark">Rechazado</label>
+                            @if ($item->status == 'rechazado')
+                                <label class="label label-danger">Rechazado</label>
                             @endif
-                            @if ($item->status == 'Aprobado')
+                            @if ($item->status == 'aprobado')
                                 <label class="label label-info">Aprobado</label>
                             @endif
-                            @if ($item->status == 'Entregado')
+                            @if ($item->status == 'entregado')
                                 <label class="label label-success">Entregado</label>
                             @endif
                         </td>
                         <td style="text-align: right">
                             <div class="no-sort no-click bread-actions text-right">
-                                {{-- @if ($item->status == 'Enviado')
-                                    <a data-toggle="modal" data-id="{{$item->id}}" data-target="#myModalAprobar" title="Aprobar Solicitud" class="btn btn-sm btn-success view">
-                                        <i class="fa-solid fa-thumbs-up"></i> Aprobar
-                                    </a>   
-                                @endif --}}
+
 
                                 @if (auth()->user()->hasPermission('read_inbox'))
-                                    <a href="{{route('inbox.show',$item->id)}}" title="Ver Solicitud" class="btn btn-sm btn-warning view">
+                                    <a href="{{route('nonstock.inbox.view',$item->id)}}" title="Ver Solicitud" class="btn btn-sm btn-warning view">
                                         <i class="fa-solid fa-eye"></i> Ver
                                     </a>  
                                 @endif
                                 
-                                {{-- @if($item->status == 'Enviado')
-                                    <a data-toggle="modal" data-target="#modal-rechazar" title="Rechazar Solicitud" data-id="{{$item->id}}" class="btn btn-sm btn-dark view">
-                                        <i class="fa-solid fa-thumbs-down"></i> <span class="hidden-xs hidden-sm">Rechazar</span>
-                                    </a>                        
-                                @endif                                 --}}
                             </div>
                         </td>                        
                     </tr>
