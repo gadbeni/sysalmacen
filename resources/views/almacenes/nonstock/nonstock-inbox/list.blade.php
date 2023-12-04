@@ -23,7 +23,7 @@
                 @forelse ($data as $item)
                     <tr style="text-align: center">
                         <td>{{$item->id}}</td>
-                        <td style="text-align: center">{{strtoupper($item->user->name.' - '.$item->job)}}</td>                        
+                        <td style="text-align: center">{{strtoupper($item->registerUser_name.' - '.$item->job)}}</td>                        
 
                         <td style="text-align: center">
                             <p><small>Gestion: {{$item->gestion}}</small></p>

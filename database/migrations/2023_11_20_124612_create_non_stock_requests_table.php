@@ -18,6 +18,7 @@ class CreateNonStockRequestsTable extends Migration
             $table->foreignId('sucursal_id')->nullable()->constrained('sucursals');
             $table->foreignId('subSucursal_id')->nullable()->constrained('sucursal_sub_almacens');
             $table->foreignId('registerUser_id')->constrained('users');//usuario que registra la solicitud
+            $table->string('registerUser_name');//nombre del usuario que registra la solicitud
             $table->date('date_request');//fecha de solicitud
             $table->string('gestion', 10);
             $table->string('nro_request'); //numero de solicitud

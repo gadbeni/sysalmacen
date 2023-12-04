@@ -56,7 +56,7 @@
                                             <label class="panel-title">Solicitante</label>
                                         </div>
                                         <div class="panel-body" style="padding-top:0;">
-                                            <p><small>{{strtoupper($nonStockRequest->user->name.' - '.$nonStockRequest->job)}} </small></p>
+                                            <p><small>{{strtoupper($nonStockRequest->registerUser_name.' - '.$nonStockRequest->job)}} </small></p>
                                         </div>
                                         <hr style="margin:0;">
                                     </div>

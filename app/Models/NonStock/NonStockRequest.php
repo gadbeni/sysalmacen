@@ -15,6 +15,7 @@ class NonStockRequest extends Model
         'sucursal_id',
         'subSucursal_id',
         'registerUser_id',
+        'registerUser_name',
         'date_request',
         'gestion',
         'nro_request',

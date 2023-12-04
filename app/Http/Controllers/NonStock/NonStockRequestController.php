@@ -62,6 +62,7 @@ class NonStockRequestController extends Controller
      */
     public function store(Request $request)
     {
+        //El usuario admin no puede almacernar articulos de inexistencia por que no tiene unidad administrativa
         DB::beginTransaction(); //Start transaction!
         try{
             $user = auth()->user();
@@ -79,6 +80,7 @@ class NonStockRequestController extends Controller
             $nonStockRequest->sucursal_id = $user->sucursal_id;
             $nonStockRequest->subSucursal_id = $request->input('subSucursal_id');
             $nonStockRequest->registerUser_id = $user->id;
+            $nonStockRequest->registerUser_name = $user->name;
 
             $nonStockRequest->date_request = Carbon::now();
             $nonStockRequest->gestion = $gestion->gestion;
@@ -112,16 +114,16 @@ class NonStockRequestController extends Controller
             }
             // ----------- NonRequestArticle -------------
             $quantities =  $request->input('quantity');
-            $prices = $request->input('price');
-            $price_refs = $request->input('price_ref');
+            // $prices = $request->input('price');
+            // $price_refs = $request->input('price_ref');
             for($i = 0; $i < count($articles); $i++){
                 $nonRequestArticle = new NonRequestArticle();
                 $nonRequestArticle->non_request_id = $nonStockRequest->id;
                 $nonRequestArticle->non_article_id = $nonStockArticlesIds[$i];
                 $nonRequestArticle->article_presentation_id = $articlePresentationsIds[$i];
                 $nonRequestArticle->quantity = $quantities[$i];
-                $nonRequestArticle->unit_price = $prices[$i];
-                $nonRequestArticle->reference_price = $price_refs[$i];
+                // $nonRequestArticle->unit_price = $prices[$i];
+                // $nonRequestArticle->reference_price = $price_refs[$i];
                 $nonRequestArticle->save();
             }
             DB::commit(); //Commit to DataBase       

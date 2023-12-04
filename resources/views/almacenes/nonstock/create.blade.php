@@ -95,8 +95,8 @@
                                             <th>Articulo (Descripción)</th>
                                             <th>Unidad</th>
                                             <th>Cantidad</th>
-                                            <th>Precio Unitario</th>
-                                            <th>Precio referencial</th>
+                                            {{-- <th>Precio Unitario</th>
+                                            <th>Precio referencial</th> --}}
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -120,12 +120,12 @@
                                             <td>
                                                 <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
                                             </td>
                                             <td>
                                                 <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="1"><i class="voyager-trash"></i></button>
                                             </td>
@@ -180,15 +180,18 @@
                 <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
             </td>
             <td>
-                <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
+            <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="${num}"><i class="voyager-trash"></i></button>
             </td>
-            <td>
-                <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
-            </td>
-            <td>
-                <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="${num}"><i class="voyager-trash"></i></button>
-            </td>
+            
         `;
+        // <td>
+        //     <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
+        // </td>
+        // <td>
+        //     <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
+        // </td>
+        
+
         tbody.appendChild(row);
         btn_delete_row = document.querySelectorAll('.btn-delete-row');
         btn_delete_row.forEach(btn => {

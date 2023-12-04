@@ -19,8 +19,8 @@ class CreateNonRequestArticlesTable extends Migration
             $table->foreignId('non_article_id')->constrained('non_stock_articles');
             $table->foreignId('article_presentation_id')->constrained('article_presentations');//presentacion del articulo
             $table->integer('quantity'); //cantidad
-            $table->double('unit_price', 8, 2);// precio unitario
-            $table->double('reference_price', 8, 2);// precio de referencia
+            $table->double('unit_price', 8, 2)->nullable();// precio unitario
+            $table->double('reference_price', 8, 2)->nullable();// precio de referencia
             $table->timestamps();
         });
     }

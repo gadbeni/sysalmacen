@@ -15,6 +15,11 @@
             <img src="{{ asset('images/rechazado.png') }}" /> 
         </div>
     @endif
+    @if ($nonStockRequest->status == 'aprobado')
+        <div id="watermark" class="w-opacity">
+            <img src="{{ asset('images/inexistencia.png') }}" /> 
+        </div>
+    @endif
     @php
         $months = array('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');    
     @endphp
@@ -24,7 +29,8 @@
             <td style="width: 15%"><img src="{{ asset('images/icon.png') }}" alt="GADBENI" width="100px"></td>
             <td style="text-align: center;  width:70%">
                 <h3 style="margin-bottom: 0px; margin-top: 5px; font-size: 15px">
-                    FORMULARIO (INEXISTENCIA) PEDIDO DE MATERIALES Y/O SERVICIOS<br>
+                    SOLICITUD DE CONTRATACIONES DE OBRAS, BIENES, SERVICIOS GENERALES Y CONSULTARIA/FORMULARIO PEDIDO DE MATERIALES Y/O SERVICIOS <br>
+                    FORMULARIO (INEXISTENCIA)<br>
                 </h3>     
             </td>
             <td style="text-align: right; width:15%">
@@ -43,7 +49,7 @@
     <table border="1" cellspacing="0" cellpadding="5" class="text-center" width="100%" style="font-size: 8pt">
         <tr>
             <th style="text-align: left; width:120px">SOLICITANTE</th>
-            <td style="text-align: left">{{strtoupper($nonStockRequest->user->name.' '.$nonStockRequest->job)}}</td>                        
+            <td style="text-align: left">{{strtoupper($nonStockRequest->registerUser_name.' '.$nonStockRequest->job)}}</td>                        
         </tr>
         <tr>
             <th style="text-align: left">UNIDAD SOLICITANTE</th>
@@ -76,8 +82,12 @@
                     <td style="text-align: left">{{strtoupper($data->nonStockArticle->name_description)}}</td>
                     <td style="text-align: center">{{strtoupper($data->articlePresentation->name_presentation)}}</td>
                     <td style="text-align: right">{{number_format($data->quantity, 0, ',', ' ')}}</td>
-                    <td style="text-align: right">{{number_format($data->unit_price, 2, ',', ' ')}}</td>
-                    <td style="text-align: right">{{number_format($data->reference_price, 2, ',', ' ')}}</td>
+                    <td style="text-align: right">
+                        {{-- {{number_format($data->unit_price, 2, ',', ' ')}} --}}
+                    </td>
+                    <td style="text-align: right">
+                        {{-- {{number_format($data->reference_price, 2, ',', ' ')}} --}}
+                    </td>
                 </tr>
             @empty
                 <tr style="text-align: center">
@@ -101,7 +111,7 @@
                 ______________________
                 <br>
                 <b style="font-size: 14px">Unidad Solicitante</b> <br>
-                <b style="font-size: 11px">{{strtoupper($nonStockRequest->user->name)}} <br>
+                <b style="font-size: 11px">{{strtoupper($nonStockRequest->registerUser_name)}} <br>
                     {{strtoupper($nonStockRequest->job)}}</b>
             </td>
             <td style="text-align: center">
@@ -129,6 +139,9 @@
         }
         body{
             margin: 1rem 2rem;
+        }
+        .w-opacity{
+            opacity: 0.2 !important;
         }
           
     </style>
