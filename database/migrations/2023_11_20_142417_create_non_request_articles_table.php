@@ -16,8 +16,10 @@ class CreateNonRequestArticlesTable extends Migration
         Schema::create('non_request_articles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('non_request_id')->constrained('non_stock_requests');
-            $table->foreignId('non_article_id')->constrained('non_stock_articles');
-            $table->foreignId('article_presentation_id')->constrained('article_presentations');//presentacion del articulo
+            $table->foreignId('article_id')->nullable()->constrained('articles');
+            $table->foreignId('non_article_id')->nullable()->constrained('non_stock_articles');
+            $table->foreignId('article_presentation_id')->nullable()->constrained('article_presentations');//presentacion del articulo
+            $table->boolean('is_existing_article');
             $table->integer('quantity'); //cantidad
             $table->double('unit_price', 8, 2)->nullable();// precio unitario
             $table->double('reference_price', 8, 2)->nullable();// precio de referencia
