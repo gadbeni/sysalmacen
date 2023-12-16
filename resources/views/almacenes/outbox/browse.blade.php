@@ -15,11 +15,11 @@
                         <i class="voyager-plus"></i> <span>Crear</span>
                     </a>
                 {{-- @endif --}}
-                @if (auth()->user()->sucursal_id == 1)
+                {{-- @if (auth()->user()->sucursal_id == 1)
                 <a href="{{ route('nonstock.index') }}" class="btn btn-warning">
                     <i class="fa fa-file-text"></i> <span>Form de Inexistencia</span>
                 </a>
-                @endif
+                @endif --}}
                 
                 <!-- </div> -->
             </div>

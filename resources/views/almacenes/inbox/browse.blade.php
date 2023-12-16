@@ -10,11 +10,11 @@
                     <h1 id="subtitle" class="page-title">
                         <i class="icon fa-regular fa-clipboard"></i> Solicitudes
                     </h1>
-                    @if (auth()->user()->sucursal_id == 1)
+                    {{-- @if (auth()->user()->sucursal_id == 1)
                     <a href="{{ route('nonstock.inbox') }}" class="btn btn-warning">
                         <i class="fa fa-file-text"></i> <span>Solicitud de Inexistencia</span>
                     </a>
-                @endif
+                    @endif --}}
             </div>
         </div>
     @stop
