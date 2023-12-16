@@ -144,6 +144,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             {!! Form::open(['route' => 'delete_session', 'method' => 'post']) !!}
+            @method('DELETE')
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><i class="voyager-trash"></i> - Desea eliminar la sesion?</h4>
