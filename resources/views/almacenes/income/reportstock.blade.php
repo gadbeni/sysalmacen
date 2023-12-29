@@ -96,8 +96,14 @@
                         <th>FECHA INGRESO</th>
                     </tr>
                     <tr>
-                        <td>{{$proveedor->razonsocial}}</td>
-                        <td>{{$proveedor->nit}}</td>
+                        @if ($proveedor)
+                            <td>{{$proveedor->razonsocial}}</td>
+                            <td>{{$proveedor->nit}}</td>
+                        @else
+                            <td>Sin Proveedor</td>
+                            <td></td>
+                        @endif
+                        
                         <td>{{$factura[0]->nrofactura}}</td>
                         <td>{{\Carbon\Carbon::parse($sol->fechaingreso)->format('d/m/Y')}}</td>
                     </tr>
