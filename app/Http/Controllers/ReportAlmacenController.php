@@ -630,7 +630,7 @@ class ReportAlmacenController extends Controller
                     ->join('detalle_facturas as df', 'df.factura_id', 'f.id')
                     ->join('articles as a', 'a.id', 'df.article_id')
                     ->join('modalities as m', 'm.id', 'sc.modality_id')
-                    ->join('providers as p', 'p.id', 'f.provider_id')
+                    ->leftJoin('providers as p', 'p.id', 'f.provider_id')
 
                     ->where('sc.deleted_at', null)
                     ->where('sc.sucursal_id', $request->sucursal_id)

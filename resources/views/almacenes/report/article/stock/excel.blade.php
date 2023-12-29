@@ -26,7 +26,7 @@
                 <td>{{ $count }}</td>
                 <td>{{date('d/m/Y', strtotime($item->fechaingreso))}}</td>
                 <td>{{ $item->modalidad }} <br>{{$item->nrosolicitud}} </td>
-                <td>{{ $item->proveedor }}</td>
+                <td>{{ $item->proveedor != null ? $item->proveedor:"SIN PROVEEDOR"}}</td>
                 <td>{{ $item->tipofactura=='Orden_Compra'? 'Orden de Compra':'Nro Factura'}}<br>{{$item->nrofactura}}</td>
                 <td>{{ $item->articulo }}</td>
                 <td>{{ $item->presentacion }}</td>
