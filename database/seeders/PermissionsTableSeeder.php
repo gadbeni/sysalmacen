@@ -149,6 +149,7 @@ class PermissionsTableSeeder extends Seeder
         $keys = [
             // reportes anuales
             'browse_printalmacen-inventarioAnual-da',
+            'browse_printalmacen-inventarioAnual-da-central',
             'browse_printalmacen-inventarioAnual-partida',
             'browse_printalmacen-inventarioAnual-detalle',
         ];
