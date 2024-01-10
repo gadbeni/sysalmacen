@@ -40,6 +40,155 @@ class ReportAlmacenController extends Controller
     {
         $this->middleware('auth');
     }
+    // reporte direccion administrativa Central
+    public function directionIncomeCentral()
+    {
+
+        $user = Auth::user();
+        $query_filter = 'user_id ='.Auth::user()->id;
+        
+        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('almacen_admin'))
+        {
+            $query_filter = 1;
+        }
+
+        $sucursal = SucursalUser::where('condicion', 1)
+                        ->where('deleted_at', null)
+                        ->whereRaw($query_filter)
+                        ->GroupBy('sucursal_id')
+                        ->first();       
+
+        return view('almacenes/report/inventarioAnual/direccionAdministrativaCentral/report', compact('sucursal'));
+    }
+
+    public function directionIncomeCentralList(Request $request)
+    {
+        $gestion = $request->gestion;
+        $sucursal = Sucursal::find($request->sucursal_id);
+
+
+        // para obtener todas las direciones de cada almacen
+        $direction = DB::connection('mamore')->table('direcciones as d')
+            ->join('sysalmacen.sucursal_direccions as s', 's.direccionAdministrativa_id', 'd.id')
+            ->where('s.deleted_at', null)
+            ->where('s.sucursal_id', $request->sucursal_id)
+
+            ->select('d.id as direcion_id', 'd.nombre')
+            ->orderBy('d.id', 'ASC')
+
+            ->get();
+
+        // Para obtener la direccion de finanzas central.
+        $directionEspecific = $direction->firstWhere('direcion_id', 16);
+
+        
+        //Para obtener los saldos de cada almacen de las GESTIONES anteriores 
+        $saldos = DB::table('solicitud_compras as sc')
+                ->join('facturas as f', 'f.solicitudcompra_id', 'sc.id')       
+                ->join('detalle_facturas as df', 'df.factura_id', 'f.id')  
+
+                ->where('sc.deleted_at', null)
+                ->where('sc.sucursal_id', $request->sucursal_id)
+
+                ->where('f.deleted_at', null)
+
+                ->where('df.hist', 1)
+                ->where('df.gestion', $gestion)
+                ->where('df.deleted_at', null)
+                
+
+                ->select('sc.direccionadministrativa as id', DB::raw("SUM(df.cantrestante * df.precio) as saldo"))
+                ->groupBy('sc.direccionadministrativa')
+                ->orderBy('sc.direccionadministrativa', 'ASC')
+                ->get();
+
+
+        // Para obtener los ingresos de la gestion actual de cada almacen
+        $data = DB::table('solicitud_compras as sc')
+                ->join('facturas as f', 'f.solicitudcompra_id', 'sc.id')       
+                ->join('detalle_facturas as df', 'df.factura_id', 'f.id')   
+
+                ->where('sc.deleted_at', null)
+                ->where('sc.sucursal_id', $request->sucursal_id)
+                ->where('sc.gestion', $gestion)
+
+                ->where('f.deleted_at', null)
+
+                ->where('df.hist', 0)
+                ->where('df.gestion', $gestion)
+                ->where('df.deleted_at', null)                    
+
+                ->select('sc.direccionadministrativa as id', DB::raw("SUM(df.cantsolicitada * df.precio) as ingreso"))
+                    // ->select('sc.direccionadministrativa as id',DB::raw("SUM(f.montofactura) as ingreso"))
+                ->groupBy('sc.direccionadministrativa')
+                ->get();
+
+                 
+        // Para obtener las salidas de la gestion  actual de cada almacen
+        $salida = DB::table('solicitud_egresos as se')
+                ->join('detalle_egresos as de', 'de.solicitudegreso_id', 'se.id')
+
+                ->where('se.gestion', $gestion)
+                ->where('se.sucursal_id', $request->sucursal_id)
+                ->where('se.deleted_at', null)
+
+                ->where('de.deleted_at', null)
+                        // ->where('d.direcciones_tipo_id', 1)
+                ->select('se.direccionadministrativa as id', DB::raw("SUM(de.cantsolicitada * de.precio) as salida"))
+                        // ->select('d.id',DB::raw("SUM(de.totalbs) as salida"))
+
+                ->groupBy('se.direccionadministrativa')
+                ->get();
+
+        
+            foreach($direction as $item)
+            {
+                $item->inicio="0.0";
+
+                foreach($saldos as $sitem)
+                {
+                    if($item->direcion_id == $sitem->id)
+                    {
+                        $item->inicio = $sitem->saldo;
+                    }
+                }
+
+
+                $item->ingreso="0.0";
+                foreach($data as $ditem)
+                {
+                    if($item->direcion_id == $ditem->id)
+                    {
+                        $item->ingreso = $ditem->ingreso;
+                    }
+                }
+
+                $item->salida="0.0";
+                foreach($salida as $eitem)
+                {
+                    if($item->direcion_id == $eitem->id)
+                    {
+                        $item->salida = $eitem->salida;
+                    }
+                }
+            }
+
+
+
+        if($request->print==1)
+        {
+            return view('almacenes/report/inventarioAnual/direccionAdministrativaCentral/print', compact('direction','directionEspecific', 'gestion', 'sucursal'));
+        }
+        if($request->print==2)
+        {
+            return Excel::download(new AnualDaExport($direction), $sucursal->nombre.' - DA Anual Central'.$gestion.'.xlsx');
+        }
+        if($request->print ==NULL)
+        {            
+            return view('almacenes/report/inventarioAnual/direccionAdministrativaCentral/list', compact(['direction','directionEspecific']));
+        }
+    }
+
     //para los reportes mediantes direciones admistrativa Income y Egress en Bolivianos  saldo
     public function directionIncomeSalida()
     {
