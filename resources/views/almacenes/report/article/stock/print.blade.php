@@ -37,6 +37,7 @@
                 <th>PROVEEDOR</th>
                 <th>NRO</th>
                 <th>ARTICULO</th>
+                <th>CODIGO ART</th>|
                 <th style="width:30px">PRESENTACION</th>
                 <th style="width:60px">PRECIO</th>
                 <th style="width:60px">CANT.</th>
@@ -63,6 +64,7 @@
                     
                     
                     <td style="text-align: left">{{ $item->articulo }}</td>
+                    <td style="text-align: center">{{ $item->article_id }}</td>
                     <td style="text-align: left">{{ $item->presentacion }}</td>
                     <td style="text-align: right">{{ number_format($item->precio,2) }}</td>
                     <td style="text-align: right">{{ number_format($item->cantrestante,2) }}</td>

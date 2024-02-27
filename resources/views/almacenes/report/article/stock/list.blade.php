@@ -18,6 +18,7 @@
                         <th style="width:25%">PROVEEDOR</th>
                         <th style="width:25%">NRO</th>
                         <th style="width:25%">ARTICULO</th>
+                        <th style="width:25%">CODIGO ART</th>
                         <th style="width:25%">PRESENTACION</th>
                         <th style="width:25%">PRECIO</th>
                         <th style="width:25%">CANT.</th>
@@ -44,6 +45,7 @@
                                 <td>{{ $item->tipofactura=='Orden_Compra'? 'Orden de Compra':'Nro Factura'}}<br>{{$item->nrofactura}}</td>
                                 
                                 <td>{{ $item->articulo }}</td>
+                                <td>{{ $item->article_id }}</td>
                                 <td>{{ $item->presentacion }}</td>
                                 <td>{{ $item->precio }}</td>
                                 <td>{{ $item->cantrestante }}</td>
