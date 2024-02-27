@@ -36,6 +36,7 @@
             <tr>
                 <th rowspan="2" style="width:5px">N&deg;</th>
                 <th rowspan="2" style="text-align: center">DESCRIPCION (ITEM)</th>
+                <th rowspan="2" style="text-align: center">CODIGO</th>
                 <th rowspan="2" style="text-align: center">U. DE MEDIDA</th>
                 <th rowspan="2" style="text-align: center">PRECIO UNITARIO</th>
                 <th colspan="4" style="text-align: center">CANTIDAD</th>
@@ -68,7 +69,8 @@
             @forelse ($collection as $item)
                 <tr>
                             <td>{{ $count }}</td>
-                            <td>{{ $item['id'] }} - {{ $item['nombre'] }}</td>
+                            <td>{{ $item['nombre'] }}</td>
+                            <td style="text-align: center">{{ $item['id'] }}</td>
                             <td style="text-align: right">{{ $item['presentacion']}}</td>
                             <td style="text-align: right">{{ $item['precio']}}</td>
                             <td style="text-align: right">{{ number_format($item['saldo'],2,',', '.')}}</td>
