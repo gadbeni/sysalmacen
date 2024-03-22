@@ -22,6 +22,10 @@ class NonStockRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -52,6 +56,66 @@ class NonStockRequestController extends Controller
         $subalmacen = SucursalSubAlmacen::where('sucursal_id', $sucursal->id)->where('deleted_at', null)->get();
         $funcionario = $this->getWorker($user->funcionario_id);
         return view('almacenes.nonstock.create',compact('funcionario','sucursal','subalmacen'));
+    }
+
+    //Funcion ajax para obtener los articulos disponible en el almacen y sin stock
+    public function ajaxProductExists(Request $request)
+    {
+
+        $q = $request->search;
+        $type = $request->externo;
+
+
+        $user = Auth::user();
+
+
+        $mainUnit = SucursalUnidadPrincipal::where('sucursal_id', $user->sucursal_id)->where('status', 1)->where('deleted_at', null)->get();
+        // return $mainUnit;
+        $query = '';
+
+        if(count($mainUnit)== 1)
+        {
+            $query = ' or s.unidadadministrativa = '.$mainUnit[0]->unidadAdministrativa_id;
+        }
+
+        if(count($mainUnit)== 2)
+        {
+            $query = ' or s.unidadadministrativa = '.$mainUnit[0]->unidadAdministrativa_id.' or s.unidadadministrativa = '.$mainUnit[1]->unidadAdministrativa_id;
+        }
+
+
+
+
+        $unidad = 'null';
+        if($user->unidadAdministrativa_id)
+        {
+            $unidad = $user->unidadAdministrativa_id;
+        }
+
+
+        $data = DB::table('solicitud_compras as s')
+                ->join('facturas as f', 'f.solicitudcompra_id', 's.id')
+                ->join('detalle_facturas as d', 'd.factura_id', 'f.id')
+                ->join('articles as a', 'a.id', 'd.article_id')
+                ->where('s.sucursal_id', $user->sucursal_id)
+                ->where('s.subSucursal_id', $type)
+                ->where('s.stock', 1)
+                ->where('s.deleted_at', null)      
+                // ->whereRaw('(s.unidadadministrativa = '.$funcionario->id_unidad.' or s.unidadadministrativa = 0)')
+                ->whereRaw('(s.unidadadministrativa = '.$unidad.''.$query.')')
+                // ->whereRaw('(s.unidadadministrativa = '.$funcionario->id_unidad.')')
+                ->where('f.deleted_at', null)
+                ->where('d.deleted_at', null)
+                ->where('d.cantrestante', '>', 0)
+                ->where('d.condicion', 1)
+                ->where('d.hist', 0)
+                ->select('a.id', 'a.nombre as nombre', 'a.image', 'a.presentacion')
+                ->whereRaw("(nombre like '%$q%')")
+                ->groupBy('id')
+                ->orderBy('nombre')
+                ->get();
+
+        return response()->json($data);
     }
 
     /**

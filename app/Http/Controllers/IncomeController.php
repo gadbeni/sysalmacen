@@ -599,6 +599,7 @@ class IncomeController extends Controller
     {
         
         return DB::connection('mamore')->table('unidades')
+                        ->where('estado', 1)
                         ->where('deleted_at', null)
                         ->where('direccion_id',$id)
                         ->select('*')

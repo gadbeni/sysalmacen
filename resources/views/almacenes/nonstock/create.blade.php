@@ -3,12 +3,16 @@
 @section('page_header')
 <div class="container-fluid">
     <div class="row">
-        <h1 id="subtitle" class="page-title">
-            <i class="fa fa-file-text"></i> Solicitud de Inexistencia
-        </h1>
-        <a href="{{ route('nonstock.index') }}" class="btn btn-warning btn-add-new">
-            <i class="fa-solid fa-file"></i> <span>Volver</span>
-        </a>
+        <div class="col-md-4">
+            <h1 id="subtitle" class="page-title">
+                <i class="fa fa-cart-arrow-down"></i> Solicitud de Inexistencia
+            </h1>
+        </div>
+        <div class="col-md-8 text-right" style="padding-top: 10px">
+            <a href="{{ route('nonstock.index') }}" class="btn btn-warning btn-add-new">
+                <i class="fa fa-arrow-circle-left"></i> <span>Volver</span>
+            </a>
+        </div>
     </div>
 </div>
 @endsection
@@ -49,32 +53,42 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-7">
-                            <label for="">Solicitante</label>
-                            <p>
-                                <small>
+                            <label for="" class="panel-title">Solicitante</label>
+                            <p class="panel-body" style="padding-top:0;">
+                                <small style="text-transform: uppercase">
                                     {{auth()->user()->name}}
                                     @if ($funcionario)
                                     - {{$funcionario->cargo}}
                                     @endif     
                                 </small>
                             </p>
+                            <hr style="margin:0;">
                         </div>
                         <div class="col-lg-5">
-                            <label for="">Fecha de solicitud</label>
-                            <p><small>{{\Carbon\Carbon::now()->format('d/m/Y h:i:s')}}</small></p>
+                            <label for="" class="panel-title">Fecha de solicitud</label>
+                            <p class="panel-body" style="padding-top:0;">
+                                <small>{{\Carbon\Carbon::now()->format('d/m/Y h:i:s')}}</small>
+                            </p>
+                            <hr style="margin:0;">
                         </div>
                     </div>
                     <div class="row">
                         @if (auth()->user()->direction)
                             <div class="col-lg-6">
-                                <label for="">Dirección</label>
-                                <p><small>{{auth()->user()->direction->nombre}}</small></p>
+                                <label for="" class="panel-title">Dirección</label>
+                                <p class="panel-body" style="padding-top:0;">
+                                    <small>{{auth()->user()->direction->nombre}}</small>
+                                </p>
+                                <hr style="margin:0;">
                             </div>
                         @endif
                         @if (auth()->user()->unit)
                             <div class="col-lg-6">
-                                <label for="">Unidad</label>
-                                <p><small>{{auth()->user()->unit->nombre}}</small></p>
+                                <label for="" class="panel-title">Unidad</label>
+                                <p class="panel-body" style="padding-top:0;">
+                                    <small>{{auth()->user()->unit->nombre}}</small>
+                                </p>
+                                <hr style="margin:0;">
                             </div>
                         @endif
                     </div>
@@ -83,6 +97,52 @@
         </div>
         <!-- form articles -->
         <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-bordered">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="product_id">Buscar producto</label>
+                                    <select class="form-control" id="select_producto"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="dataTable" class="tables table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 30px">N&deg;</th>
+                                                <th style="text-align: center">Detalle</th>  
+                                                <th style="text-align: center; width: 120px">Cantidad</th>  
+                                                <th style="text-align: center; width: 80px"></th>  
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-body">
+                                            <tr id="tr-empty">
+                                                <td colspan="6" style="height: 290px">
+                                                    <h4 class="text-center text-muted" style="margin-top: 50px">
+                                                        <i class="voyager-basket" style="font-size: 50px"></i> <br><br>
+                                                        Lista de pedido vacía
+                                                    </h4>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>       
+                            <div class="form-group col-md-12 text-center">
+                                {{-- Tiene que tener una gestion activa y tenes una unidad agregada como funcionario --}}
+                                {{-- @if ($gestion && $user->unidadAdministrativa_id)
+                                    <button type="submit" id="btn-register" class="btn btn-success btn-block">Registrar Pedido <i class="voyager-basket"></i></button>
+                                @endif --}}
+                                {{-- <button id="btn-volver" class="btn btn-block" href="{{ route('outbox.index') }}" >Volver a la lista</button> --}}
+                            </div>                        
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="panel panel-bordered">
                 <div class="panel-body">
                     <div class="row">
@@ -137,7 +197,10 @@
                             <button id="add-row" type="button" class="btn btn-success btn-sm btn-add-row"><i class="voyager-plus" style="font-size: 1.5rem"></i></button>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success btn-block">Guardar</button>
+                    <button type="submit" class="btn btn-success btn-block">
+                        Registrar Inexistencia
+                        <i class="fa fa-cart-arrow-down"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -146,7 +209,186 @@
 </form>
 @endsection
 
+
 @section('javascript')
+{{-- scripts copy --}}
+<script>
+    $(document).ready(function(){
+        
+        $('#form-registrar-pedido').submit(function(e){
+            // $('#btn-register').text('Registrando...');
+            // $('#btn-register').prop('disabled', true);
+
+            $("#btn-register").text('Registrando...');
+            $("#btn-register").attr('disabled','disabled');
+
+
+            // $('#btn-volver').prop('disabled', true);
+            $('#btn-volver').attr('disabled','disabled');
+        });
+        
+
+    })
+    $(document).ready(function(){
+        
+
+        var productSelected;
+        subid=null;
+        $('#subSucursal_id').on('change', function()
+        {
+            subid = $("#subSucursal_id").val();
+            $('#select_producto').val("").trigger("change");
+            $(`.classRemove`).remove();
+            $('#tr-empty').fadeIn('fast');
+        });
+        // ruta = `{{ url('admin/outbox/article/stock/ajax/${subid}') }}`
+        // alert(subid)
+        // alert(ruta)
+
+
+        $('#select_producto').select2({
+            placeholder: '<i class="fa fa-search"></i> Buscar...',
+            escapeMarkup : function(markup) {
+                return markup;
+            },
+            language: {
+                inputTooShort: function (data) {
+                    return `Por favor ingrese ${data.minimum - data.input.length} o más caracteres`;
+                },
+                noResults: function () {
+                    return `<i class="far fa-frown"></i> No hay resultados encontrados`;
+                }
+            },
+            quietMillis: 250,
+            minimumInputLength: 2,
+            ajax: {
+                // http://127.0.0.1:8000/admin/outbox/article/stock/ajax?search=papel&externo=25
+                url: `{{ url('admin/outbox/article/stock/ajax') }}`,     
+                data: function (params) {
+                    return {
+                                search: params.term, // search term
+                                externo: subid,
+                            };
+                        },   
+                processResults: function (data) {                    
+                    let results = [];
+                    data.map(data =>{
+                        results.push({
+                            ...data,
+                            disabled: false
+                        });
+                    });
+                    return {
+                        results
+                    };
+                },
+                cache: true
+            },
+            templateResult: formatResultCustomers,
+            templateSelection: (opt) => {
+                productSelected = opt;
+
+                
+                return opt.id?opt.nombre:'<i class="fa fa-search"></i> Buscar... ';
+            }
+        }).change(function(){
+            // alert(2)
+            // alert($('#select_producto option:selected').val())
+            if($('#select_producto option:selected').val()){
+                let product = productSelected;
+                // toastr.info('EL detalle ya está agregado', 'Información');
+
+                // alert(product.article_id);
+                if($('.tables').find(`#tr-item-${product.id}`).val() === undefined){
+                // alert(product.name);
+
+                    $('#table-body').append(`
+                        <tr class="tr-item classRemove" id="tr-item-${product.id}">
+                            <td class="td-item"></td>
+                            <td>
+                                <b class="label-description" id="description-${product.id}"><small>${product.nombre}</small><br>
+                                <b class="label-description"><small>${product.presentacion}</small>
+                                <input type="hidden" name="article_id[]" value="${product.id}" />
+                            </td>
+                            <td>
+                                <input type="number" name="cantidad[]" min="0.1" step="0.01" id="select-cant-${product.id}" style="text-align: right" class="form-control text" required>
+                            </td>
+                            <td class="text-right"><button type="button" onclick="removeTr(${product.id})" class="btn btn-link"><i class="voyager-trash text-danger"></i></button></td>
+                        </tr>
+                    `);
+                    toastr.success('Producto agregado..', 'Información');
+
+                }else{
+                    // alert(1)
+                    toastr.warning('El detalle ya está agregado..', 'Información');
+                }
+                setNumber();
+                // getSubtotal(product.article_id);
+            }
+        });
+
+        
+        
+
+    })
+
+    function formatResultCustomers(option){
+    // Si está cargando mostrar texto de carga
+    // alert(option.article.name)
+        if (option.loading) {
+            return '<span class="text-center"><i class="fas fa-spinner fa-spin"></i> Buscando...</span>';
+        }
+        let image = "{{ asset('images/default.jpg') }}";
+        if(option.image){
+            image = "{{ asset('storage') }}/"+option.image.replace('.', '-cropped.');
+            // alert(image)
+        }
+        
+        // Mostrar las opciones encontradas
+        return $(`  <div style="display: flex">
+                        <div style="margin: 0px 10px">
+                            <img src="${image}" width="50px" />
+                        </div>
+                        <div>
+                            <b style="font-size: 16px"> ${option.nombre} </b> <br>
+                            <small style="font-size: 16px">${option.presentacion} </small>
+                         
+                        </div>
+                    </div>`);
+    }
+
+
+
+    function setNumber(){
+        var length = 0;
+        $(".td-item").each(function(index) {
+            $(this).text(index +1);
+            length++;
+        });
+
+        if(length > 0){
+            $('#tr-empty').css('display', 'none');
+        }else{
+            $('#tr-empty').fadeIn('fast');
+        }
+    }
+
+    function removeTr(id){
+        $(`#tr-item-${id}`).remove();
+        $('#select_producto').val("").trigger("change");
+        setNumber();
+        // getTotal();
+    }
+
+
+
+
+
+
+
+</script>
+
+{{-- my scripts --}}
 <Script>
     const btn_add_row = document.getElementById('add-row');
     let btn_delete_row = document.querySelectorAll('.btn-delete-row');

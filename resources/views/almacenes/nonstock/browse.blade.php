@@ -4,15 +4,19 @@
 @section('page_header')
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-4">
                     <h1 id="subtitle" class="page-title">
-                        <i class="fa fa-file-text"></i> Form Inexistencia
+                        <i class="fa fa-cart-arrow-down"></i> Inexistencia
                     </h1>
+                </div>
+                <div class="col-md-8 text-right" style="padding-top: 10px">
                     <a href="{{ route('nonstock.create') }}" class="btn btn-success btn-add-new">
-                        <i class="voyager-plus"></i> <span>Nuevo</span>
+                        <i class="voyager-plus"></i> <span>Crear</span>
                     </a>
                     <a href="{{ route('outbox.index') }}" class="btn btn-warning">
                         <i class="fa fa-arrow-circle-left"></i> <span>Volver a pedidos</span>
                     </a>
+                </div>
             </div>
         </div>
 @endsection

@@ -7,14 +7,18 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- <div class="c"> -->
+                <div class="col-md-4">
                     <h1 id="subtitle" class="page-title">
                         <i class="icon fa-regular fa-clipboard"></i> Solicitudes
                     </h1>
-                    {{-- @if (auth()->user()->sucursal_id == 1)
-                    <a href="{{ route('nonstock.inbox') }}" class="btn btn-warning">
-                        <i class="fa fa-file-text"></i> <span>Solicitud de Inexistencia</span>
+                </div>
+                <div class="col-md-8 text-right" style="padding-top: 10px">
+                    @if ( auth()->user()->hasRole('admin') && auth()->user()->sucursal_id == 1 )
+                    <a href="{{ route('nonstock.inbox') }}" class="btn btn-success">
+                        <span>Solicitud Inexistencia</span> <i class="fa fa-file-text"></i> 
                     </a>
-                    @endif --}}
+                    @endif
+                </div>  
             </div>
         </div>
     @stop
