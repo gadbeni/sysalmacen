@@ -6,12 +6,16 @@
     <div class="container-fluid">
         <div class="row">
             <!-- <div class="c"> -->
+            <div class="col-md-4">
                 <h1 id="subtitle" class="page-title">
-                    <i class="fa fa-file-text"></i> Solicitudes Inexistencias
+                    <i class="fa fa-clipboard"></i> Solicitudes Inexistencias
                 </h1>
+            </div>
+            <div class="col-md-8 text-right" style="padding-top: 10px">
                 <a href="{{ route('inbox.index') }}" class="btn btn-warning">
                     <i class="fa fa-arrow-circle-left"></i> <span>Volver</span>
                 </a>
+            </div>
     
         </div>
     </div>

@@ -87,7 +87,7 @@
                         <td style="text-align: left">{{strtoupper($data->nonStockArticle->name_description)}}</td>
                         <td style="text-align: center">{{strtoupper($data->articlePresentation->name_presentation)}}</td>
                     @endif
-                    <td style="text-align: right">{{number_format($data->quantity, 0, ',', ' ')}}</td>
+                    <td style="text-align: right">{{number_format($data->quantity, 2, ',', ' ')}}</td>
                     <td style="text-align: right">
                         {{-- {{number_format($data->unit_price, 2, ',', ' ')}} --}}
                     </td>

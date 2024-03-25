@@ -14,8 +14,8 @@
                 </div>
                 <div class="col-md-8 text-right" style="padding-top: 10px">
                     @if ( auth()->user()->hasRole('admin') && auth()->user()->sucursal_id == 1 )
-                    <a href="{{ route('nonstock.inbox') }}" class="btn btn-success">
-                        <span>Solicitud Inexistencia</span> <i class="fa fa-file-text"></i> 
+                    <a href="{{ route('nonstock.inbox') }}" class="btn btn-default">
+                        <i class="fa fa-clipboard"></i> <span>Inexistencia</span> 
                     </a>
                     @endif
                 </div>  

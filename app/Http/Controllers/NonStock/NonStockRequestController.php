@@ -412,10 +412,15 @@ class NonStockRequestController extends Controller
          * @var NonStockRequest $nonStockRequest
          * @return \Illuminate\Http\RedirectResponse
          * 
-         * Esta funcion elimina la solicitud de articulos de inexistencia non_stock
+         * Esta funcion elimina la solicitud de articulos de inexistencia non_stock 
+         * Siempre y cuando la solicitud no haya sido aprobada o rechazada
          */
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
+        if($nonStockRequest->status == 'aprobado' || $nonStockRequest->status == 'rechazado'){
+            return redirect()->route('nonstock.index')->with('message','No se puede eliminar la solicitud de articulos de inexistencia, ya ha sido aprobada o rechazada');
+        }
         $nonStockRequest->status = 'eliminado';
+        $nonStockRequest->deletedUser_Id = auth()->user()->id;
         $nonStockRequest->deleted_at = Carbon::now();
         $nonStockRequest->save();
         return redirect()->route('nonstock.index')->with('success','Se ha eliminado la solicitud de articulos de inexistencia con exito');

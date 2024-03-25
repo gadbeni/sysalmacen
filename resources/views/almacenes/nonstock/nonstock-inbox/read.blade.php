@@ -6,20 +6,25 @@
         
         <div class="container-fluid">
             <div class="row">
-                <h1 id="subtitle" class="page-title">
-                    <i class="fa fa-file-text-o"></i> Detalle Solicitud (Inexistencia)
-                </h1>
-                <a href="{{ route('nonstock.inbox') }}" class="btn btn-warning btn-add-new">
-                    <i class="fa-solid fa-file"></i> <span>Volver</span>
-                </a>
-                @if ($nonStockRequest->status == 'enviado')
-                    <a data-toggle="modal" data-target="#modal-rechazar" title="Rechazar Solicitud" class="btn btn-sm btn-dark view">
-                        <i class="fa-solid fa-thumbs-down"></i> <span class="hidden-xs hidden-sm">Rechazar</span>
-                    </a> 
-                    <a data-toggle="modal" data-target="#myModalAprobar" title="Aprobar Solicitud" class="btn btn-sm btn-success view">
-                        <i class="fa-solid fa-thumbs-up"></i> Aprobar
-                    </a>  
-                @endif
+                <div class="col-md-4">
+                    <h1 id="subtitle" class="page-title">
+                        <i class="fa fa-cart-arrow-down"></i> Detalle (Inexistencia)
+                    </h1>
+                </div>
+                <div class="col-md-8 text-right" style="padding-top: 10px">
+                    <a href="{{ route('nonstock.inbox') }}" class="btn btn-warning btn-add-new">
+                        <i class="fa fa-arrow-circle-left"></i> <span>Volver</span>
+                    </a>
+                    
+                    @if ($nonStockRequest->status == 'enviado')
+                        <a data-toggle="modal" data-target="#modal-rechazar" title="Rechazar Solicitud" class="btn btn-sm btn-dark view">
+                            <i class="fa-solid fa-thumbs-down"></i> <span class="hidden-xs hidden-sm">Rechazar</span>
+                        </a> 
+                        <a data-toggle="modal" data-target="#myModalAprobar" title="Aprobar Solicitud" class="btn btn-sm btn-success view">
+                            <i class="fa-solid fa-thumbs-up"></i> Aprobar
+                        </a>  
+                    @endif
+                </div>
             </div>
         </div>
     @stop
@@ -97,9 +102,9 @@
                                                         <th style="width: 50px; text-align: center">N°</th>
                                                         <th style="text-align: center">DESCRIPCIÓN</th>
                                                         <th style="text-align: center">UNIDAD</th>
-                                                        <th width="150px" style="text-align: center">CANTIDAD SOLICITADA</th>
-                                                        <th width="150px" style="text-align: center">PRECIO UNITARIO</th>
-                                                        <th width="150px" style="text-align: center">PRECIO REFERENCIAL</th>
+                                                        <th width="150px" style="text-align: center">CANTIDAD</th>
+                                                        {{-- <th width="150px" style="text-align: center">PRECIO UNITARIO</th> --}}
+                                                        {{-- <th width="150px" style="text-align: center">PRECIO REFERENCIAL</th> --}}
                                                         @if ($nonStockRequest->status == 'entregado')
                                                             <th width="150px" style="text-align: center">CANTIDAD ENTREGADA</th>  
                                                         @endif               
@@ -109,11 +114,18 @@
                                                     @foreach ($nonRequestArticles as $item)
                                                         <tr>
                                                             <td style="text-align: right">{{$loop->iteration}}</td>
-                                                            <td style="text-align: left">{{strtoupper($item->nonStockArticle->name_description)}}</td>
-                                                            <td style="text-align: center">{{strtoupper($item->articlePresentation->name_presentation)}}</td>
-                                                            <td style="text-align: right">{{number_format($item->quantity, 0, ',', ' ')}}</td>
-                                                            <td style="text-align: right">{{number_format($item->unit_price, 2, ',', ' ')}}</td>
-                                                            <td style="text-align: right">{{number_format($item->reference_price, 2, ',', ' ')}}</td>
+                                                            @if ($item->article)
+                                                                <td style="text-align: left">{{strtoupper($item->article->nombre)}}</td>
+                                                                <td style="text-align: center">{{strtoupper($item->article->presentacion)}}</td>
+                                                            @else
+                                                                <td style="text-align: left">{{strtoupper($item->nonStockArticle->name_description)}}</td>
+                                                                <td style="text-align: center">{{strtoupper($item->articlePresentation->name_presentation)}}</td>
+                                                            @endif
+                                                            
+                                                            
+                                                            <td style="text-align: right">{{number_format($item->quantity, 2, ',', ' ')}}</td>
+                                                            {{-- <td style="text-align: right">{{number_format($item->unit_price, 2, ',', ' ')}}</td> --}}
+                                                            {{-- <td style="text-align: right">{{number_format($item->reference_price, 2, ',', ' ')}}</td> --}}
                                                             @if ($nonStockRequest->status == 'entregado')
                                                                 {{-- <td style="text-align: right">{{number_format($item->cantentregada, 2, ',', ' ')}}</td> --}}
                                                             @endif  
