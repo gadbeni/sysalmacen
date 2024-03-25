@@ -167,7 +167,7 @@
                                         <datalist id="presentationList">
         
                                         </datalist>
-                                        <tr data-id="1" class="fila">
+                                        {{-- <tr data-id="1" class="fila">
                                             <td>
                                                 <span class="num-fila">1</span>
                                             </td>
@@ -180,16 +180,17 @@
                                             <td>
                                                 <input type="number" name="quantity[]" id="quantity" class="form-control" step="1" required>
                                             </td>
+
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="1"><i class="voyager-trash"></i></button>
+                                            </td>
+                                        </tr> --}}
                                             {{-- <td>
                                                 <input type="number" name="price[]" id="price" class="form-control" min="0" step="0.01" required>
                                             </td>
                                             <td>
                                                 <input type="number" name="price_ref[]" id="price_ref" class="form-control" min="0" step="0.01" required>
                                             </td> --}}
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm btn-delete-row" data-id="1"><i class="voyager-trash"></i></button>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                                 
@@ -263,7 +264,7 @@
             minimumInputLength: 2,
             ajax: {
                 // http://127.0.0.1:8000/admin/outbox/article/stock/ajax?search=papel&externo=25
-                url: `{{ url('admin/outbox/article/stock/ajax') }}`,     
+                url: `{{ url('admin/nonstock/article/nostock/ajax') }}`,     
                 data: function (params) {
                     return {
                                 search: params.term, // search term

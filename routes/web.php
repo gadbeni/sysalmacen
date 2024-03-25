@@ -97,6 +97,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
 
     //:::::::::::::::::::::::::::::: PRODUCTOS INEXISTENCIA Non-stock
     Route::resource('nonstock', NonStockRequestController::class);
+    Route::get('nonstock/article/nostock/ajax', [NonStockRequestController::class, 'ajaxProductNoExists']);//Obtener los articulos o productos No disponibles
     Route::get('get-articles-nonstock/ajax/list', [NonStockRequestController::class, 'getArticlesNames'])->name('get-articlesnames-nonstock.list');
     Route::get('get-presentation-nonstock/ajax/list', [NonStockRequestController::class, 'getPresentationNames'])->name('get-presentations-nonstock.list');
     Route::get('get-table-list/ajax/list', [NonStockRequestController::class, 'getTableList'])->name('get-nonstock.list');

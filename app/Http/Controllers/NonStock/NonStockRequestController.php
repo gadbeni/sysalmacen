@@ -12,8 +12,13 @@ use App\Models\Sucursal;
 use App\Models\SucursalSubAlmacen;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\SucursalUnidadPrincipal;
 
 use App\Models\InventarioAlmacen;
+
+use function PHPSTORM_META\type;
 
 class NonStockRequestController extends Controller
 {
@@ -59,7 +64,7 @@ class NonStockRequestController extends Controller
     }
 
     //Funcion ajax para obtener los articulos disponible en el almacen y sin stock
-    public function ajaxProductExists(Request $request)
+    public function ajaxProductNoExists(Request $request)
     {
 
         $q = $request->search;
@@ -83,17 +88,14 @@ class NonStockRequestController extends Controller
             $query = ' or s.unidadadministrativa = '.$mainUnit[0]->unidadAdministrativa_id.' or s.unidadadministrativa = '.$mainUnit[1]->unidadAdministrativa_id;
         }
 
-
-
-
         $unidad = 'null';
         if($user->unidadAdministrativa_id)
         {
             $unidad = $user->unidadAdministrativa_id;
         }
 
-
-        $data = DB::table('solicitud_compras as s')
+        // articulos con stocks
+        $stockArticles = DB::table('solicitud_compras as s')
                 ->join('facturas as f', 'f.solicitudcompra_id', 's.id')
                 ->join('detalle_facturas as d', 'd.factura_id', 'f.id')
                 ->join('articles as a', 'a.id', 'd.article_id')
@@ -114,6 +116,28 @@ class NonStockRequestController extends Controller
                 ->groupBy('id')
                 ->orderBy('nombre')
                 ->get();
+        // todos los articulos
+        $allArticles = DB::table('articles as a')
+        ->select('id', 'nombre', 'image', 'presentacion')
+        ->whereRaw("(nombre like '%$q%')")
+        ->orderBy('nombre')
+        ->get();
+
+        $dataIds = $stockArticles->pluck('id')->toArray();
+        $allArticleIds = $allArticles->pluck('id')->toArray();
+
+        $articleIdsWithoutStock = array_diff($allArticleIds, $dataIds);
+        //todos los articulos  menos los articulos con stok
+        // articulos sin stock
+        if (!$type) {
+            return response()->json([]);
+        }
+        $data = DB::table('articles as a')
+            ->select('id', 'nombre', 'image', 'presentacion')
+            ->whereIn('id', $articleIdsWithoutStock)
+            ->orderBy('nombre')
+            ->get();
+
 
         return response()->json($data);
     }
@@ -131,6 +155,10 @@ class NonStockRequestController extends Controller
         try{
             $user = auth()->user();
             $funcionario = $this->getWorker($user->funcionario_id);
+            $sucursal = Sucursal::where('id', $user->sucursal_id)->first();
+            if($sucursal == null){
+                return redirect()->route('nonstock.index')->with('error','No se puede realizar la solicitud de articulos de inexistencia, no se ha encontrado la sucursal');
+            }
             $gestion = InventarioAlmacen::where('status', 1)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada
             if($gestion == null){
                 return redirect()->route('nonstock.index')->with('error','No se puede realizar la solicitud de articulos de inexistencia, no hay gestion activa');
@@ -144,11 +172,12 @@ class NonStockRequestController extends Controller
             $nonStockRequest->sucursal_id = $user->sucursal_id;
             $nonStockRequest->subSucursal_id = $request->input('subSucursal_id');
             $nonStockRequest->registerUser_id = $user->id;
-            $nonStockRequest->registerUser_name = $user->name;
+            $nonStockRequest->registerUser_name = $funcionario->first_name.' '.$funcionario->last_name;
 
             $nonStockRequest->date_request = Carbon::now();
             $nonStockRequest->gestion = $gestion->gestion;
-            $nonStockRequest->nro_request = $nro_request_final; 
+            $nonStockRequest->nro_request = $nro_request_final;
+            $nonStockRequest->people_id = $funcionario->people_id;
             $nonStockRequest->job = $funcionario->cargo;
             $nonStockRequest->direction_id = $user->direccionAdministrativa_id;
             $nonStockRequest->direction_name = $user->direction->nombre;
@@ -158,6 +187,32 @@ class NonStockRequestController extends Controller
             $nonStockRequest->date_status = Carbon::now();
 
             $nonStockRequest->save();
+        //-----------  Articulos existentes en almacen pero sin stok ----------------
+            $articlesIds = $request->input('article_id'); // articulos sin stock pero existentes
+            $noStockArticles = $request->input('article_name'); // articulos no existentes
+            $quantities =  $request->input('cantidad');
+            if ($articlesIds == null && $noStockArticles == null) {
+                DB::rollback();
+                return redirect()->route('nonstock.index')->with(['message' => 'No se ha registrado la solicitud de articulos de inexistencia, no se ha seleccionado ningun articulo', 'alert-type' => 'error']);
+            }
+            if ($articlesIds != null) {
+                for($i = 0; $i < count($articlesIds); $i++){
+                    $nonRequestArticle = new NonRequestArticle();
+                    $nonRequestArticle->non_request_id = $nonStockRequest->id;
+                    $nonRequestArticle->sucursal_id = $user->sucursal_id;
+                    $nonRequestArticle->gestion = $gestion->gestion;
+                    $nonRequestArticle->article_id = $articlesIds[$i];
+                    $nonRequestArticle->quantity = $quantities[$i];
+                    $nonRequestArticle->save();
+                }
+            }
+
+            // En caso de no haber articulos manuales ya no se procede
+            if ($noStockArticles == null) {
+                DB::commit(); //Commit to DataBase
+                return redirect()->route('nonstock.index')->with(['message' => 'Se ha registrado la solicitud de articulos de inexistencia con exito', 'alert-type' => 'success']);
+            }
+
         //----------- ArticlePresentation ----------------
             $articlePresentationsIds = [];
             $presentations = $request->input('unit_presentation');
@@ -168,8 +223,7 @@ class NonStockRequestController extends Controller
             }
             // ----------- NonStockArticle ---------------
             $nonStockArticlesIds = [];
-            $articles = $request->input('article_name');
-            foreach($articles as $article){
+            foreach($noStockArticles as $article){
                 $nonStockArticle = NonStockArticle::firstOrCreate(
                     ['name_description' => $article],
                     ['registerUser_id' => $user->id]
@@ -180,9 +234,11 @@ class NonStockRequestController extends Controller
             $quantities =  $request->input('quantity');
             // $prices = $request->input('price');
             // $price_refs = $request->input('price_ref');
-            for($i = 0; $i < count($articles); $i++){
+            for($i = 0; $i < count($noStockArticles); $i++){
                 $nonRequestArticle = new NonRequestArticle();
                 $nonRequestArticle->non_request_id = $nonStockRequest->id;
+                $nonRequestArticle->sucursal_id = $user->sucursal_id;
+                $nonRequestArticle->gestion = $gestion->gestion;
                 $nonRequestArticle->non_article_id = $nonStockArticlesIds[$i];
                 $nonRequestArticle->article_presentation_id = $articlePresentationsIds[$i];
                 $nonRequestArticle->quantity = $quantities[$i];
@@ -198,11 +254,6 @@ class NonStockRequestController extends Controller
             DB::rollback();
             return redirect()->route('nonstock.index')->withwith(['message' => 'No se ha registrado la solicitud de articulos de inexistencia, ha ocurrido un error', 'alert-type' => 'error']);
         }
-        
-        
-        
-        
-        
         
     }
     /**

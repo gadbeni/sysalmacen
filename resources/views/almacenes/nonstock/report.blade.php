@@ -76,11 +76,17 @@
         </thead>
         <tbody>
             @forelse ($nonRequestArticles as $data)
+                
                 <tr>
                     <td style="text-align: right">{{$loop->iteration}}</td>
                     {{-- <td style="text-align: center">{{$data->}}</td> --}}
-                    <td style="text-align: left">{{strtoupper($data->nonStockArticle->name_description)}}</td>
-                    <td style="text-align: center">{{strtoupper($data->articlePresentation->name_presentation)}}</td>
+                    @if ($data->article_id)
+                        <td style="text-align: left">{{strtoupper($data->article->nombre)}}</td>
+                        <td style="text-align: center">{{strtoupper($data->article->presentacion)}}</td>
+                    @else
+                        <td style="text-align: left">{{strtoupper($data->nonStockArticle->name_description)}}</td>
+                        <td style="text-align: center">{{strtoupper($data->articlePresentation->name_presentation)}}</td>
+                    @endif
                     <td style="text-align: right">{{number_format($data->quantity, 0, ',', ' ')}}</td>
                     <td style="text-align: right">
                         {{-- {{number_format($data->unit_price, 2, ',', ' ')}} --}}
@@ -89,6 +95,7 @@
                         {{-- {{number_format($data->reference_price, 2, ',', ' ')}} --}}
                     </td>
                 </tr>
+                
             @empty
                 <tr style="text-align: center">
                     <td colspan="5">No se encontraron registros.</td>
