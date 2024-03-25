@@ -16,9 +16,23 @@
                     <a href="{{ route('outbox.create') }}" class="btn btn-success btn-add-new">
                         <i class="voyager-plus"></i> <span>Crear</span>
                     </a>
-                    @if (auth()->user()->sucursal_id == 1)
-                        <a href="{{ route('nonstock.index') }}" class="btn btn-default">
+                    @if (auth()->user()->sucursal_id == 1 ||auth()->user()->hasRole('admin'))
+                        <a href="{{ route('nonstock.index') }}" class="btn btn-default" style="position: relative">
                             <i class="fa fa-cart-arrow-down"></i> <span>Inexistencia</span>
+                            <span
+                            style="
+                            font-size: 10px;
+                            display: block;
+                            position:absolute;
+                            background-color:rgb(174, 174, 174);
+                            color:white;
+                            padding: 2px 5px;
+                            top: -10px;
+                            right: 0;
+                            border-radius: 15px;
+                            ">
+                                Beta
+                            </span>
                         </a>
                     @endif
                 </div>

@@ -27,6 +27,11 @@
         {{ session('error') }}
     </div>
     @endif
+    {{-- alert para dar informacion sobre la nueva funcionalidad --}}
+    <div class="alert alert-info">
+        <strong>Información: </strong>
+        <p>En esta sección podrá realizar el formulario de inexistencia y visualizar las solicitudes realizadas. Cuando alguna solicitud este aprobada el sistema colacara el sello de "inexistencia" automaticamente.</p>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-bordered">

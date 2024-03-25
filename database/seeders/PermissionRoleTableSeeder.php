@@ -152,7 +152,10 @@ class PermissionRoleTableSeeder extends Seeder
                                             `key` = "edit_providers" or
                                             `key` = "add_providers" or
 
-                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-inventarioAnual-da" or
+                                            `key` = "browse_printalmacen-inventarioAnual-partida" or
+                                            `key` = "browse_printalmacen-inventarioAnual-detalle" or
                                             
                                             `key` = "browse_printalmacen-article-list" or
                                             `key` = "browse_printalmacen-article-stock" or
@@ -209,7 +212,10 @@ class PermissionRoleTableSeeder extends Seeder
 
                                             table_name = "inbox" or
 
-                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-inventarioAnual-da" or
+                                            `key` = "browse_printalmacen-inventarioAnual-partida" or
+                                            `key` = "browse_printalmacen-inventarioAnual-detalle" or
                                             
                                             `key` = "browse_printalmacen-article-list" or
                                             `key` = "browse_printalmacen-article-stock" or
@@ -240,7 +246,10 @@ class PermissionRoleTableSeeder extends Seeder
 
                                             table_name = "existingproducts" or 
 
-                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-inventarioAnual-da" or
+                                            `key` = "browse_printalmacen-inventarioAnual-partida" or
+                                            `key` = "browse_printalmacen-inventarioAnual-detalle" or
                                             
                                             `key` = "browse_printalmacen-article-list" or
                                             `key` = "browse_printalmacen-article-stock" or

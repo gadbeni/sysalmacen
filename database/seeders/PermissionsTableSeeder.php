@@ -216,6 +216,8 @@ class PermissionsTableSeeder extends Seeder
             ]);
         }
 
+        //generando permisos para la tabla de solicitudes de no existencia
+        Permission::generateFor('non_stock_requests');
 
         
 

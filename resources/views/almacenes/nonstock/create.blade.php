@@ -97,10 +97,20 @@
         </div>
         <!-- form articles -->
         <div class="container-fluid">
+            
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-bordered">
                         <div class="panel-body">
+                            <h1 class="page-title">
+                                <i class="fa fa-archive"></i>
+                                Articulos registrados en el sistema
+                            </h1>
+                            <div class="alert alert-info">
+                                <strong>Información: </strong>
+                                <p>En esta sección puede buscar el articulo a solicitar, Se listaran todos los articulos registrados en almacen que no esten disponibles en la "solicitud de pedidos".</p>
+                                <p>En caso de no encontrar lo que busca aqui, baje a la siguiente sección donde podra ingresar el producto manualmente.</p>
+                            </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="product_id">Buscar producto</label>
@@ -146,7 +156,15 @@
             <div class="panel panel-bordered">
                 <div class="panel-body">
                     <div class="row">
+                        <h1 class="page-title">
+                            <i class="fa fa-archive"></i>
+                            Registrar Manualmente
+                        </h1>
                         <div class="col-lg-12">
+                            <div class="alert alert-info">
+                                <strong>Información: </strong>
+                                <p>En esta sección puede introducir el articulo manualmente. Click en el boton "+" para añadir una nueva fila.</p>
+                            </div>
                             <div class="table-responsive">
                                 <table id="tblArticles" class="table table-bordered table-striped table-hover">
                                     <thead>

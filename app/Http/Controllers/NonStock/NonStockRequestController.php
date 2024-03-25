@@ -516,6 +516,9 @@ class NonStockRequestController extends Controller
         /**
          * 
          */
+        if (!auth()->user()->hasPermission('browse_inbox')) {
+            abort('401');
+        }
         $nonStockRequest = NonStockRequest::findOrFail($id);
         $nonRequestArticles = NonRequestArticle::where('non_request_id', $nonStockRequest->id)->get();
         return view('almacenes.nonstock.nonstock-inbox.read', compact('nonStockRequest', 'nonRequestArticles'));

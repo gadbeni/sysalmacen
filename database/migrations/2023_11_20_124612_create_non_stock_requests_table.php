@@ -24,8 +24,6 @@ class CreateNonStockRequestsTable extends Migration
             $table->string('nro_request')->nullable(); //numero de solicitud
 
             $table->integer('people_id')->nullable(); //id de la persona
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
             $table->string('job')->nullable(); //trabajo actual del usuario
 
             $table->integer('direction_id'); //id de la direccion
