@@ -17,7 +17,7 @@
 </div>
 @endsection
 @section('content')
-<form action="{{ route('nonstock.store') }}" method="POST">
+<form id="form-registrar-pedido" action="{{ route('nonstock.store') }}" method="POST">
     @csrf
     <div>
         <div class="container-fluid">
@@ -216,7 +216,7 @@
                             <button id="add-row" type="button" class="btn btn-success btn-sm btn-add-row"><i class="voyager-plus" style="font-size: 1.5rem"></i></button>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success btn-block">
+                    <button id="submit-button" type="submit" class="btn btn-success btn-block">
                         Registrar Inexistencia
                         <i class="fa fa-cart-arrow-down"></i>
                     </button>
@@ -232,18 +232,16 @@
 @section('javascript')
 {{-- scripts copy --}}
 <script>
+
     $(document).ready(function(){
         
         $('#form-registrar-pedido').submit(function(e){
-            // $('#btn-register').text('Registrando...');
-            // $('#btn-register').prop('disabled', true);
 
-            $("#btn-register").text('Registrando...');
-            $("#btn-register").attr('disabled','disabled');
+            $("#submit-button").text('Registrando...');
+            $("#submit-button").attr('disabled','disabled');
 
 
-            // $('#btn-volver').prop('disabled', true);
-            $('#btn-volver').attr('disabled','disabled');
+            // $('#btn-volver').attr('disabled','disabled');
         });
         
 

@@ -24,6 +24,9 @@
     <div class="page-content browse container-fluid">
         <div class="row">
             <div class="col-md-12">
+                <div class="alert alert-info" role="alert">
+                    <strong>Información:</strong> Aquí se muestran las solicitudes de inexistencias que han sido enviadas por los usuarios.
+                </div>
                 <div class="panel panel-bordered">
                     <div class="panel-body">
                         <div class="row">
