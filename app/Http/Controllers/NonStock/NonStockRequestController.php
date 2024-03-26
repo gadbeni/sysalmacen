@@ -433,6 +433,9 @@ class NonStockRequestController extends Controller
          * 
          * Esta funcion aprueba la solicitud de articulos de inexistencia non_stock
          */
+        if (!auth()->user()->hasPermission('approve_noninbox')) {
+            abort('401');
+        }
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
         $nonStockRequest->status = 'aprobado';
         $nonStockRequest->date_status = Carbon::now();
@@ -448,6 +451,10 @@ class NonStockRequestController extends Controller
          * 
          * Esta funcion rechaza la solicitud de articulos de inexistencia non_stock
          */
+        if (!auth()->user()->hasPermission('reject_noninbox')) {
+            abort('401');
+        }
+
         $nonStockRequest = NonStockRequest::findOrFail($request->input('id'));
         $nonStockRequest->status = 'rechazado';
         $nonStockRequest->date_status = Carbon::now();
@@ -458,7 +465,7 @@ class NonStockRequestController extends Controller
 
     //-------------------- admin inboxes --------------------
     public function inboxIndex(Request $request){
-        if (!auth()->user()->hasPermission('browse_inbox')) {
+        if (!auth()->user()->hasPermission('browse_noninbox')) {
             abort('401');
         }
         return view('almacenes.nonstock.nonstock-inbox.browse');
@@ -516,7 +523,7 @@ class NonStockRequestController extends Controller
         /**
          * 
          */
-        if (!auth()->user()->hasPermission('browse_inbox')) {
+        if (!auth()->user()->hasPermission('read_noninbox')) {
             abort('401');
         }
         $nonStockRequest = NonStockRequest::findOrFail($id);

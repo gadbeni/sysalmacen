@@ -122,9 +122,9 @@
                     {{strtoupper($nonStockRequest->job)}}</b>
             </td>
             <td style="text-align: center">
-                {{-- ______________________
+                ______________________
                 <br>
-                <b>Firma Responsable</b> --}}
+                <b>Sección Almacenes</b>
             </td>
             <td style="text-align: center">
                 ______________________

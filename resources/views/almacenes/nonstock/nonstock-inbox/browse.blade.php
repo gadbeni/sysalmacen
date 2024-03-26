@@ -12,9 +12,9 @@
                 </h1>
             </div>
             <div class="col-md-8 text-right" style="padding-top: 10px">
-                <a href="{{ route('inbox.index') }}" class="btn btn-warning">
+                {{-- <a href="{{ route('inbox.index') }}" class="btn btn-warning">
                     <i class="fa fa-arrow-circle-left"></i> <span>Volver</span>
-                </a>
+                </a> --}}
             </div>
     
         </div>

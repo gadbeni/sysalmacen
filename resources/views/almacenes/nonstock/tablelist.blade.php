@@ -5,7 +5,7 @@
                 <tr>
                     <th style="text-align: center">Nro&deg;</th>
                     <th style="text-align: center">Oficina</th>
-                    <th style="text-align: center">Nro Pedido</th>
+                    <th style="text-align: center">Nro Form</th>
                     <th style="text-align: center">Fecha Solicitud</th>
 
                     <th style="text-align: center">Fecha Registro</th>

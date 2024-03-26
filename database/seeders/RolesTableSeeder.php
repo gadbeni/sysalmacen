@@ -149,7 +149,7 @@ class RolesTableSeeder extends Seeder
         $role = Role::firstOrNew(['name' => 'almacen_subadmin_central']);
         if (!$role->exists) {
             $role->fill([
-                'display_name' => __('Almacen - Responsable de almacen central "Ingreso & Egreso & Report & Solicitar Pedido"'),
+                'display_name' => __('Almacen - Responsable de almacen central "Ingreso & Egreso & Report & Aprobar Inexistencia & Solicitar Pedido"'),
             ])->save();
         }
 

@@ -1,7 +1,7 @@
 @extends('voyager::master')
 
 @section('page_title', 'Viendo Detalle Solicitud')
-@if (auth()->user()->hasPermission('read_inbox'))
+@if (auth()->user()->hasPermission('read_noninbox'))
     @section('page_header')
         
         <div class="container-fluid">
@@ -17,12 +17,16 @@
                     </a>
                     
                     @if ($nonStockRequest->status == 'enviado')
-                        <a data-toggle="modal" data-target="#modal-rechazar" title="Rechazar Solicitud" class="btn btn-sm btn-dark view">
-                            <i class="fa-solid fa-thumbs-down"></i> <span class="hidden-xs hidden-sm">Rechazar</span>
-                        </a> 
-                        <a data-toggle="modal" data-target="#myModalAprobar" title="Aprobar Solicitud" class="btn btn-sm btn-success view">
-                            <i class="fa-solid fa-thumbs-up"></i> Aprobar
-                        </a>  
+                        @if (auth()->user()->hasPermission('reject_noninbox'))
+                            <a data-toggle="modal" data-target="#modal-rechazar" title="Rechazar Solicitud" class="btn btn-sm btn-dark view">
+                                <i class="fa-solid fa-thumbs-down"></i> <span class="hidden-xs hidden-sm">Rechazar</span>
+                            </a>
+                        @endif
+                        @if (auth()->user()->hasPermission('approve_noninbox'))
+                            <a data-toggle="modal" data-target="#myModalAprobar" title="Aprobar Solicitud" class="btn btn-sm btn-success view">
+                                <i class="fa-solid fa-thumbs-up"></i> Aprobar
+                            </a>
+                        @endif 
                     @endif
                 </div>
             </div>

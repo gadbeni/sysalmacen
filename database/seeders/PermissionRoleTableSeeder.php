@@ -351,7 +351,8 @@ class PermissionRoleTableSeeder extends Seeder
                                             `key` = "add_providers" or
 
                                             table_name = "outbox" or
-                                            table_name = "existingproducts" or 
+                                            table_name = "existingproducts" or
+                                            table_name = "no_stock_inbox" or 
 
                                             table_name = "reports_anual" or
                                             

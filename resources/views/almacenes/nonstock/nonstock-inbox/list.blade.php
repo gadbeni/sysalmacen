@@ -6,7 +6,7 @@
                     <th style="text-align: center">Nro&deg;</th>
                     <th style="text-align: center">Solicitante</th>
                     <th style="text-align: center">Oficina</th>
-                    <th style="text-align: center">Nro Pedido</th>
+                    <th style="text-align: center">Nro Form</th>
                     <th class="text-align: center">Fecha Solicitud</th>
 
                     <th style="text-align: center">Fecha Registro</th>
@@ -60,7 +60,7 @@
                             <div class="no-sort no-click bread-actions text-right">
 
 
-                                @if (auth()->user()->hasPermission('read_inbox'))
+                                @if (auth()->user()->hasPermission('read_noninbox'))
                                     <a href="{{route('nonstock.inbox.view',$item->id)}}" title="Ver Solicitud" class="btn btn-sm btn-warning view">
                                         <i class="fa-solid fa-eye"></i> Ver
                                     </a>  
