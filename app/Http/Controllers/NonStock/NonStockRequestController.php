@@ -133,9 +133,10 @@ class NonStockRequestController extends Controller
             return response()->json([]);
         }
         $data = DB::table('articles as a')
-            ->select('id', 'nombre', 'image', 'presentacion')
-            ->whereIn('id', $articleIdsWithoutStock)
-            ->orderBy('nombre')
+            ->join('partidas as p', 'p.id', '=', 'a.partida_id')
+            ->select('a.id', 'a.nombre', 'a.image', 'a.presentacion','p.nombre as nombre_partida')
+            ->whereIn('a.id', $articleIdsWithoutStock)
+            ->orderBy('a.nombre')
             ->get();
 
 
