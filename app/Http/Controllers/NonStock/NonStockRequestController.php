@@ -160,7 +160,8 @@ class NonStockRequestController extends Controller
             if($sucursal == null){
                 return redirect()->route('nonstock.index')->with('error','No se puede realizar la solicitud de articulos de inexistencia, no se ha encontrado la sucursal');
             }
-            $gestion = InventarioAlmacen::where('status', 1)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada
+            //para ver si hay gestion activa o cerrada
+            $gestion = InventarioAlmacen::where('status', 1)->where('sucursal_id', $sucursal->id)->where('deleted_at', null)->first();
             if($gestion == null){
                 return redirect()->route('nonstock.index')->with('error','No se puede realizar la solicitud de articulos de inexistencia, no hay gestion activa');
             }
