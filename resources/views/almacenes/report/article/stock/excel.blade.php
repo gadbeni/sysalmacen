@@ -47,7 +47,7 @@
             </tr>
         @endforelse
         <tr>
-            <td colspan="8" class="text-right"><strong>TOTAL</strong></td>
+            <td colspan="9" class="text-right"><strong>TOTAL</strong></td>
             <td><strong>{{number_format($cant,2)}}</strong></td>
             <td><strong>{{number_format($total,2)}}</strong></td>
         </tr>

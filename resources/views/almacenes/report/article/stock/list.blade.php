@@ -65,7 +65,7 @@
                             </tr>
                         @endforelse
                         <tr>
-                            <th colspan="8" class="text-right"><strong>TOTAL</strong></th>
+                            <th colspan="9" class="text-right"><strong>TOTAL</strong></th>
                             <th><strong>{{number_format($cant,2)}}</strong></th>
                             <th><strong>{{number_format($total,2)}}</strong></th>
                         </tr>
