@@ -86,15 +86,19 @@
                                         <i class="fa-solid fa-xmark"></i> Cancelar Eliminación
                                     </a>
                                 @endif --}}
-                                
-                                @if($gestion && $item->status == 'pendiente' || $gestion && $item->status == 'enviado')
+                                {{-- @if($gestion && $item->status == 'pendiente')
                                     @if($item->gestion == $gestion->gestion)
-                                        @if(auth()->user()->hasPermission('edit_outbox') && 1==2)
-                                            <a href="{{route('nonstock.edit',$item->id)}}" title="Editar" class="btn btn-sm btn-info view">
+                                        @if(auth()->user()->hasPermission('edit_non_stock_requests'))
+                                            <a href="{{route('nonstock.edit',$item->id)}}" title="Editar" class="btn btn-sm btn-default view">
                                                 <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm">Editar</span>
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('delete_outbox'))
+                                    @endif
+                                @endif --}}
+
+                                @if($gestion && $item->status == 'pendiente' || $gestion && $item->status == 'enviado')
+                                    @if($item->gestion == $gestion->gestion)
+                                        @if(auth()->user()->hasPermission('delete_non_stock_requests'))
                                             <a data-toggle="modal" data-id="{{$item->id}}" data-target="#myModalEliminar" title="Eliminar" class="btn btn-sm btn-danger view">
                                                 <i class="voyager-trash"></i> <span class="hidden-xs hidden-sm">Eliminar</span>
                                             </a>

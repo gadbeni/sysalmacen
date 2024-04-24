@@ -302,6 +302,7 @@ class PermissionRoleTableSeeder extends Seeder
         $role = Role::where('name', 'almacen_solicitud_pedido')->firstOrFail();
         $permissions = Permission::whereRaw('table_name = "admin" or
                                              table_name = "outbox" or
+                                             table_name = "non_stock_requests" or
                                              table_name = "existingproducts" or 
 
                                             
@@ -352,7 +353,8 @@ class PermissionRoleTableSeeder extends Seeder
 
                                             table_name = "outbox" or
                                             table_name = "existingproducts" or
-                                            table_name = "no_stock_inbox" or 
+                                            table_name = "no_stock_inbox" or
+                                            table_name = "non_stock_requests" or 
 
                                             table_name = "reports_anual" or
                                             

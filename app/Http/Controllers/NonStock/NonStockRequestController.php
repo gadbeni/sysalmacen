@@ -49,7 +49,7 @@ class NonStockRequestController extends Controller
     public function create()
     {
         //
-        if (!auth()->user()->hasPermission('browse_outbox')) {
+        if (!auth()->user()->hasPermission('add_non_stock_requests')) {
             abort('401');
         }
         $gestion = InventarioAlmacen::where('status', 1)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada 
@@ -281,6 +281,22 @@ class NonStockRequestController extends Controller
     public function edit($id)
     {
         //
+        if (!auth()->user()->hasPermission('edit_non_stock_requests')) {
+            abort('401');
+        }
+        $gestion = InventarioAlmacen::where('status', 1)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada 
+        if($gestion == null){
+            return redirect()->route('nonstock.index')->with(['message' => 'No se puede realizar la solicitud de articulos de inexistencia, no hay gestion activa', 'alert-type' => 'error']);
+        }
+        $nonStockRequest = NonStockRequest::findOrFail($id);
+        $nonRequestArticlesExist = NonRequestArticle::where('non_request_id', $nonStockRequest->id)->where('article_id', '!=', null)->get();
+        $nonRequestArticlesNoExist = NonRequestArticle::where('non_request_id', $nonStockRequest->id)->where('non_article_id', '!=', null)->get();
+
+        $user = auth()->user();
+        $sucursal = Sucursal::findOrFail($user->sucursal_id);
+        $subalmacen = SucursalSubAlmacen::where('sucursal_id', $sucursal->id)->where('deleted_at', null)->get();
+        $funcionario = $this->getWorker($user->funcionario_id);
+        return view('almacenes.nonstock.edit',compact('nonStockRequest','nonRequestArticlesExist','nonRequestArticlesNoExist','funcionario','sucursal','subalmacen'));
     }
 
     /**
@@ -293,6 +309,7 @@ class NonStockRequestController extends Controller
     public function update(Request $request, $id)
     {
         //
+        DB::beginTransaction();
     }
 
     /**
