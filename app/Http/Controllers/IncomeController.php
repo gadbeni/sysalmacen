@@ -262,10 +262,17 @@ class IncomeController extends Controller
                         ->get();
                 // return $unidad;
 
-                $aux = SolicitudCompra::where('unidadadministrativa',$request->unidadadministrativa)
+                //quedo obsoleto debido a que se cambio la forma de generar el numero de solicitud a una mas eficiente
+                // $aux = SolicitudCompra::where('unidadadministrativa',$request->unidadadministrativa)
+                //     ->where('deleted_at', null)
+                //     ->get();
+                
+                $lastSolicitud = SolicitudCompra::where('unidadadministrativa',$request->unidadadministrativa)
                     ->where('deleted_at', null)
-                    ->get();
+                    ->orderBy('id', 'desc')
+                    ->first();
 
+                $numeroSolicitud = $lastSolicitud ? (int) explode('-',$lastSolicitud->nrosolicitud)[1] + 1 : 1;
                     $length = 4;
                     $char = 0;
                     $type = 'd';
@@ -273,7 +280,7 @@ class IncomeController extends Controller
                     
 
 
-                $request->merge(['nrosolicitud' => strtoupper($unidad[0]->sigla).'-'.sprintf($format, count($aux)+1)]);
+                $request->merge(['nrosolicitud' => strtoupper($unidad[0]->sigla).'-'.sprintf($format, $numeroSolicitud)]);
 // return $request;
             
                 // $gestion = Carbon::parse($request->fechaingreso)->format('Y');
