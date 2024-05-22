@@ -760,7 +760,14 @@ class ReportAlmacenController extends Controller
 
     public function articleStockList(Request $request)
     {
-        
+        $fechaHasta = null;
+        if ($request->has('fecha_hasta') && $request->fecha_hasta) {
+            $fechaHasta = Carbon::parse($request->fecha_hasta);
+            if (!$fechaHasta->isValid()) {
+                $fechaHasta = null;
+            }
+        }
+
         $date = Carbon::now();
         $sucursal = Sucursal::find($request->sucursal_id);
         // para convertir letras a numeros
@@ -790,9 +797,12 @@ class ReportAlmacenController extends Controller
 
                     ->where('df.cantrestante', '>', 0)
                     ->where('df.hist', 0)
-                    ->where('df.deleted_at', null)
+                    ->where('df.deleted_at', null);
+        if ($fechaHasta) {
+            $data = $data->whereDate('df.fechaingreso', '<=', $fechaHasta);
+        }
 
-                    ->select('df.fechaingreso', 'm.nombre as modalidad', 'sc.nrosolicitud', 'p.razonsocial as proveedor',
+        $data = $data->select('df.fechaingreso', 'm.nombre as modalidad', 'sc.nrosolicitud', 'p.razonsocial as proveedor',
                             'f.tipofactura', 'f.nrofactura', 'a.id as article_id', 'a.nombre as articulo', 'a.presentacion', 'df.cantsolicitada', 'df.precio',
                             'df.cantrestante', 'df.totalbs', 'sc.id')
                     ->orderBy('df.fechaingreso', 'ASC')

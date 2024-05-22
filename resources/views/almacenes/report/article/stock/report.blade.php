@@ -37,6 +37,14 @@
                                         <small>Tipo</small>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <!-- ... -->
+                                    <br>
+                                    <div class="form-line">
+                                        <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control">
+                                        <small>Fecha limite</small>
+                                    </div>
+                                </div>
                                 
                                 
                                 <div class="text-right">
