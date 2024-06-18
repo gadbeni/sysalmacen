@@ -49,7 +49,8 @@
                                 <td>{{ $item->presentacion }}</td>
                                 <td>{{ $item->precio }}</td>
                                 <td>{{ $item->cantrestante }}</td>
-                                <td>{{ $item->totalbs }}</td>
+                                {{-- <td>{{ $item->totalbs }}</td> --}}
+                                <td>{{ number_format($item->precio * $item->cantrestante,2) }}</td>
 
 
                                                                                           
