@@ -151,6 +151,7 @@ class PermissionsTableSeeder extends Seeder
             'browse_printalmacen-inventarioAnual-da',
             'browse_printalmacen-inventarioAnual-da-central',
             'browse_printalmacen-inventarioAnual-partida',
+            'browse_printalmacen-inventarioAnual-partida-detallada',
             'browse_printalmacen-inventarioAnual-detalle',
         ];
 

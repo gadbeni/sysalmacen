@@ -227,6 +227,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::get('print/almacen-inventarioAnual-partida', [ReportAlmacenController::class, 'inventarioPartida'])->name('almacen-inventarioAnual-partida.report');
     Route::post('print/almacen-inventarioAnual-partida/list', [ReportAlmacenController::class, 'inventarioPartidaList'])->name('almacen-inventarioAnual-partida.list');
 
+    // -------------------- Partida Detallada --------------------
+    Route::get('print/almacen-inventarioAnual-partida-detallada', [ReportAlmacenController::class, 'inventarioPartidaDetalle'])->name('almacen-inventarioAnual-partida-detalle.report');
+    Route::post('print/almacen-inventarioAnual-partida-datallada/list', [ReportAlmacenController::class, 'inventarioPartidaListDetallado'])->name('almacen-inventarioAnual-partida-detalle.list');
+
     Route::get('print/almacen-inventarioAnual-detalle', [ReportAlmacenController::class, 'inventarioDetalle'])->name('almacen-inventarioAnual-detalle.report');
     Route::post('print/almacen-inventarioAnual-detalle/list', [ReportAlmacenController::class, 'inventarioDetalleList'])->name('almacen-inventarioAnual-detalle.list');
 

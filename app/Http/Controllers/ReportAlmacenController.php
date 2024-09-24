@@ -488,7 +488,123 @@ class ReportAlmacenController extends Controller
         }
     }
     // ################################################################################
+    // para ver el inventario de una partida detallando items (anual)
+    public function inventarioPartidaDetalle()
+    { 
+        $user = Auth::user();
+        $query_filter = 'user_id ='.$user->id;
+        
+        if($user->hasRole('admin') || $user->hasRole('almacen_admin'))
+        {
+            $query_filter = 1;
+        }
 
+        $sucursal = SucursalUser::where('condicion', 1)
+                        ->where('deleted_at', null)
+                        ->whereRaw($query_filter)
+                        ->GroupBy('sucursal_id')
+                        ->get();
+                        
+        $partidas = Partida::all();
+
+        return view('almacenes/report/inventarioAnual/partidaDetallada/report', compact('sucursal','partidas'));
+    }
+
+    public function inventarioPartidaListDetallado(Request $request)
+    {
+        // dd($request);
+        $gestion = $request->gestion;
+        $partida = Partida::find($request->partida_id);
+        $date = Carbon::now();
+        $sucursal = Sucursal::find($request->sucursal_id);
+
+        // Para obtener las entradas de los articulos asociados a la partida
+        $entradas = DB::table('solicitud_compras as sc')
+            ->join('facturas as f', 'f.solicitudcompra_id', 'sc.id')
+            ->join('detalle_facturas as df', 'df.factura_id', 'f.id')
+            ->join('articles as a', 'a.id', 'df.article_id')
+            ->join('partidas as p', 'p.id', 'a.partida_id')
+            ->where('sc.gestion', $gestion)
+            ->where('sc.deleted_at', null)
+            ->where('f.deleted_at', null)
+            ->where('df.deleted_at', null)
+            ->where('df.hist', 0)
+            ->where('sc.sucursal_id', $request->sucursal_id)
+            ->where('p.id', $request->partida_id)
+            ->select(
+                'a.id',
+                'a.nombre',
+                'a.presentacion',
+                DB::raw('SUM(df.cantsolicitada) as total_cantsolicitada'),
+                DB::raw('SUM(df.totalbs) as total_totalbs')
+            )
+            ->groupBy('a.id', 'a.nombre', 'a.presentacion')
+            ->orderBy('id', 'ASC')
+            ->get();
+            // este es el select inicial lo dejo comentado por si acaso
+            // ->select('a.id', 'a.nombre', 'a.presentacion', 'df.precio', 'df.cantsolicitada', 'df.totalbs')
+            // ->get();
+        // dd($data);
+
+        //Para obtener las salidas de los articulos asociados a la partida
+        $salidas = DB::table('solicitud_egresos as se')
+            ->join('detalle_egresos as de', 'de.solicitudegreso_id', 'se.id')
+            ->join('detalle_facturas as df', 'df.id', 'de.detallefactura_id')
+            ->join('articles as a', 'a.id', 'df.article_id')
+            ->join('partidas as p', 'p.id', 'a.partida_id')
+            ->where('se.gestion', $gestion)
+            ->where('se.sucursal_id', $request->sucursal_id)
+            ->where('se.deleted_at', null)
+            ->where('de.deleted_at', null)
+            ->where('p.id', $request->partida_id)
+            ->select(
+                'a.id',
+                'a.nombre',
+                'a.presentacion',
+                DB::raw('SUM(de.cantsolicitada) as total_cantsolicitada'),
+                DB::raw('SUM(de.totalbs) as total_totalbs')
+            )
+            ->groupBy('a.id', 'a.nombre', 'a.presentacion')
+            ->orderBy('id', 'ASC')
+            ->get();
+            // ->select('a.id', 'a.nombre', 'a.presentacion', 'de.precio', 'de.cantsolicitada', 'de.totalbs')
+            // ->get();
+
+        // Combinar los datos de entrada y salida
+        $data = $entradas->map(function ($compra) use ($salidas){
+            $salida = $salidas->firstWhere('id', $compra->id);
+            return (object)[
+                'id' => $compra->id,
+                'nombre' => $compra->nombre,
+                'presentacion' => $compra->presentacion,
+                'total_cantsolicitada' => $compra->total_cantsolicitada,
+                'total_totalbs' => $compra->total_totalbs,
+                'total_cantidad_salida' => $salida ? $salida->total_cantsolicitada : 0,
+                'total_totalbs_salida' => $salida ? $salida->total_totalbs : 0,
+            ];
+        })->sortBy('id')->values();
+        
+        // Agregar. Si hay artículos en las salidas que no están en las compras
+        $salidas->each(function ($salida) use ($data) {
+            if (!$data->firstWhere('id', $salida->id)) {
+                $data->push((object) [
+                    'id' => $salida->id,
+                    'nombre' => $salida->nombre,
+                    'presentacion' => $salida->presentacion,
+                    'total_cantsolicitada' => 0,
+                    'total_totalbs' => 0,
+                    'total_cantidad_salida' => $salida->total_cantsolicitada,
+                    'total_totalbs_salida' => $salida->total_totalbs,
+                ]);
+            }
+        });
+        $data = $data->sortBy('id')->values(); 
+
+        // dd($data);
+        return view('almacenes/report/inventarioAnual/partidaDetallada/list', compact('data','partida', 'gestion', 'sucursal'));
+    }
+
+    // ################################################################################
     //para el inventario anual Detallado por ITEM
     public function inventarioDetalle()
     {
