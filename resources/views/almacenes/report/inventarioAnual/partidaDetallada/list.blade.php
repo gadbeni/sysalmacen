@@ -23,7 +23,7 @@
                     </tr>
                     <tr>
                         <th style="text-align: center">CANTIDAD</th>
-                        <th style="text-align: center">TOTAL BS</th>
+                        <th style="text-align: center">SUB TOTAL BS</th>
                         {{-- <th style="text-align: center">CANTIDAD</th>
                         <th style="text-align: center">TOTAL BS</th> --}}
                     </tr>
@@ -31,6 +31,8 @@
                 <tbody>
                     @php
                         $count = 1;
+                        $cantidad_total = 0;
+                        $total_bs = 0;
                     @endphp
 
                     @forelse ($data as $item)
@@ -46,12 +48,19 @@
                         </tr>
                         @php
                             $count++;
+                            $cantidad_total += $item->total_cantsolicitada;
+                            $total_bs += $item->total_totalbs;
                         @endphp
                     @empty
                         <tr style="text-align: center">
                             <td colspan="6">No se encontraron registros.</td>
                         </tr>
                     @endforelse
+                    <tr>
+                        <th colspan="4" style="text-align: right">Total</th>
+                        <th style="text-align: right">{{number_format($cantidad_total,2, ',', '.')}}</th>
+                        <th style="text-align: right">{{number_format($total_bs,2, ',', '.')}}</th>
+                    </tr>
                 </tbody>
             </table>
         </div>

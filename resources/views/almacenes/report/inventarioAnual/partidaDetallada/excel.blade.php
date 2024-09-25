@@ -10,12 +10,14 @@
             </tr>
             <tr>
                 <th><strong>CANTIDAD</strong></th>
-                <th><strong>TOTAL BS</strong></th>
+                <th><strong>SUB TOTAL BS</strong></th>
             </tr>
         </thead>
         <tbody>
                     @php
                         $count = 1;
+                        $cantidad_total = 0;
+                        $total_bs = 0;
                     @endphp
                     @forelse ($data as $item)
                         <tr>
@@ -28,19 +30,19 @@
                         </tr>
                         @php
                             $count++;
+                            $cantidad_total += $item->total_cantsolicitada;
+                            $total_bs += $item->total_totalbs;
                         @endphp
                     @empty
                         <tr>
                             <td colspan="6">No se encontraron registros.</td>
                         </tr>
                     @endforelse
-            {{-- <tr>
-                <th colspan="2" style="text-align: right">Total</th>
-                <th style="text-align: right">{{number_format($cant1,2,',', '.')}}</th>
-                <th style="text-align: right">{{number_format($total1,2,',', '.')}}</th>
-                <th style="text-align: right">{{number_format($cant2,2,',', '.')}}</th>
-                <th style="text-align: right">{{number_format($total2,2,',', '.')}}</th>
-            </tr> --}}
+                    <tr>
+                        <th colspan="4" style="text-align: right">Total</th>
+                        <th style="text-align: right">{{number_format($cantidad_total,2, ',', '.')}}</th>
+                        <th style="text-align: right">{{number_format($total_bs,2, ',', '.')}}</th>
+                    </tr>
         </tbody>
     
     </table>
