@@ -50,10 +50,10 @@
                                         <select name="partida_id" id="partida_id" class="form-control select2" required>
                                             <option value=""disabled selected>Seleccione una opcion..</option>
                                             @foreach ($partidas as $partida)
-                                                <option value="{{$partida->id}}">{{$partida->nombre}}</option>
+                                                <option value="{{$partida->id}}">{{$partida->codigo}} - {{$partida->nombre}}</option>
                                             @endforeach                                             
                                         </select>
-                                        <small>Sucursal</small>
+                                        <small>Partida</small>
                                     </div>
                                 </div>                                
                                 <div class="text-right">
