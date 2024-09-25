@@ -18,6 +18,7 @@ use App\Models\Direction;
 use App\Models\Provider;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Exports\AnualComprasPartidaExport;
 use App\Exports\AnualPartidaExport;
 use App\Exports\AnualDaExport;
 use App\Exports\AnualDetalleExport;
@@ -601,6 +602,14 @@ class ReportAlmacenController extends Controller
         $data = $data->sortBy('id')->values(); 
 
         // dd($data);
+        if($request->print==1)
+        {
+            return view('almacenes/report/inventarioAnual/partidaDetallada/print', compact('data','partida', 'gestion', 'sucursal'));
+        }
+        if($request->print==2)
+        {
+            return Excel::download(new AnualComprasPartidaExport($data, $partida, $gestion), $sucursal->nombre.' - Partida Detallada '.$gestion.'.xlsx');
+        }
         return view('almacenes/report/inventarioAnual/partidaDetallada/list', compact('data','partida', 'gestion', 'sucursal'));
     }
 

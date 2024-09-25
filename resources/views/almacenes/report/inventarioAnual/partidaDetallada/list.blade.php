@@ -1,10 +1,10 @@
 
-{{-- <div class="col-md-12 text-right">
+<div class="col-md-12 text-right">
 
     <button type="button" onclick="report_excel()" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Excel</button>
     <button type="button" onclick="report_print()" class="btn btn-dark"><i class="glyphicon glyphicon-print"></i> Imprimir</button>
 
-</div> --}}
+</div>
 
 
 <div class="col-md-12">
@@ -18,14 +18,14 @@
                         <th style="text-align: center" rowspan="2">DESCRIPCION</th>
                         <th style="text-align: center" rowspan="2">CODIGO</th>
                         <th style="text-align: center" rowspan="2">PRESENTACIÓN</th>
-                        <th style="text-align: center" colspan="2">ENTRADA</th>
-                        <th style="text-align: center" colspan="2">SALIDA</th>
+                        <th style="text-align: center" colspan="2">COMPRAS</th>
+                        {{-- <th style="text-align: center" colspan="2">SALIDA</th> --}}
                     </tr>
                     <tr>
                         <th style="text-align: center">CANTIDAD</th>
                         <th style="text-align: center">TOTAL BS</th>
-                        <th style="text-align: center">CANTIDAD</th>
-                        <th style="text-align: center">TOTAL BS</th>
+                        {{-- <th style="text-align: center">CANTIDAD</th>
+                        <th style="text-align: center">TOTAL BS</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -41,8 +41,8 @@
                             <td>{{ $item->presentacion }}</td>
                             <td style="text-align: right">{{ number_format($item->total_cantsolicitada,2, ',', '.')}}</td>
                             <td style="text-align: right">{{ number_format($item->total_totalbs,2, ',', '.')}}</td>
-                            <td style="text-align: right">{{ number_format($item->total_cantidad_salida,2, ',', '.')}}</td>
-                            <td style="text-align: right">{{ number_format($item->total_totalbs_salida, 2, ',', '.')}}</td>
+                            {{-- <td style="text-align: right">{{ number_format($item->total_cantidad_salida,2, ',', '.')}}</td> --}}
+                            {{-- <td style="text-align: right">{{ number_format($item->total_totalbs_salida, 2, ',', '.')}}</td> --}}
                         </tr>
                         @php
                             $count++;

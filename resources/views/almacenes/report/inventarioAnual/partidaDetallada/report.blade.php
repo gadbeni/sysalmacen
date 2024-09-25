@@ -12,7 +12,7 @@
                     <div class="panel-body" style="padding: 0px">
                         <div class="col-md-8" style="padding: 0px">
                             <h1 class="page-title">
-                                <i class="voyager-calendar"></i> Reporte Anual Partidas detalladas.
+                                <i class="voyager-calendar"></i> Reporte Anual de Compras por Partidas.
                             </h1>
                             {{-- <div class="alert alert-info">
                                 <strong>Información:</strong>
