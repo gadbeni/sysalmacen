@@ -369,5 +369,21 @@ class PermissionRoleTableSeeder extends Seeder
                                             
                                             `key` = "browse_clear-cache"')->get();
         $role->permissions()->sync($permissions->pluck('id')->all());
+        //almacen_report_central
+        $role = Role::where('name', 'almacen_report_central')->firstOrFail();
+        $permissions = Permission::whereRaw('table_name = "admin" or
+                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-article-list" or
+                                            `key` = "browse_printalmacen-article-stock" or
+                                            `key` = "browse_printalmacen-article-incomeoffice" or     
+                                            `key` = "browse_printalmacen-article-egressoffice" or  
+
+                                            `key` = "browse_printalmacen-partida-incomearticle" or  
+                                            
+                                            `key` = "browse_printalmacen-provider-list" or
+                                            
+                                            `key` = "browse_clear-cache"')->get();
+        $role->permissions()->sync($permissions->pluck('id')->all());
     }
 }
