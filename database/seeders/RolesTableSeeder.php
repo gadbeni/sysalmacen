@@ -152,6 +152,13 @@ class RolesTableSeeder extends Seeder
                 'display_name' => __('Almacen - Responsable de almacen central "Ingreso & Egreso & Report & Aprobar Inexistencia & Solicitar Pedido"'),
             ])->save();
         }
+        // Para Reportes de contabilidad En el Almacen Central
+        $role = Role::firstOrNew(['name' => 'almacen_report_central']);
+        if (!$role->exists) {
+            $role->fill([
+                'display_name' => __('Almacen - Responsable de almacen central "Reports"'),
+            ])->save();
+        }
 
     }
 }

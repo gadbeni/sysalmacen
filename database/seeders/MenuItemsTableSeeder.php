@@ -911,7 +911,7 @@ class MenuItemsTableSeeder extends Seeder
                 'parent_id' => 60,
                 'route' => 'almacen-inventarioAnual-partida-detalle.report',
                 'target' => '_self',
-                'title' => 'Balance por Partida',
+                'title' => 'Ingreso Anual por Partida',
                 'updated_at' => '2024-09-24 15:50:19',
                 'url' => '',
             ),
