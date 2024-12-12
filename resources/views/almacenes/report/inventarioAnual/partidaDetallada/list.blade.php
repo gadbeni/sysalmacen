@@ -19,13 +19,13 @@
                         <th style="text-align: center" rowspan="2">CODIGO</th>
                         <th style="text-align: center" rowspan="2">PRESENTACIÓN</th>
                         <th style="text-align: center" colspan="2">COMPRAS</th>
-                        {{-- <th style="text-align: center" colspan="2">SALIDA</th> --}}
+                        <th style="text-align: center" colspan="2">SALIDA</th>
                     </tr>
                     <tr>
                         <th style="text-align: center">CANTIDAD</th>
                         <th style="text-align: center">SUB TOTAL BS</th>
-                        {{-- <th style="text-align: center">CANTIDAD</th>
-                        <th style="text-align: center">TOTAL BS</th> --}}
+                        <th style="text-align: center">CANTIDAD</th>
+                        <th style="text-align: center">TOTAL BS</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,6 +33,8 @@
                         $count = 1;
                         $cantidad_total = 0;
                         $total_bs = 0;
+                        $cant_to_sal = 0;
+                        $total_bs_sal = 0;
                     @endphp
 
                     @forelse ($data as $item)
@@ -43,13 +45,15 @@
                             <td>{{ $item->presentacion }}</td>
                             <td style="text-align: right">{{ number_format($item->total_cantsolicitada,2, ',', '.')}}</td>
                             <td style="text-align: right">{{ number_format($item->total_totalbs,2, ',', '.')}}</td>
-                            {{-- <td style="text-align: right">{{ number_format($item->total_cantidad_salida,2, ',', '.')}}</td> --}}
-                            {{-- <td style="text-align: right">{{ number_format($item->total_totalbs_salida, 2, ',', '.')}}</td> --}}
+                            <td style="text-align: right">{{ number_format($item->total_cantidad_salida,2, ',', '.')}}</td>
+                            <td style="text-align: right">{{ number_format($item->total_totalbs_salida, 2, ',', '.')}}</td>
                         </tr>
                         @php
                             $count++;
                             $cantidad_total += $item->total_cantsolicitada;
                             $total_bs += $item->total_totalbs;
+                            $cant_to_sal += $item->total_cantidad_salida;
+                            $total_bs_sal += $item->total_totalbs_salida;
                         @endphp
                     @empty
                         <tr style="text-align: center">
@@ -60,6 +64,8 @@
                         <th colspan="4" style="text-align: right">Total</th>
                         <th style="text-align: right">{{number_format($cantidad_total,2, ',', '.')}}</th>
                         <th style="text-align: right">{{number_format($total_bs,2, ',', '.')}}</th>
+                        <th>{{number_format($cant_to_sal,2,',','.')}}</th>
+                        <th>{{number_format($total_bs_sal,2,',','.')}}</th>
                     </tr>
                 </tbody>
             </table>
