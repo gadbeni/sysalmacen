@@ -31,7 +31,7 @@
                                         <select name="people_id" id="people_id" class="form-control select2" required>
                                             <option value="" disabled selected>-- Selecciona una persona --</option>
                                             @foreach ($people as $item)
-                                                <option value="{{$item->id}}">{{$item->first_name}} {{$item->last_name}}</option>
+                                                <option value="{{$item->id}}">{{$item->first_name}} {{$item->paternal_surname}} {{$item->maternal_surname}}</option>
                                             @endforeach
                                         </select>
                                     </div>       
