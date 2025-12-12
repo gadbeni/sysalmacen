@@ -1,11 +1,11 @@
-@if (auth()->user()->hasRole('almacen_admin') || auth()->user()->hasRole('admin'))
+{{-- @if (auth()->user()->hasRole('almacen_admin') || auth()->user()->hasRole('admin')) --}}
     <div class="col-md-12 text-right">
 
         <button type="button" onclick="report_excel()" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Excel</button>
         <button type="button" onclick="report_print()" class="btn btn-dark"><i class="glyphicon glyphicon-print"></i> Imprimir</button>
 
     </div>
-@endif
+{{-- @endif --}}
 
 <div class="col-md-12">
 <div class="panel panel-bordered">

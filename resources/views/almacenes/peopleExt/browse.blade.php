@@ -195,12 +195,17 @@
             let search = $('#input-search').val() ? $('#input-search').val() : '';
 
             $.ajax({
-                url: `${url}/${search}?paginate=${countPage}&page=${page}`,
+                url: url,
                 type: 'get',
-                
+                data: {
+                    search: search,
+                    paginate: countPage,
+                    page: page
+                },
                 success: function(result){
-                $("#div-results").html(result);
-            }});
+                    $("#div-results").html(result);
+                }
+            });
 
         }
         

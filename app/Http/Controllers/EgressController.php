@@ -25,6 +25,7 @@ use App\Models\SucursalUnidadPrincipal;
 use PhpParser\Node\Stmt\Break_;
 use App\Models\SucursalSubAlmacen;
 use Facade\Ignition\DumpRecorder\Dump;
+use Luecano\NumeroALetras\NumeroALetras; // Para convertir numeros a su equivalente en palabras
 
 class EgressController extends Controller
 {
@@ -660,9 +661,12 @@ class EgressController extends Controller
 
         // return $detalle;
 
+        //Para convertir letras a palabras
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
 
 
-        return view('almacenes.egress.report', compact('sol', 'unidad', 'detalle'));
+        return view('almacenes.egress.report', compact('sol', 'unidad', 'detalle','formatter'));
     }
 
 

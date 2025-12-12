@@ -9,8 +9,12 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/style/dataTableStyle.css') }}">
+    <!-- Importa la biblioteca Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
 
     <!-- Favicon -->
@@ -150,20 +154,20 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
                 <div id="voyager-notifications"></div>
                 @yield('content')
                 
-                <a href="https://api.whatsapp.com/send/?phone=59167285914" class="btn-wsp" target="_blank">
+                {{-- <a href="https://api.whatsapp.com/send/?phone=59167285914" class="btn-wsp" target="_blank">
                     <i class="fa-brands fa-whatsapp"></i>
-                </a>
+                </a> --}}
             </div>
         </div>
     </div>
-    <div class="social">
+    {{-- <div class="social">
         <ul>
             <li><a href="https://www.facebook.com/GobernacionDelBeni" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i></a></li>
             <li><a href="https://www.youtube.com/@gobernaciondelbeni145/featured" target="_blank" class="youtube"><i class="fa-brands fa-youtube"></i></a></li>
             <li><a href="https://www.tiktok.com/@gobiernoautonomodelbeni" target="_blank" class="tiktok"><i class="fa-brands fa-tiktok"></i></a></li>
             <li><a href="https://www.instagram.com/gobernacionbeni/?igshid=YmMyMTA2M2Y%3D" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i></a></li>
         </ul>
-    </div>
+    </div> --}}
 </div>
 
 @include('voyager::partials.app-footer')
@@ -183,7 +187,7 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
     <script type="text/javascript" src="{{asset('navidad/snow.js')}}"></script>
     <script type="text/javascript">
         $(function() {
-            $(document).snow({ SnowImage: "{{ asset('navidad/image/icon.png') }}" });
+            $(document).snow({ SnowImage: "{{ asset('navidad/image/icon.png') }}", SnowImage2: "{{ asset('navidad/image/caramelo.png') }}" });
         });
     </script>
 @endif
