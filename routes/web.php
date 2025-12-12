@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EgressController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SolicitudController;
+// use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\IncomeSolicitudController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\NonStock\NonStockRequestController;
 use App\Http\Controllers\IncomeDonorController;
 use App\Http\Controllers\EgressDonorController;
 use App\Http\Controllers\NotificationController;
@@ -37,13 +38,20 @@ use App\Http\Controllers\SolicitudPedidoController;
 |
 */
 
-Route::get('login', function () {
-    return redirect('admin/login');
-})->name('login');
+
 
 Route::get('/', function () {
     return redirect('admin');
 });
+ 
+// Route::middleware('auth')->group(function() {
+//     Route::post('/delete-session', function(Request $request) {
+//         DB::table('sessions')
+//             ->where('id', $request->id)
+//             ->where('user_id', auth()->id())
+//             ->delete();
+//     });
+// });
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('logins');
 
@@ -56,6 +64,12 @@ Route::get('/contact', [MaintenanceController::class , 'contact'])->name('contac
 
 Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Voyager::routes();
+
+    //<- sesiones
+    Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions')->middleware('auth');
+    Route::delete('/usuario/sesion/',[UserController::class,'deleteSession'])->name('delete_session');
+    //sesiones ->
+    Route::put('/usario/change-password/',[UserController::class,'changePassword'])->name('change_password');
 
     Route::resource('usuario', UserController::class);
     Route::post('usuarios/desactivar', [UserController::class, 'desactivar'])->name('almacen_desactivar');
@@ -81,9 +95,22 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::post('inbox/rechazar', [SolicitudBandejaController::class, 'rechazarSolicitud'])->name('inbox.rechazar');
     Route::post('inbox/aprobar', [SolicitudBandejaController::class, 'aprobarSolicitud'])->name('inbox.aprobar');
 
-
-
-
+    //:::::::::::::::::::::::::::::: PRODUCTOS INEXISTENCIA Non-stock
+    Route::resource('nonstock', NonStockRequestController::class);
+    Route::get('nonstock/article/nostock/ajax', [NonStockRequestController::class, 'ajaxProductNoExists']);//Obtener los articulos o productos No disponibles
+    Route::get('get-articles-nonstock/ajax/list', [NonStockRequestController::class, 'getArticlesNames'])->name('get-articlesnames-nonstock.list');
+    Route::get('get-presentation-nonstock/ajax/list', [NonStockRequestController::class, 'getPresentationNames'])->name('get-presentations-nonstock.list');
+    Route::get('get-table-list/ajax/list', [NonStockRequestController::class, 'getTableList'])->name('get-nonstock.list');
+    // status non-stock
+    Route::post('nonstock/send', [NonStockRequestController::class, 'sendNonStock'])->name('nonstock.send');
+    Route::post('nonstock/delete', [NonStockRequestController::class, 'deleteNonStock'])->name('nonstock.delete');
+    // inboxes non-stock
+    Route::get('non/inbox', [NonStockRequestController::class, 'inboxIndex'])->name('nonstock.inbox');
+    Route::get('non/inbox/ajax/list', [NonStockRequestController::class, 'getInboxList'])->name('nonstock.inbox.list');
+    Route::get('non/inbox/view/{id?}', [NonStockRequestController::class, 'inboxShow'])->name('nonstock.inbox.view');
+    //--
+    Route::post('non/inbox/accept', [NonStockRequestController::class, 'approveNonStock'])->name('nonstock.inbox.accept');
+    Route::post('non/inbox/reject', [NonStockRequestController::class, 'rejectNonStock'])->name('nonstock.inbox.reject');
     
     //........................  INCOME
     Route::resource('income', IncomeController::class);
@@ -158,7 +185,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
 
     // para crear personas externas en el sistemas
     Route::resource('people_ext', PeopleExtController::class);
-    Route::get('people_ext/ajax/list/{search?}', [PeopleExtController::class, 'list']);
+    Route::get('people_ext/ajax/list', [PeopleExtController::class, 'list']);
     Route::get('people_ext/{people_ext}/baja', [PeopleExtController::class, 'finish'])->name('people_ext.baja');
 
 
@@ -192,8 +219,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::get('print/almacen-inventarioAnual-da', [ReportAlmacenController::class, 'directionIncomeSalida'])->name('almacen-inventarioAnual-da.report');
     Route::post('print/almacen-inventarioAnual-da/list', [ReportAlmacenController::class, 'directionIncomeSalidaList'])->name('almacen-direction-income-egress.list');
 
+    // -------------------- Direccion Administrativa --------------------
+    Route::get('print/almacen-inventarioAnual-da-central', [ReportAlmacenController::class, 'directionIncomeCentral'])->name('almacen-inventarioAnual-da-central.report');
+    Route::post('print/almacen-inventarioAnual-da-central/list', [ReportAlmacenController::class, 'directionIncomeCentralList'])->name('almacen-direction-central.list');
+
+
     Route::get('print/almacen-inventarioAnual-partida', [ReportAlmacenController::class, 'inventarioPartida'])->name('almacen-inventarioAnual-partida.report');
     Route::post('print/almacen-inventarioAnual-partida/list', [ReportAlmacenController::class, 'inventarioPartidaList'])->name('almacen-inventarioAnual-partida.list');
+
+    // -------------------- Partida Detallada --------------------
+    Route::get('print/almacen-inventarioAnual-partida-detallada', [ReportAlmacenController::class, 'inventarioPartidaDetalle'])->name('almacen-inventarioAnual-partida-detalle.report');
+    Route::post('print/almacen-inventarioAnual-partida-datallada/list', [ReportAlmacenController::class, 'inventarioPartidaListDetallado'])->name('almacen-inventarioAnual-partida-detalle.list');
 
     Route::get('print/almacen-inventarioAnual-detalle', [ReportAlmacenController::class, 'inventarioDetalle'])->name('almacen-inventarioAnual-detalle.report');
     Route::post('print/almacen-inventarioAnual-detalle/list', [ReportAlmacenController::class, 'inventarioDetalleList'])->name('almacen-inventarioAnual-detalle.list');
@@ -342,11 +378,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Route::get('incomes/selectarticle/{id?}', [IncomeController::class, 'ajax_article'])->name('ajax_article');
     Route::get('incomes/selectpresentacion/{id?}', [IncomeController::class, 'ajax_presentacion'])->name('ajax_presentacion');
 
-
-    //SOLICITUD DE EGRESO MEDIANTE VISTA
-    Route::get('solicitudes/modalidadcompra/{id?}', [SolicitudController::class, 'ajax_modalidadcompra'])->name('ajax_modalidadcompra'); 
-    Route::get('solicitudes/articulosolicitud/{id?}', [SolicitudController::class, 'ajax_articulo'])->name('ajax_solicitudes_articulo');
-    Route::get('solicitudes/articuloautollenar/{id?}', [SolicitudController::class, 'ajax_autollenar_articulo'])->name('ajax_autollenar_articulo');
+    //No existe
+    // //SOLICITUD DE EGRESO MEDIANTE VISTA
+    // Route::get('solicitudes/modalidadcompra/{id?}', [SolicitudController::class, 'ajax_modalidadcompra'])->name('ajax_modalidadcompra'); 
+    // Route::get('solicitudes/articulosolicitud/{id?}', [SolicitudController::class, 'ajax_articulo'])->name('ajax_solicitudes_articulo');
+    // Route::get('solicitudes/articuloautollenar/{id?}', [SolicitudController::class, 'ajax_autollenar_articulo'])->name('ajax_autollenar_articulo');
 
 
     
@@ -403,6 +439,10 @@ Route::get('/admin/clear-cache', function() {
     return redirect('/admin')->with(['message' => 'Cache eliminada.', 'alert-type' => 'success']);
 })->name('clear.cache');
 
-Auth::routes();
+Auth::routes(['register'=>false]);
+
+Route::get('login', function () {
+    return redirect('admin/login');
+})->name('login');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

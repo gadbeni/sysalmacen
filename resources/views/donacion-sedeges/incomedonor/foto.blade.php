@@ -176,7 +176,7 @@
                 </tbody>    
             </table>
             <div class="row" style="font-size: 9pt">
-                <p style="text-align: right">Total - Detalle de Compra: {{NumerosEnLetras::convertir($total,'Bolivianos',true)}}</p>
+                {{-- <p style="text-align: right">Total - Detalle de Compra: {{NumerosEnLetras::convertir($total,'Bolivianos',true)}}</p> --}}
             </div>
 
             <div class="card-body">

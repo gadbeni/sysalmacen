@@ -37,6 +37,7 @@
                 <th>PROVEEDOR</th>
                 <th>NRO</th>
                 <th>ARTICULO</th>
+                <th>CODIGO ART</th>|
                 <th style="width:30px">PRESENTACION</th>
                 <th style="width:60px">PRECIO</th>
                 <th style="width:60px">CANT.</th>
@@ -54,9 +55,16 @@
                     <td>{{ $count }}</td>
                     <td>{{date('d/m/Y', strtotime($item->fechaingreso))}}</td>
                     <td style="text-align: left">{{ $item->modalidad }} <br>{{$item->nrosolicitud}} </td>
-                    <td style="text-align: left">{{ $item->proveedor }}</td>
+                    
+
+                    <td style="text-align: left">{{ $item->proveedor != null ? $item->proveedor:'SIN PROVEEDOR' }}</td>
+                    
                     <td style="text-align: left">{{ $item->tipofactura=='Orden_Compra'? 'Orden de Compra':'Nro Factura'}}<br>{{$item->nrofactura}}</td>
+                    
+                    
+                    
                     <td style="text-align: left">{{ $item->articulo }}</td>
+                    <td style="text-align: center">{{ $item->article_id }}</td>
                     <td style="text-align: left">{{ $item->presentacion }}</td>
                     <td style="text-align: right">{{ number_format($item->precio,2) }}</td>
                     <td style="text-align: right">{{ number_format($item->cantrestante,2) }}</td>
@@ -73,14 +81,15 @@
                 </tr>
             @endforelse
             <tr>
-                <td colspan="8" class="text-right"><strong>TOTAL</strong></td>
+                <td colspan="9" class="text-right"><strong>TOTAL</strong></td>
                 <td><strong>{{number_format($cant,2)}}</strong></td>
                 <td><strong>{{number_format($total,2)}}</strong></td>
             </tr>
         </tbody>
     </table>
     <div class="row" style="font-size: 9pt">
-        <p style="text-align: right">Total - Artículo Disponible: BS. {{NumerosEnLetras::convertir($total,'Bolivianos',true)}}</p>
+        {{-- <p style="text-align: right">Total - Artículo Disponible: BS. {{NumerosEnLetras::convertir($total,'Bolivianos',true)}}</p> --}}
+        <p style="text-align: right">Total - Artículo Disponible: BS. {{number_format($total,2)}} ({{$formatter->toMoney($total,2,'Bolivianos','Centavos')}})</p>
     </div>
 
 @endsection

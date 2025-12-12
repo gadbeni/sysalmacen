@@ -27,7 +27,7 @@
 
                         <td style="text-align: center">
                             <p><small>Gestion: {{$item->gestion}}</small></p>
-                            <p><small>{{$item->unidad_name}}</small></p>
+                            <p><small style="text-transform: uppercase">{{$item->unidad_name}}</small></p>
                             <p><small>{{$item->direccion_name}}</small></p>
                         </td>
                         <td>

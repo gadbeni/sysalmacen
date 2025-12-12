@@ -7,14 +7,42 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- <div class="c"> -->
+                <div class="col-md-4">
                     <h1 id="subtitle" class="page-title">
                         <i class="fa-solid fa-cart-shopping"></i> Pedidos
                     </h1>
-                {{-- @if(auth()->user()->hasPermission('add_egres')) --}}
+                </div>
+                <div class="col-md-8 text-right" style="padding-top: 10px">
                     <a href="{{ route('outbox.create') }}" class="btn btn-success btn-add-new">
                         <i class="voyager-plus"></i> <span>Crear</span>
                     </a>
+                    @if (auth()->user()->sucursal_id == 1 ||auth()->user()->hasRole('admin'))
+                        <a href="{{ route('nonstock.index') }}" class="btn btn-default" style="position: relative">
+                            <i class="fa fa-cart-arrow-down"></i> <span>Inexistencia</span>
+                            <span
+                            style="
+                            font-size: 10px;
+                            display: block;
+                            position:absolute;
+                            background-color:rgb(174, 174, 174);
+                            color:white;
+                            padding: 2px 5px;
+                            top: -10px;
+                            right: 0;
+                            border-radius: 15px;
+                            ">
+                                Beta
+                            </span>
+                        </a>
+                    @endif
+                </div>
+                    
+                {{-- @if(auth()->user()->hasPermission('add_egres')) --}}
+                    
                 {{-- @endif --}}
+
+                
+                
                 <!-- </div> -->
             </div>
         </div>

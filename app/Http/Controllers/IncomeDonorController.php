@@ -20,6 +20,7 @@ use DataTables;
 use Illuminate\Support\Str;
 use file;
 use PhpParser\Node\Stmt\Return_;
+use Luecano\NumeroALetras\NumeroALetras; // Para convertir numeros a su equivalente en palabras
 
 class IncomeDonorController extends Controller
 {
@@ -185,6 +186,11 @@ class IncomeDonorController extends Controller
 
         $centro = Centro::find($do->centro_id);
 
+        // para convertir letras a numeros
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
+        // para convertir letras a numeros
+
         if($do->tipodonante == 0 || $do->tipodonante == 1)
         {
             $donante = DonadorEmpresa::find($do->onuempresa_id);
@@ -225,7 +231,7 @@ class IncomeDonorController extends Controller
         }
         // return $donante->tipo;
         
-        return view('donacion-sedeges.incomedonor.report',compact('detalle', 'do', 'centro', 'donante'));
+        return view('donacion-sedeges.incomedonor.report',compact('detalle', 'do', 'centro', 'donante','formatter'));
     }
 
     public function show_stock($id)
