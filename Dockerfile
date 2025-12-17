@@ -31,6 +31,7 @@ COPY unit.json /docker-entrypoint.d/unit.json
 
 COPY .env.example .env
 RUN php artisan key:generate
+RUN php artisan storage:link
 
 EXPOSE 8000
 
