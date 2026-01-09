@@ -9,8 +9,9 @@
 
 function __ShowSnow(settings)
 {
+    console.log(settings);
 
-    var snowsrc = settings.SnowImage;
+    var snowsrc = [settings.SnowImage, settings.SnowImage2];
     var no = settings.Quantity;
 
     var dx, xp, yp;    // coordinate and position variables
@@ -36,7 +37,12 @@ function __ShowSnow(settings)
         stx[i] = 0.02 + Math.random()/10; // set step variables
         sty[i] = 0.7 + Math.random();     // set step variables
 
+        
         var flake = $("<div />");
+
+        var randomImage = snowsrc[Math.floor(Math.random() * snowsrc.length)];
+
+        flake.append("<img src='" + randomImage + "' width=20px>");
 
         var id = ("dot" + i);
         flake.attr("id", id);
@@ -44,13 +50,15 @@ function __ShowSnow(settings)
                     position: "absolute",
                     zIndex: i,
                     top: "15px",
-                    left: "15px"
+                    left: "15px",
+                    opacity: 0.4
                 });
 
-        flake.append("<img src='" + snowsrc + "' width=20px>");
+        // flake.append("<img src='" + snowsrc + "' width=20px>");
         flake.appendTo("body");
 
         flakes[i] = $("#" + id);
+        
     }
 
     var animateSnow;

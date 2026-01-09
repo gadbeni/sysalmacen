@@ -30,8 +30,9 @@
                 </p>
                 <img src="{{asset('images/maintenance.gif')}}" width="250" height="200" border="0">
                 <br>
-
-                <a href="{{ url('/') }}" class="btn btn-primary">Volver a intentar</a>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="{{ route('login') }}" class="btn btn-primary">Volver al inicio</a>
+                </div>
             </div>
         </div>
     </body>

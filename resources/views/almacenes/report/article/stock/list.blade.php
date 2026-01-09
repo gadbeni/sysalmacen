@@ -18,6 +18,7 @@
                         <th style="width:25%">PROVEEDOR</th>
                         <th style="width:25%">NRO</th>
                         <th style="width:25%">ARTICULO</th>
+                        <th style="width:25%">CODIGO ART</th>
                         <th style="width:25%">PRESENTACION</th>
                         <th style="width:25%">PRECIO</th>
                         <th style="width:25%">CANT.</th>
@@ -35,13 +36,21 @@
                                 <td>{{ $count }}</td>
                                 <td>{{date('d/m/Y', strtotime($item->fechaingreso))}}</td>
                                 <td>{{ $item->modalidad }} <br>{{$item->nrosolicitud}} </td>
-                                <td>{{ $item->proveedor }}</td>
+                                @if ($item->proveedor)
+                                    <td>{{ $item->proveedor }}</td>
+                                @else
+                                    <td>SIN PROVEEDOR</td>
+                                @endif
+                                
                                 <td>{{ $item->tipofactura=='Orden_Compra'? 'Orden de Compra':'Nro Factura'}}<br>{{$item->nrofactura}}</td>
+                                
                                 <td>{{ $item->articulo }}</td>
+                                <td>{{ $item->article_id }}</td>
                                 <td>{{ $item->presentacion }}</td>
                                 <td>{{ $item->precio }}</td>
                                 <td>{{ $item->cantrestante }}</td>
-                                <td>{{ $item->totalbs }}</td>
+                                {{-- <td>{{ $item->totalbs }}</td> --}}
+                                <td>{{ number_format($item->precio * $item->cantrestante,2) }}</td>
 
 
                                                                                           
@@ -57,7 +66,7 @@
                             </tr>
                         @endforelse
                         <tr>
-                            <th colspan="8" class="text-right"><strong>TOTAL</strong></th>
+                            <th colspan="9" class="text-right"><strong>TOTAL</strong></th>
                             <th><strong>{{number_format($cant,2)}}</strong></th>
                             <th><strong>{{number_format($total,2)}}</strong></th>
                         </tr>

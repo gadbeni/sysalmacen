@@ -149,7 +149,9 @@ class PermissionsTableSeeder extends Seeder
         $keys = [
             // reportes anuales
             'browse_printalmacen-inventarioAnual-da',
+            'browse_printalmacen-inventarioAnual-da-central',
             'browse_printalmacen-inventarioAnual-partida',
+            'browse_printalmacen-inventarioAnual-partida-detallada',
             'browse_printalmacen-inventarioAnual-detalle',
         ];
 
@@ -215,8 +217,23 @@ class PermissionsTableSeeder extends Seeder
             ]);
         }
 
+        //generando permisos para la tabla de solicitudes de no existencia
+        Permission::generateFor('non_stock_requests');
 
-        
+        //Para las Solicitudes de non_stock_requests
+        $keys = [
+            'browse_noninbox',
+            'read_noninbox',
+            'approve_noninbox',
+            'reject_noninbox',
+        ];
+
+        foreach ($keys as $key) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'table_name' => 'no_stock_inbox',
+            ]);
+        }
 
         
     }

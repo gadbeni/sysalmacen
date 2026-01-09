@@ -4,6 +4,7 @@
             <tr>
                 <th rowspan="2"><strong>NRO</strong></th>
                 <th rowspan="2"><strong>DESCRIPCION (ITEM)</strong></th>
+                <th rowspan="2"><strong>CODIGO</strong></th>
                 <th rowspan="2"><strong>U. DE MEDIDA</strong></th>
                 <th rowspan="2"><strong>PRECIO UNITARIO</strong></th>
                 <th colspan="4"><strong>CANTIDAD</strong></th>
@@ -36,7 +37,8 @@
             @forelse ($collection as $item)
                 <tr>
                         <td>{{ $count }}</td>
-                        <td>{{ $item['id'] }} - {{ $item['nombre'] }}</td>
+                        <td>{{ $item['nombre'] }}</td>
+                        <td style="text-align: center">{{ $item['id'] }}</td>
                         <td style="text-align: right">{{ $item['presentacion']}}</td>
                         <td style="text-align: right">{{ $item['precio']}}</td>
                         <td style="text-align: right">{{ number_format($item['saldo'],2,',', '.')}}</td>
@@ -70,7 +72,7 @@
                 </tr>
             @endforelse
             <tr>
-                    <th colspan="4" style="text-align: left">Total</th>
+                    <th colspan="5" style="text-align: left">Total</th>
                     <th style="text-align: right">{{number_format($cIni,2,',', '.')}}</th>
                     <th style="text-align: right">{{number_format($cEnt,2,',', '.')}}</th>
                     <th style="text-align: right">{{number_format($cSal,2,',', '.')}}</th>

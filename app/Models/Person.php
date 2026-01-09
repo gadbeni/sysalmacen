@@ -11,5 +11,5 @@ class Person extends Model
 
     protected $connection = 'mamore';
     protected $table = 'people';
-    protected $fillable = ['first_name', 'last_name'];
+    protected $fillable = ['first_name', 'last_name', 'paternal_surname', 'maternal_surname'];
 }
