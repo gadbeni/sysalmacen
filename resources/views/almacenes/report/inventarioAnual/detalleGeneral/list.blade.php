@@ -1,12 +1,12 @@
 
-@if (auth()->user()->hasRole('almacen_admin') || auth()->user()->hasRole('admin'))
+{{-- @if (auth()->user()->hasRole('almacen_admin') || auth()->user()->hasRole('admin')) --}}
     <div class="col-md-12 text-right">
 
         <button type="button" onclick="report_excel()" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Excel</button>
         <button type="button" onclick="report_print()" class="btn btn-dark"><i class="glyphicon glyphicon-print"></i> Imprimir</button>
 
     </div>
-@endif
+{{-- @endif --}}
 <div class="col-md-12">
 <div class="panel panel-bordered">
     <div class="panel-body">
@@ -15,7 +15,9 @@
                 <thead>
                     <tr>
                         <th rowspan="2" style="width:5px">N&deg;</th>
+                        
                         <th rowspan="2" style="text-align: center">DESCRIPCION (ITEM)</th>
+                        <th rowspan="2" style="text-align: center">CODIGO</th>
                         <th rowspan="2" style="text-align: center">U. DE MEDIDA</th>
                         <th rowspan="2" style="text-align: center">PRECIO UNITARIO</th>
                         <th colspan="4" style="text-align: center">CANTIDAD</th>
@@ -47,8 +49,10 @@
                     @endphp
                     @forelse ($collection as $item)
                         <tr style="text-align: center">
-                            <td>{{ $count }}</td>
-                            <td>{{ $item['id'] }} - {{ $item['nombre'] }}</td>
+                            <td>N#{{ $count }}</td>
+                            
+                            <td>{{ $item['nombre'] }}</td>
+                            <td>{{ $item['id'] }}</td>
                             <td style="text-align: right">{{ $item['presentacion']}}</td>
                             <td style="text-align: right">{{ $item['precio']}}</td>
                             <td style="text-align: right">{{ number_format($item['saldo'],2,',', '.')}}</td>
@@ -84,7 +88,7 @@
                         </tr>
                     @endforelse
                     <tr>
-                        <th colspan="4" style="text-align: left">Total</th>
+                        <th colspan="5" style="text-align: left">Total</th>
                         <th style="text-align: right">{{number_format($cIni,2,',', '.')}}</th>
                         <th style="text-align: right">{{number_format($cEnt,2,',', '.')}}</th>
                         <th style="text-align: right">{{number_format($cSal,2,',', '.')}}</th>

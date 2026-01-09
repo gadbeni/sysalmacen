@@ -7,10 +7,18 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- <div class="c"> -->
+                <div class="col-md-4">
                     <h1 id="subtitle" class="page-title">
                         <i class="icon fa-regular fa-clipboard"></i> Solicitudes
                     </h1>
-        
+                </div>
+                <div class="col-md-8 text-right" style="padding-top: 10px">
+                    {{-- @if ( auth()->user()->hasRole('admin') || auth()->user()->sucursal_id == 1 )
+                    <a href="{{ route('nonstock.inbox') }}" class="btn btn-default">
+                        <i class="fa fa-clipboard"></i> <span>Inexistencia</span> 
+                    </a>
+                    @endif --}}
+                </div>  
             </div>
         </div>
     @stop

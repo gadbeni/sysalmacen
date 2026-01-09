@@ -355,8 +355,8 @@
                         </div>
                         <div>
                             <b style="font-size: 16px"> ${option.nombre} </b> <br>
-                            <small style="font-size: 16px">${option.presentacion} </small>
-                         
+                            <small style="font-size: 16px">${option.presentacion} </small> <br>
+                            <small style="font-size: 14px; font-weight: normal">CODIGO DE ARTICULO: ${option.id} </small>
                         </div>
                     </div>`);
     }
