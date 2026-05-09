@@ -109,7 +109,7 @@ class DataRowsTableSeeder extends Seeder
                 'required' => 0,
                 'browse' => 0,
                 'read' => 0,
-                'edit' => 0,
+                'edit' => 1,
                 'add' => 0,
                 'delete' => 0,
                 'details' => '{}',
@@ -896,7 +896,7 @@ class DataRowsTableSeeder extends Seeder
                 'edit' => 1,
                 'add' => 1,
                 'delete' => 1,
-                'details' => '{"model":"App\\\\Models\\\\Partida","table":"partidas","type":"belongsTo","column":"partida_id","key":"id","label":"nombre","pivot_table":"archivos","pivot":"0","taggable":"0"}',
+                'details' => '{"model":"App\\\\Models\\\\Partida","table":"partidas","type":"belongsTo","column":"partida_id","key":"id","label":"full_code","pivot_table":"archivos","pivot":"0","taggable":"0"}',
                 'order' => 10,
             ),
             55 => 

@@ -177,7 +177,8 @@ class PermissionsTableSeeder extends Seeder
             'browse_printalmacen-provider-list',
 
             // reportes adicionales
-            'browse_printalmacen-user-list'
+            'browse_printalmacen-user-list',
+            'browse_printalmacen-usuarios-direccion'
         ];
 
         foreach ($keys as $key) {
