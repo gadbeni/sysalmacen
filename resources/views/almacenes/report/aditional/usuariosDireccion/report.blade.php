@@ -1,7 +1,7 @@
 @extends('voyager::master')
 
 @section('page_title', 'Reporte de Usuarios por Dirección Administrativa')
-@if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('almacen_admin') || auth()->user()->hasPermission('browse_printalmacen-usuarios-direccion'))
+@if(auth()->user()->hasRole('admin'))
 
 @section('page_header')
     <div class="container-fluid">

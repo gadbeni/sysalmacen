@@ -17,6 +17,7 @@ class ReportUsuariosDireccionController extends Controller
     public function index()
     {
         $user = Auth::user();
+        
 
         if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('almacen_admin')) {
             $sucursal = Sucursal::where('deleted_at', null)->where('condicion', 1)->get();
@@ -68,7 +69,7 @@ class ReportUsuariosDireccionController extends Controller
                     ->where('u.unidadAdministrativa_id', $unidad->id)
                     ->select(
                         'u.id',
-                        'u.name as username',
+                        'u.email',
                         'r.display_name as rol',
                         'p.ci',
                         'p.first_name',
