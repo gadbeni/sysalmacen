@@ -26,6 +26,7 @@ use App\Http\Controllers\PeopleExtController;
 use App\Http\Controllers\ReportAlmacenController;
 use App\Http\Controllers\SolicitudBandejaController;
 use App\Http\Controllers\SolicitudPedidoController;
+use App\Http\Controllers\ReportUsuariosDireccionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -264,6 +265,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     // Usuario
     Route::get('print/almacen-user-list', [ReportAlmacenController::class, 'user'])->name('almacen-user-list.report');
     Route::post('print/almacen/user/list/list', [ReportAlmacenController::class, 'userList'])->name('almacen-user-list.list');
+
+    // Usuarios por Dirección y Unidad Administrativa
+    Route::get('print/almacen-usuarios-direccion', [ReportUsuariosDireccionController::class, 'index'])->name('almacen-usuarios-direccion.report');
+    Route::post('print/almacen/usuarios/direccion/list', [ReportUsuariosDireccionController::class, 'list'])->name('almacen-usuarios-direccion.list');
 
 
 
