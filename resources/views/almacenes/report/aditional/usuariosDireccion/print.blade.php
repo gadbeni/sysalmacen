@@ -48,16 +48,17 @@
             </tr>
         </table>
 
-        <table style="width:100%; font-size:10px; border-collapse:collapse" border="1" cellspacing="0" cellpadding="4">
+        <table style="width:100%; font-size:9px; border-collapse:collapse" border="1" cellspacing="0" cellpadding="3">
             <thead>
                 <tr style="background:#e8f0fe">
-                    <th style="width:4%; text-align:center">N°</th>
-                    <th style="width:28%">UNIDAD ADMINISTRATIVA</th>
-                    <th style="width:7%; text-align:center">SIGLA</th>
-                    <th style="width:8%; text-align:center">CI</th>
-                    <th style="width:25%">NOMBRE COMPLETO</th>
-                    <th style="width:15%">CORREO</th>
-                    <th style="width:13%">ROL</th>
+                    <th style="width:3%; text-align:center">N°</th>
+                    <th style="width:22%">UNIDAD ADMINISTRATIVA</th>
+                    <th style="width:6%; text-align:center">SIGLA</th>
+                    <th style="width:7%; text-align:center">CI</th>
+                    <th style="width:22%">NOMBRE COMPLETO</th>
+                    <th style="width:14%">CORREO</th>
+                    <th style="width:10%">ROL</th>
+                    <th style="width:16%; text-align:center">ÚLTIMO ACCESO</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,6 +81,9 @@
                                 <td style="vertical-align:middle">{{ trim(($usr->first_name ?? '') . ' ' . ($usr->last_name ?? '')) }}</td>
                                 <td style="vertical-align:middle">{{ $usr->email ?? '—' }}</td>
                                 <td style="vertical-align:middle">{{ $usr->rol ?? '—' }}</td>
+                                <td style="text-align:center; vertical-align:middle">
+                                    {{ $usr->last_login_at ? \Carbon\Carbon::parse($usr->last_login_at)->format('d/m/Y H:i') : '—' }}
+                                </td>
                             </tr>
                         @endforeach
                     @else
@@ -87,13 +91,13 @@
                             <td style="text-align:center">{{ $numUnidad }}</td>
                             <td>{{ $unidad->nombre }}</td>
                             <td style="text-align:center">{{ $unidad->sigla ?? '-' }}</td>
-                            <td colspan="4" style="text-align:center; font-style:italic; color:#999">Sin usuarios asignados</td>
+                            <td colspan="5" style="text-align:center; font-style:italic; color:#999">Sin usuarios asignados</td>
                         </tr>
                     @endif
                     @php $numUnidad++; @endphp
                 @empty
                     <tr>
-                        <td colspan="7" style="text-align:center; font-style:italic; color:#999">
+                        <td colspan="8" style="text-align:center; font-style:italic; color:#999">
                             No hay unidades registradas para esta dirección.
                         </td>
                     </tr>
