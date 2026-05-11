@@ -26,7 +26,8 @@ class User extends \TCG\Voyager\Models\User
         'subSucursal_id',
         'direccionAdministrativa_id',
         'unidadAdministrativa_id',
-        'contract_id'
+        'contract_id',
+        'last_login_at',
     ];
 
     public function unit()
