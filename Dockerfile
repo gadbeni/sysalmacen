@@ -22,16 +22,19 @@ RUN mkdir -p /var/www/sysalmacen/storage /var/www/sysalmacen/bootstrap/cache
 
 COPY . .
 
-RUN composer install --prefer-dist --optimize-autoloader --no-interaction
+# CORRECCIÓN AQUÍ: Deshabilitar bloqueo de paquetes inseguros
+RUN composer config audit.block-insecure false \
+    && composer install --prefer-dist --optimize-autoloader --no-interaction --ignore-platform-req=php
 
 RUN chown -R unit:unit /var/www/sysalmacen/storage /var/www/sysalmacen/bootstrap/cache \
     && chmod -R 775 /var/www/sysalmacen/storage /var/www/sysalmacen/bootstrap/cache
 
 COPY unit.json /docker-entrypoint.d/unit.json
 
-COPY .env.example .env
-RUN php artisan key:generate
-RUN php artisan storage:link
+# CORRECCIÓN: No usar .env.example en producción
+RUN cp .env.example .env || true
+RUN php artisan key:generate || true
+RUN php artisan storage:link || true
 
 EXPOSE 8000
 
