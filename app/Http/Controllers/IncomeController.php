@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\SucursalUser;
 use App\Models\InventarioAlmacen;
 use App\Models\SucursalSubAlmacen;
+use Luecano\NumeroALetras\NumeroALetras; // Para convertir numeros a su equivalente en palabras
 
 class IncomeController extends Controller
 {
@@ -70,99 +71,72 @@ class IncomeController extends Controller
         return view('almacenes.income.browse', compact('gestion'));
     }
 
-    public function list($type, $search = null){
+    public function list($type, $search = null) {
+        /**
+         * Esta funcion genera el listado de registros de la vista de ingresos "almacenes.income.list"
+         * Y los filtra segun el tipo o la busqueda
+         * 
+         * @param String $type Describe el tipo, puede ser: "todo","constock","sinstock"
+         * @param String $search Es un parametro de busqueda para filtrar los datos por nombre,monto,numero de factura,nit ,etc
+         * @return view Devuelve los datos a la vista "almacenes.income.list" que a su vez esta en almacenes.income.browse
+         */
+
         $user = Auth::user();
         $sucursal = $user->sucursal_id;
-
-        // $sucursal = SucursalUser::where('user_id', $user->id)->where('condicion', 1)->where('deleted_at', null)->first();
-
-        $gestion = InventarioAlmacen::where('status', 1)->where('sucursal_id', $sucursal)->where('deleted_at', null)->first();//para ver si hay gestion activa o cerrada
-        
-        // dd($sucursal);
-
+        $gestion = InventarioAlmacen::where('status', 1)->where('sucursal_id', $sucursal)->where('deleted_at', null)->first();
+    
         $query_filter = 'sucursal_id = '.$sucursal.' and subSucursal_id = '. $user->subSucursal_id;
-        // dd($gestion);
-        
-        if(Auth::user()->hasRole('admin'))
-        {
-            $query_filter =1;
+    
+        if (Auth::user()->hasRole('admin')) {
+            $query_filter = 1;
         }
-
-        
+    
         $paginate = request('paginate') ?? 10;
-        switch($type)
-        {
-            case 'todo':
-                $data = SolicitudCompra::with(['factura.proveedor', 'modality', 'unidad', 'direccion'])
-                    ->where(function($query) use ($search){
-                        if($search){
-                            $query->OrwhereHas('modality', function($query) use($search){
-                                $query->whereRaw("(nombre like '%$search%')");
-                            })
-                            ->OrwhereHas('factura', function($query) use($search){
-                                $query->whereRaw("(montofactura like '%$search%' or nrofactura like '%$search%')");
-                            })
-                            ->OrwhereHas('factura.proveedor', function($query) use($search){
-                                $query->whereRaw("(razonsocial like '%$search%' or nit like '%$search%')");
-                            })
-                            ->OrWhereRaw($search ? "gestion like '%$search%'" : 1)
-                            ->OrWhereRaw($search ? "nrosolicitud like '%$search%'" : 1);
-                        }
-                    })
-                    ->where('deleted_at', NULL)
-                    ->whereRaw($query_filter)
-                    ->orderBy('id', 'DESC')->paginate($paginate);
-                break;
-            case 'constock':
-                $data = SolicitudCompra::with(['factura.proveedor', 'modality', 'unidad', 'direccion'])
-                    ->where(function($query) use ($search){
-                        if($search){
-                            $query->OrwhereHas('modality', function($query) use($search){
-                                $query->whereRaw("(nombre like '%$search%')");
-                            })
-                            ->OrwhereHas('factura', function($query) use($search){
-                                $query->whereRaw("(montofactura like '%$search%' or nrofactura like '%$search%')");
-                            })
-                            ->OrwhereHas('factura.proveedor', function($query) use($search){
-                                $query->whereRaw("(razonsocial like '%$search%' or nit like '%$search%')");
-                            })
-                            ->OrWhereRaw($search ? "gestion like '%$search%'" : 1)
-                            ->OrWhereRaw($search ? "nrosolicitud like '%$search%'" : 1);
-                        }
-                    })
-                    ->where('deleted_at', NULL)
-                    ->where('stock', 1)
-                    ->whereRaw($query_filter)
-                    ->orderBy('id', 'DESC')->paginate($paginate);
-                break;
-            case 'sinstock':
-                $data = SolicitudCompra::with(['factura.proveedor', 'modality', 'unidad', 'direccion'])
-                    ->where(function($query) use ($search){
-                        if($search){
-                            $query->OrwhereHas('modality', function($query) use($search){
-                                $query->whereRaw("(nombre like '%$search%')");
-                            })
-                            ->OrwhereHas('factura', function($query) use($search){
-                                $query->whereRaw("(montofactura like '%$search%' or nrofactura like '%$search%')");
-                            })
-                            ->OrwhereHas('factura.proveedor', function($query) use($search){
-                                $query->whereRaw("(razonsocial like '%$search%' or nit like '%$search%')");
-                            })
-                            ->OrWhereRaw($search ? "gestion like '%$search%'" : 1)
-                            ->OrWhereRaw($search ? "nrosolicitud like '%$search%'" : 1);
-                        }
-                    })
-                    ->where('deleted_at', NULL)
-                    ->where('stock', 0)
-                    ->whereRaw($query_filter)
-                    ->orderBy('id', 'DESC')->paginate($paginate);
-                break;
-        }
-        // dd($data);
 
+        $data = SolicitudCompra::with(['factura.proveedor', 'modality', 'unidad', 'direccion'])
+        ->where(function($query) use ($search){
+            $this->addSearchConditions($query,$search);
+        })
+        ->where('deleted_at', NULL)
+        ->whereRaw($query_filter)
+        ->orderBy('id', 'DESC');
+        
+        /* Condicion Extra para filtrar si el usuario quiere ver "Con stock" o "Sin stock"*/
+        if ($type == 'constock'){
+            $data->where('stock', 1);
+        }
+        else if ($type =='sinstock'){
+            $data->where('stock', 0);
+        }
+
+        $data = $data->paginate($paginate);
+    
         return view('almacenes.income.list', compact('data', 'gestion'));
     }
 
+    private function addSearchConditions($query, $search) {
+        /**
+         * Funcion auxiliar para hacer las consultas, de la funcion "list"
+         * 
+         * @param String $query Es la consulta
+         * @param String $search Es un parametro de busqueda
+         */
+        if ($search) {
+            $query->orWhereHas('modality', function ($query) use ($search) {
+                $query->where('nombre', 'like', "%$search%");
+            })
+            ->orWhereHas('factura', function ($query) use ($search) {
+                $query->where('montofactura', 'like', "%$search%")
+                    ->orWhere('nrofactura', 'like', "%$search%");
+            })
+            ->orWhereHas('factura.proveedor', function ($query) use ($search) {
+                $query->where('razonsocial', 'like', "%$search%")
+                    ->orWhere('nit', 'like', "%$search%");
+            })
+            ->orWhere('gestion','like',"%$search%")
+            ->orWhere('nrosolicitud','like',"%$search%");
+        }
+    }
 
     public function create()
     {
@@ -225,8 +199,12 @@ class IncomeController extends Controller
         
         $proveedor = Provider::find($factura->provider_id);
 
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
+        // para convertir letras a numeros
         
-        return view('almacenes.income.report',compact('sol','factura', 'detalle', 'sucursal', 'modalidad', 'unidad', 'proveedor'));
+        
+        return view('almacenes.income.report',compact('sol','factura', 'detalle', 'sucursal', 'modalidad', 'unidad', 'proveedor','formatter'));
         // return view('income.view', compact('sol','factura', 'detalle', 'sucursal', 'modalidad', 'unidad'));
     }
 
@@ -284,10 +262,17 @@ class IncomeController extends Controller
                         ->get();
                 // return $unidad;
 
-                $aux = SolicitudCompra::where('unidadadministrativa',$request->unidadadministrativa)
+                //quedo obsoleto debido a que se cambio la forma de generar el numero de solicitud a una mas eficiente
+                // $aux = SolicitudCompra::where('unidadadministrativa',$request->unidadadministrativa)
+                //     ->where('deleted_at', null)
+                //     ->get();
+                
+                $lastSolicitud = SolicitudCompra::where('unidadadministrativa',$request->unidadadministrativa)
                     ->where('deleted_at', null)
-                    ->get();
+                    ->orderBy('id', 'desc')
+                    ->first();
 
+                $numeroSolicitud = $lastSolicitud ? (int) explode('-',$lastSolicitud->nrosolicitud)[1] + 1 : 1;
                     $length = 4;
                     $char = 0;
                     $type = 'd';
@@ -295,7 +280,7 @@ class IncomeController extends Controller
                     
 
 
-                $request->merge(['nrosolicitud' => strtoupper($unidad[0]->sigla).'-'.sprintf($format, count($aux)+1)]);
+                $request->merge(['nrosolicitud' => strtoupper($unidad[0]->sigla).'-'.sprintf($format, $numeroSolicitud)]);
 // return $request;
             
                 // $gestion = Carbon::parse($request->fechaingreso)->format('Y');
@@ -621,6 +606,7 @@ class IncomeController extends Controller
     {
         
         return DB::connection('mamore')->table('unidades')
+                        ->where('estado', 1)
                         ->where('deleted_at', null)
                         ->where('direccion_id',$id)
                         ->select('*')

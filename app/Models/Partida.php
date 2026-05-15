@@ -9,4 +9,11 @@ class Partida extends Model
 {
     use HasFactory;
     protected $fillable = ['codigo', 'nombre'];
+
+    public $additional_attributes = ['full_code'];
+
+    public function getFullCodeAttribute()
+    {
+        return $this->codigo . ' - ' . $this->nombre;
+    }
 }

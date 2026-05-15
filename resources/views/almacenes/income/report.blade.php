@@ -101,7 +101,8 @@
        
     </table>
     <div class="row" style="font-size: 9pt">
-        <p style="text-align: right">Total - Artículo Disponible: BS. {{NumerosEnLetras::convertir($total,'Bolivianos',true)}}</p>
+        {{-- <p style="text-align: right">Total - Artículo Disponible: BS. {{NumerosEnLetras::convertir($total,'Bolivianos',true)}}</p> --}}
+        <p style="text-align: right">Total - Artículo Disponible: BS. {{number_format($total,2)}} ({{$formatter->toMoney($total,2,'Bolivianos','Centavos')}})</p>
     </div>
 
     <div class="text">
@@ -125,7 +126,12 @@
             <td style="text-align: center">
                 ______________________
                 <br>
-                <b style="font-size: 12px">Jefe de Contrataciones</b>
+                @if ($sucursal->id == 6)
+                    {{-- Para que Al Almacen Del SEDEGES LE SALGA DIFERENTE --}}
+                    <b style="font-size: 12px">Unidad de Administración y Finanzas</b>
+                @else
+                    <b style="font-size: 12px">Jefe de Contrataciones</b>
+                @endif
             </td>
         </tr>
     </table>
