@@ -42,8 +42,8 @@ use App\Http\Controllers\ReportUsuariosDireccionController;
 
 
 Route::get('/', function () {
-    return redirect('admin');
-});
+    return view('welcome');
+})->name('landing');
  
 // Route::middleware('auth')->group(function() {
 //     Route::post('/delete-session', function(Request $request) {
