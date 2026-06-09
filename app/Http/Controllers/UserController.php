@@ -162,7 +162,7 @@ class UserController extends Controller
                     'm.id',
                     DB::raw("CONCAT(m.first_name, ' ', COALESCE(m.paternal_surname, ''), ' ', COALESCE(m.maternal_surname, '')) as text"),
                     'm.first_name as nombre',
-                    'm.last_name as apellido',
+                    DB::raw("CONCAT_WS(' ', m.paternal_surname, m.maternal_surname) as apellido"),
                     'm.ci',
                 )
                 ->whereRaw('(m.ci like "%' . $search . '%" or ' . DB::raw("CONCAT(m.first_name, ' ', COALESCE(m.paternal_surname, ''), ' ', COALESCE(m.maternal_surname, ''))") . ' like "%' . $search . '%")')

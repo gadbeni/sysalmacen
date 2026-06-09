@@ -174,7 +174,7 @@ class NonStockRequestController extends Controller
             $nonStockRequest->sucursal_id = $user->sucursal_id;
             $nonStockRequest->subSucursal_id = $request->input('subSucursal_id');
             $nonStockRequest->registerUser_id = $user->id;
-            $nonStockRequest->registerUser_name = $funcionario->first_name.' '.$funcionario->last_name;
+            $nonStockRequest->registerUser_name = $funcionario->nombre;
 
             $nonStockRequest->date_request = Carbon::now();
             $nonStockRequest->gestion = $gestion->gestion;

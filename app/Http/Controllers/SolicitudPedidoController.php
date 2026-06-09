@@ -293,7 +293,7 @@ class SolicitudPedidoController extends Controller
                 'nropedido' => $request->nropedido,
                 'people_id'=> $funcionario->people_id,
                 'first_name'=>$funcionario->first_name,
-                'last_name'=>$funcionario->last_name,
+                'last_name'=>trim(($funcionario->paternal_surname ?? '') . ' ' . ($funcionario->maternal_surname ?? '')),
                 'job'=>$funcionario->cargo,
                 'direccion_name'=>$unidad->direction->nombre,
                 'direccion_id'=>$user->direccionAdministrativa_id,

@@ -73,9 +73,11 @@ class ReportUsuariosDireccionController extends Controller
                         'r.display_name as rol',
                         'p.ci',
                         'p.first_name',
-                        'p.last_name'
+                        'p.paternal_surname',
+                        'p.maternal_surname',
+                        DB::raw("CONCAT_WS(' ', p.first_name, p.paternal_surname, p.maternal_surname) as nombre")
                     )
-                    ->orderBy('p.last_name', 'asc')
+                    ->orderBy('p.paternal_surname', 'asc')
                     ->get();
 
                 $unidades_data[] = [

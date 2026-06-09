@@ -78,7 +78,7 @@
                                     <td style="text-align:center; vertical-align:middle" rowspan="{{ $userCount }}">{{ $unidad->sigla ?? '-' }}</td>
                                 @endif
                                 <td style="text-align:center; vertical-align:middle">{{ $usr->ci ?? '—' }}</td>
-                                <td style="vertical-align:middle">{{ trim(($usr->first_name ?? '') . ' ' . ($usr->last_name ?? '')) }}</td>
+                                <td style="vertical-align:middle">{{ $usr->nombre ?? '' }}</td>
                                 <td style="vertical-align:middle">{{ $usr->email ?? '—' }}</td>
                                 <td style="vertical-align:middle">{{ $usr->rol ?? '—' }}</td>
                                 <td style="text-align:center; vertical-align:middle">
