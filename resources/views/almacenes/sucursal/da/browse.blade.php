@@ -44,7 +44,7 @@
                                             <thead>
                                                 <tr>
                                                     <th style="text-align: center">Unidad</th>
-                                                    <th style="text-align: right">Acciones</th>
+                                                    <th style="text-align: center">Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -73,7 +73,7 @@
                                             <thead>
                                                 <tr>
                                                     <th style="text-align: center">Nombre</th>
-                                                    <th style="text-align: right">Acciones</th>
+                                                    <th style="text-align: center">Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -100,7 +100,7 @@
                                                     <th style="text-align: center">Nro&deg;</th>
                                                     <th style="text-align: center">Dirección Administrativa</th>
                                                     <th style="text-align: center">Estado</th>
-                                                    <th style="text-align: right">Acciones</th>
+                                                    <th style="text-align: center">Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

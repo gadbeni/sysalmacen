@@ -132,42 +132,43 @@
                                     @endforeach
                                 </select>
                             </div>
-                            @if ($dataTypeContent->id)
-                                @php
+                            @php
+                                $sub = $direction = $unidad = collect();
+                                if ($dataTypeContent->id) {
+                                    $sub = \App\Models\SucursalSubAlmacen::where('sucursal_id', $dataTypeContent->sucursal_id)->where('deleted_at', null)->get();
                                     $direction = \App\Models\SucursalDireccion::with(['direction'])->where('sucursal_id', $dataTypeContent->sucursal_id)->where('status', 1)->where('deleted_at', null)->get();
                                     $unidad = \App\Models\Unit::where('direccion_id', $dataTypeContent->direccionAdministrativa_id)->where('estado', 1)->where('deleted_at', null)->get();
-                                    $sub = \App\Models\SucursalSubAlmacen::where('sucursal_id', $dataTypeContent->sucursal_id)->where('deleted_at', null)->get();
+                                }
+                            @endphp
+                            <div class="form-group">
+                                <label for="subSucursal_id">Sub Almacen</label>
+                                <select name="subSucursal_id" id="subSucursal_id" class="form-control select2">
+                                    <option value="">--Seleccione una opción--</option>
+                                    @foreach ($sub as $item)
+                                        <option value="{{$item->id}}" {{($dataTypeContent->id && $dataTypeContent->subSucursal_id==$item->id)?'selected':''}}>{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                                @endphp 
-                                <div class="form-group">
-                                    <label for="subSucursal_id">Sub Almacen</label>
-                                    <select name="subSucursal_id" id="subSucursal_id" class="form-control select2">                                   
-                                        <option value="" >--Seleccione una opción--</option>
-                                        @foreach ($sub as $item)
-                                            <option value="{{$item->id}}" {{$dataTypeContent->subSucursal_id==$item->id?'selected':''}}>{{$item->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>  
-                                  
-                                <div class="form-group">
-                                    <label for="direction_id">Dirección Administrativa</label>
-                                    <select name="direction_id" id="direction_id" class="form-control select2">                                   
-                                        <option value="" >--Seleccione una opción--</option>
-                                        @foreach ($direction as $item)
-                                            <option value="{{$item->direction->id}}" {{$dataTypeContent->direccionAdministrativa_id==$item->direction->id?'selected':''}}>{{$item->direction->nombre}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>  
-                                <div class="form-group">
-                                    <label for="unit_id">Unidad Administrativa</label>
-                                    <select name="unit_id" id="unit_id" class="form-control select2">   
-                                        <option value="" >--Seleccione una opción--</option>
-                                        @foreach ($unidad as $item)
-                                            <option value="{{$item->id}}" {{$dataTypeContent->unidadAdministrativa_id==$item->id?'selected':''}}>{{$item->nombre}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endif
+                            <div class="form-group">
+                                <label for="direction_id">Dirección Administrativa</label>
+                                <select name="direction_id" id="direction_id" class="form-control select2">
+                                    <option value="">--Seleccione una opción--</option>
+                                    @foreach ($direction as $item)
+                                        <option value="{{$item->direction->id}}" {{($dataTypeContent->id && $dataTypeContent->direccionAdministrativa_id==$item->direction->id)?'selected':''}}>{{$item->direction->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="unit_id">Unidad Administrativa</label>
+                                <select name="unit_id" id="unit_id" class="form-control select2">
+                                    <option value="">--Seleccione una opción--</option>
+                                    @foreach ($unidad as $item)
+                                        <option value="{{$item->id}}" {{($dataTypeContent->id && $dataTypeContent->unidadAdministrativa_id==$item->id)?'selected':''}}>{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                          
                             @php

@@ -210,6 +210,9 @@ class UserController extends Controller
                 'role_id' => $request->role_id,
                 'email' => $request->email,
                 'sucursal_id' => $request->sucursal_id,
+                'subSucursal_id' => $request->subSucursal_id,
+                'unidadAdministrativa_id' => $request->unit_id,
+                'direccionAdministrativa_id' => $request->direction_id,
                 'avatar' => 'users/default.png',
                 'password' => bcrypt($request->password),
             ]);

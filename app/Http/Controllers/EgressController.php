@@ -173,6 +173,10 @@ class EgressController extends Controller
                     ->whereRaw($search ? "(gestion like '%$search%' or nropedido like '%$search%' or id like '%$search%')" : 1)
 
                     ->orderBy('id', 'DESC')->paginate($paginate);
+
+                    // dump($data);
+
+                    // return 1;
                     return view('almacenes.egress.listEgreso', compact('data', 'gestion'));
 
                     break;

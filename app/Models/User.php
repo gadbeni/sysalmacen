@@ -40,6 +40,28 @@ class User extends \TCG\Voyager\Models\User
         return $this->belongsTo(Direction::class, 'direccionAdministrativa_id');
     }
 
+    public function getFuncionarioIdBrowseAttribute()
+    {
+        if (!$this->funcionario_id) return null;
+        $person = \Illuminate\Support\Facades\DB::connection('mamore')
+            ->table('people')
+            ->select(\Illuminate\Support\Facades\DB::raw("CONCAT(COALESCE(first_name,''), ' ', COALESCE(paternal_surname,''), ' ', COALESCE(maternal_surname,'')) as nombre_completo"))
+            ->where('id', $this->funcionario_id)
+            ->where('deleted_at', null)
+            ->first();
+        return $person ? trim($person->nombre_completo) : $this->funcionario_id;
+    }
+
+    public function getDireccionAdministrativaIdBrowseAttribute()
+    {
+        return optional($this->direction)->nombre;
+    }
+
+    public function getUnidadAdministrativaIdBrowseAttribute()
+    {
+        return optional($this->unit)->nombre;
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

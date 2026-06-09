@@ -45,38 +45,38 @@ class PermissionsTableSeeder extends Seeder
         Permission::generateFor('settings');
 
         //---------- DONACIONES SEDEGES
-        Permission::generateFor('centro_categorias');
-        Permission::generateFor('centros');
+        // Permission::generateFor('centro_categorias');
+        // Permission::generateFor('centros');
 
-        Permission::generateFor('donacion_categorias');
-        Permission::generateFor('donacion_articulos');
+        // Permission::generateFor('donacion_categorias');
+        // Permission::generateFor('donacion_articulos');
 
-        Permission::generateFor('donador_personas');
-        Permission::generateFor('donador_empresas');
+        // Permission::generateFor('donador_personas');
+        // Permission::generateFor('donador_empresas');
 
-        Permission::generateFor('incomedonor');
-        $keys = [
-            'browse_incomedonorstockview',
-        ];
+        // Permission::generateFor('incomedonor');
+        // $keys = [
+        //     'browse_incomedonorstockview',
+        // ];
 
-        foreach ($keys as $key) {
-            Permission::firstOrCreate([
-                'key'        => $key,
-                'table_name' => 'incomedonor',
-            ]);
-        }
-        Permission::generateFor('egressdonor');
+        // foreach ($keys as $key) {
+        //     Permission::firstOrCreate([
+        //         'key'        => $key,
+        //         'table_name' => 'incomedonor',
+        //     ]);
+        // }
+        // Permission::generateFor('egressdonor');
 
-        $keys = [
-            'browse_view_stock_donacion',
-        ];
+        // $keys = [
+        //     'browse_view_stock_donacion',
+        // ];
 
-        foreach ($keys as $key) {
-            Permission::firstOrCreate([
-                'key'        => $key,
-                'table_name' => 'view_stock_donacion',
-            ]);
-        }
+        // foreach ($keys as $key) {
+        //     Permission::firstOrCreate([
+        //         'key'        => $key,
+        //         'table_name' => 'view_stock_donacion',
+        //     ]);
+        // }
         //FIN DONACIONES SEDEGES
 
 
