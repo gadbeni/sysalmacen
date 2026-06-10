@@ -19,33 +19,6 @@ class RolesTableSeeder extends Seeder
             ])->save();
         }
 
-        //  DONACIONES SEDEGES ROLES
-        $role = Role::firstOrNew(['name' => 'sedeges_admin']);
-        if (!$role->exists) {
-            $role->fill([
-                'display_name' => __('administrador Sedeges'),
-            ])->save();
-        }
-
-        $role = Role::firstOrNew(['name' => 'sedeges_donacion_responsable']);
-        if (!$role->exists) {
-            $role->fill([
-                'display_name' => __('Responsable de Donacion SEDEGES'),
-            ])->save();
-        }
-
-        // $role = Role::firstOrNew(['name' => 'sedeges_donacion_view']);
-        // if (!$role->exists) {
-        //     $role->fill([
-        //         'display_name' => __('Ver Stock Donacion SEDEGES'),
-        //     ])->save();
-        // }
-
-
-
-
-        // FIN DONACIONES SEDEGES
-
         $role = Role::firstOrNew(['name' => 'almacen_admin']);
         if (!$role->exists) {
             $role->fill([
@@ -162,4 +135,3 @@ class RolesTableSeeder extends Seeder
 
     }
 }
-

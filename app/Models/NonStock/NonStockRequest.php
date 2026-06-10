@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Sucursal;
 use App\Models\User;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class NonStockRequest extends Model
+class NonStockRequest extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'sucursal_id',
