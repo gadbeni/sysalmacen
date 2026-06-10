@@ -86,7 +86,7 @@ class PeopleExtController extends Controller
     {
         DB::beginTransaction();
         try {
-            PeopleExt::where('id', $people_ext)->update(['deleted_at' => Carbon::now()]);
+            PeopleExt::find($people_ext)->update(['deleted_at' => Carbon::now()]);
 
             DB::commit();
             return redirect()->route('people_ext.index')->with(['message' => 'Eliminado exitosamente.', 'alert-type' => 'success']);

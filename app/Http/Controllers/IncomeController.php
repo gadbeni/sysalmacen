@@ -581,12 +581,15 @@ class IncomeController extends Controller
         try{
 
             $sol = SolicitudCompra::find($request->id);
-            SolicitudCompra::where('id', $sol->id)->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now()]);
-    
-            $fac = Factura::where('solicitudcompra_id',$sol->id)->get();
-            Factura::where('solicitudcompra_id', $sol->id)->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now()]);
+            $sol->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now()]);
 
-            DetalleFactura::where('factura_id', $fac[0]->id)->where('hist',0)->update(['deleteuser_id'=>$user->id,'deleted_at' => Carbon::now()]);
+            $fac = Factura::where('solicitudcompra_id',$sol->id)->get();
+            foreach ($fac as $factura) {
+                $factura->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now()]);
+            }
+
+            DetalleFactura::where('factura_id', $fac[0]->id)->where('hist',0)->get()
+                ->each(fn($df) => $df->update(['deleteuser_id'=>$user->id,'deleted_at' => Carbon::now()]));
 
             DB::commit();
             return redirect()->route('income.index')->with(['message' => 'Ingreso Eliminado Exitosamente.', 'alert-type' => 'success']);
