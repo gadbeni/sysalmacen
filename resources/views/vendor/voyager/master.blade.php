@@ -170,6 +170,12 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
     </div> --}}
 </div>
 
+@auth
+    @if(auth()->user()->must_change_password)
+        @include('partials.modal-change-password')
+    @endif
+@endauth
+
 @include('voyager::partials.app-footer')
 
 <!-- Javascript Libs -->

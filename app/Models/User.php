@@ -28,6 +28,8 @@ class User extends \TCG\Voyager\Models\User
         'unidadAdministrativa_id',
         'contract_id',
         'last_login_at',
+        'must_change_password',
+        'status',
     ];
 
     public function unit()
@@ -79,6 +81,8 @@ class User extends \TCG\Voyager\Models\User
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'must_change_password' => 'boolean',
+        'status' => 'boolean',
     ];
 
     public function isAdmin(){

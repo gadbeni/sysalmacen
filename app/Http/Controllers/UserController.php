@@ -215,6 +215,8 @@ class UserController extends Controller
                 'direccionAdministrativa_id' => $request->direction_id,
                 'avatar' => 'users/default.png',
                 'password' => bcrypt($request->password),
+                'must_change_password' => true,
+                'status' => $request->input('status', 1),
             ]);
 
             // return 1;
@@ -256,6 +258,12 @@ class UserController extends Controller
             return redirect()->route('voyager.users.index')->with(['message' => 'Elija otro correo por favor.', 'alert-type' => 'error']);
         }
 
+        $status = $request->has('status') ? (bool) $request->input('status', 1) : $user->status;
+
+        if ((int) $request->user()->id === (int) $user->id) {
+            $status = true;
+        }
+
         // return $request;
         DB::beginTransaction();
         try {
@@ -265,11 +273,19 @@ class UserController extends Controller
                 'sucursal_id' => $request->sucursal_id,
                 'subSucursal_id' => $request->subSucursal_id,
                 'unidadAdministrativa_id' => $request->unit_id,
-                'direccionAdministrativa_id' => $request->direction_id
+                'direccionAdministrativa_id' => $request->direction_id,
+                'status' => $status,
             ]);
+
+            if (!$user->status) {
+                DB::table('sessions')
+                    ->where('user_id', $user->id)
+                    ->delete();
+            }
 
             if ($request->password != '') {
                 $user->password = bcrypt($request->password);
+                $user->must_change_password = ($request->user()->id !== $user->id);
                 $user->save();
 
                 //Eliminar las sesiones del usuario por cambio de contraseña
@@ -320,6 +336,36 @@ class UserController extends Controller
             ->with([
                 'message' => "El usuario, se actualizo con exito.",
                 'alert-type' => 'success'
+            ]);
+    }
+
+    public function toggle_status(User $user)
+    {
+        if ((int) auth()->id() === (int) $user->id) {
+            return redirect()
+                ->route('voyager.users.index')
+                ->with([
+                    'message' => 'No puede desactivar su propio usuario.',
+                    'alert-type' => 'error',
+                ]);
+        }
+
+        $user->status = !$user->status;
+        $user->save();
+
+        if (!$user->status) {
+            DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->delete();
+        }
+
+        return redirect()
+            ->route('voyager.users.index')
+            ->with([
+                'message' => $user->status
+                    ? 'El usuario fue activado.'
+                    : 'El usuario fue desactivado.',
+                'alert-type' => 'success',
             ]);
     }
 
@@ -374,7 +420,8 @@ class UserController extends Controller
             ->delete();
 
         $user->update([
-            'password' => bcrypt($request->input('password'))
+            'password' => bcrypt($request->input('password')),
+            'must_change_password' => false,
         ]);
         return redirect('/');
     }

@@ -67,10 +67,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     Voyager::routes();
 
     //<- sesiones
-    Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions')->middleware('auth');
-    Route::delete('/usuario/sesion/',[UserController::class,'deleteSession'])->name('delete_session');
-    //sesiones ->
-    Route::put('/usario/change-password/',[UserController::class,'changePassword'])->name('change_password');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions');
+        Route::delete('/usuario/sesion/',[UserController::class,'deleteSession'])->name('delete_session');
+        Route::put('/usario/change-password/',[UserController::class,'changePassword'])->name('change_password');
+    });
 
     Route::resource('usuario', UserController::class);
     Route::post('usuarios/desactivar', [UserController::class, 'desactivar'])->name('almacen_desactivar');
@@ -191,9 +192,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
 
 
     // Para registrar los usuarios
-    Route::post('register-users', [UserController::class, 'create_user'])->name('store.users');
-    Route::put('update-user/{user}' ,[UserController::class ,'update_user'])->name('update.users');
-    Route::get('search', [UserController::class, 'getFuncionario'])->name('user.getFuncionario');
+    Route::middleware(['auth'])->group(function () {
+        Route::post('register-users', [UserController::class, 'create_user'])->name('store.users');
+        Route::put('update-user/{user}' ,[UserController::class ,'update_user'])->name('update.users');
+        Route::get('search', [UserController::class, 'getFuncionario'])->name('user.getFuncionario');
+    });
 
 
 

@@ -76,7 +76,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Confirmar Contraseña:</label>
-                            <input style="max-width: 700px;" type="password" name="password_confirmation"" class="form-control" id="" required>
+                            <input style="max-width: 700px;" type="password" name="password_confirmation" class="form-control" id="" required>
                         </div>
                         <input type="submit" class="btn btn-success" value="Cambiar contraseña">
                     </form>
