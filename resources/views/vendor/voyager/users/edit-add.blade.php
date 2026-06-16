@@ -93,6 +93,25 @@
                                 <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
                             </div>
 
+                            @if(auth()->user()->hasRole('admin') && (is_null($dataTypeContent->getKey()) || auth()->id() !== $dataTypeContent->getKey()))
+                                <div class="form-group">
+                                    <label class="control-label">Estado</label>
+                                    <span class="voyager-question text-info pull-left" data-toggle="tooltip" data-placement="left" title="Active o desactive el acceso del usuario al sistema."></span>
+                                    <input type="hidden" name="status" value="0">
+                                    <input
+                                        type="checkbox"
+                                        name="status"
+                                        value="1"
+                                        class="toggleswitch"
+                                        data-toggle="toggle"
+                                        data-on="Activo"
+                                        data-off="Inactivo"
+                                        data-onstyle="success"
+                                        data-offstyle="danger"
+                                        {{ old('status', $dataTypeContent->status ?? 1) ? 'checked' : '' }}>
+                                </div>
+                            @endif
+
                             @can('editRoles', $dataTypeContent)
                                 <div class="form-group">
                                     <label for="default_role">{{ __('voyager::profile.role_default') }}</label>
