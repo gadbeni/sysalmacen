@@ -6,10 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends \TCG\Voyager\Models\User
+class User extends \TCG\Voyager\Models\User implements Auditable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +31,13 @@ class User extends \TCG\Voyager\Models\User
         'last_login_at',
         'must_change_password',
         'status',
+    ];
+
+    protected $auditExclude = [
+        'password',
+        'remember_token',
+        'api_token',
+        'token',
     ];
 
     public function unit()

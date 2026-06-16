@@ -5,10 +5,11 @@ namespace App\Models\NonStock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Article;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class NonRequestArticle extends Model
+class NonRequestArticle extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'non_request_id',

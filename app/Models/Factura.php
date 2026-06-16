@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Factura extends Model
+class Factura extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $fillable = ['solicitudcompra_id', 'provider_id', 'registeruser_id',
                             'tipofactura', 'fechafactura', 'montofactura', 'nrofactura',

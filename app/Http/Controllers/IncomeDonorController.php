@@ -460,10 +460,11 @@ class IncomeDonorController extends Controller
 
             $sol = DonacionIngreso::find($request->id);
 
-            DonacionIngreso::where('id', $request->id)->update(['deleted_at' => Carbon::now(), 'deleteuser_id' => $user->id, 'condicion' => 0]);
-            DonacionIngresoDetalle::where('donacioningreso_id', $sol->id)->update(['deleted_at' => Carbon::now(),'deleteuser_id' => $user->id, 'condicion' => 0]);
-            DonacionArchivo::where('donacioningreso_id', $sol->id)
-                ->update(['deleted_at' => Carbon::now(),'deleteuser_id' => $user->id]);
+            $sol->update(['deleted_at' => Carbon::now(), 'deleteuser_id' => $user->id, 'condicion' => 0]);
+            DonacionIngresoDetalle::where('donacioningreso_id', $sol->id)->get()
+                ->each(fn($d) => $d->update(['deleted_at' => Carbon::now(),'deleteuser_id' => $user->id, 'condicion' => 0]));
+            DonacionArchivo::where('donacioningreso_id', $sol->id)->get()
+                ->each(fn($a) => $a->update(['deleted_at' => Carbon::now(),'deleteuser_id' => $user->id]));
 
             DB::commit();
             return redirect()->route('incomedonor.index')->with(['message' => 'Ingreso Eliminado Exitosamente.', 'alert-type' => 'success']);
@@ -481,8 +482,7 @@ class IncomeDonorController extends Controller
         {
             $user = Auth::user();
 
-            DonacionArchivo::where('id', $request->id)
-                ->update(['deleted_at' => Carbon::now(),'deleteuser_id' => $user->id]);
+            DonacionArchivo::find($request->id)->update(['deleted_at' => Carbon::now(),'deleteuser_id' => $user->id]);
 
             DB::commit();
             return redirect()->route('donacion-sedeges.incomedonor.edit', $request->ingreso_id)->with(['message' => 'Archivo Eliminado Exitosamente.', 'alert-type' => 'success']);
