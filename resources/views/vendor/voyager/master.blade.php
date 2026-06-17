@@ -88,6 +88,11 @@
             color: rgb(12, 12, 12);
             font-weight: bold;
         }
+        /* Separacion entre los botones de accion en los listados BREAD */
+        td .btn.pull-right {
+            margin-left: 5px;
+            margin-bottom: 5px;
+        }
     </style>
 
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
@@ -171,7 +176,7 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
 </div>
 
 @auth
-    @if(auth()->user()->must_change_password)
+    @if(auth()->user()->must_change_password && session()->pull('prompt_password_change'))
         @include('partials.modal-change-password')
     @endif
 @endauth

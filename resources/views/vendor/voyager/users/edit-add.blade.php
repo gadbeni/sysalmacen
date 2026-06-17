@@ -93,25 +93,6 @@
                                 <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
                             </div>
 
-                            @if(auth()->user()->hasRole('admin') && (is_null($dataTypeContent->getKey()) || auth()->id() !== $dataTypeContent->getKey()))
-                                <div class="form-group">
-                                    <label class="control-label">Estado</label>
-                                    <span class="voyager-question text-info pull-left" data-toggle="tooltip" data-placement="left" title="Active o desactive el acceso del usuario al sistema."></span>
-                                    <input type="hidden" name="status" value="0">
-                                    <input
-                                        type="checkbox"
-                                        name="status"
-                                        value="1"
-                                        class="toggleswitch"
-                                        data-toggle="toggle"
-                                        data-on="Activo"
-                                        data-off="Inactivo"
-                                        data-onstyle="success"
-                                        data-offstyle="danger"
-                                        {{ old('status', $dataTypeContent->status ?? 1) ? 'checked' : '' }}>
-                                </div>
-                            @endif
-
                             @can('editRoles', $dataTypeContent)
                                 <div class="form-group">
                                     <label for="default_role">{{ __('voyager::profile.role_default') }}</label>
@@ -212,18 +193,6 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="panel panel panel-bordered panel-warning">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                @if(isset($dataTypeContent->avatar))
-                                    <img src="{{ filter_var($dataTypeContent->avatar, FILTER_VALIDATE_URL) ? $dataTypeContent->avatar : Voyager::image( $dataTypeContent->avatar ) }}" style="width:200px; height:auto; clear:both; display:block; padding:2px; border:1px solid #ddd; margin-bottom:10px;" />
-                                @endif
-                                <input type="file" data-name="avatar" name="avatar">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             {{-- @if (auth()->user()->isAdmin()) --}}
             <button type="submit" class="btn btn-primary pull-right save">

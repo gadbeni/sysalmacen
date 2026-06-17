@@ -67,16 +67,19 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{route('change_password')}}" method="post">
+                    <form id="change-password-form" action="{{route('change_password')}}" method="post">
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label for="">Nueva Contraseña:</label>
-                            <input style="max-width: 700px;" type="password" name="password" class="form-control" id="" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Confirmar Contraseña:</label>
-                            <input style="max-width: 700px;" type="password" name="password_confirmation" class="form-control" id="" required>
+                            <label for="password">Nueva Contraseña:</label>
+                            <div class="password-field">
+                                <input type="password" name="password" class="form-control" id="password" required>
+                                <span class="password-toggle-wrap">
+                                    <button class="password-toggle" type="button" id="toggle-password" title="Mostrar/ocultar contraseña">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </span>
+                            </div>
                         </div>
                         <input type="submit" class="btn btn-success" value="Cambiar contraseña">
                     </form>
@@ -184,6 +187,39 @@
         padding: 0.5rem 1rem;
         border-radius: 5px;
     }
+    .password-field{
+        display: flex;
+        max-width: 700px;
+        align-items: stretch;
+    }
+    .password-field .form-control{
+        height: 40px;
+        border-right: 0;
+        border-radius: 4px 0 0 4px;
+        box-shadow: none;
+    }
+    .password-toggle-wrap{
+        display: flex;
+    }
+    .password-toggle{
+        width: 46px;
+        height: 40px;
+        border: 1px solid #d2d6de;
+        border-left: 0;
+        border-radius: 0 4px 4px 0;
+        background: #f8fafc;
+        color: #52616b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color .15s ease, color .15s ease;
+    }
+    .password-toggle:hover,
+    .password-toggle:focus{
+        background: #eef3f7;
+        color: #111827;
+        outline: none;
+    }
 </style>
 @section('javascript')
 <script type="text/javascript">
@@ -193,5 +229,18 @@
         var modal = $(this)
         modal.find('.modal-body #id').val(id);
     })
+
+    $('#toggle-password').on('click', function () {
+        var input = $('#password');
+        var icon = $(this).find('i');
+
+        if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
 </script>
 @endsection

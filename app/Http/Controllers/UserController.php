@@ -246,16 +246,21 @@ class UserController extends Controller
 
     public function update_user(Request $request, User $user)
     {
+        // Destino de redireccion: el listado si el usuario tiene permiso de verlo,
+        // en caso contrario el dashboard (/admin) para evitar caer en una pagina sin acceso.
+        $redirectRoute = $request->user()->hasPermission('browse_users')
+            ? 'voyager.users.index'
+            : 'voyager.dashboard';
 
         $ok = User::where('funcionario_id', $request->funcionario_id)->where('id', '!=', $user->id)->first();
         // return $ok;
         if ($ok) {
-            return redirect()->route('voyager.users.index')->with(['message' => 'El Funcionario ya cuenta con usuario.', 'alert-type' => 'error']);
+            return redirect()->route($redirectRoute)->with(['message' => 'El Funcionario ya cuenta con usuario.', 'alert-type' => 'error']);
         }
 
         $ok = User::where('email', $request->email)->where('id', '!=', $user->id)->first();
         if ($ok) {
-            return redirect()->route('voyager.users.index')->with(['message' => 'Elija otro correo por favor.', 'alert-type' => 'error']);
+            return redirect()->route($redirectRoute)->with(['message' => 'Elija otro correo por favor.', 'alert-type' => 'error']);
         }
 
         $status = $request->has('status') ? (bool) $request->input('status', 1) : $user->status;
@@ -331,12 +336,10 @@ class UserController extends Controller
         if ($request->user_belongstomany_role_relationship <> '') {
             $user->roles()->sync($request->user_belongstomany_role_relationship);
         }
-        return redirect()
-            ->route('voyager.users.index')
-            ->with([
-                'message' => "El usuario, se actualizo con exito.",
-                'alert-type' => 'success'
-            ]);
+        return redirect()->route($redirectRoute)->with([
+            'message' => "El usuario, se actualizo con exito.",
+            'alert-type' => 'success'
+        ]);
     }
 
     public function toggle_status(User $user)
@@ -406,7 +409,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
-            'password' => 'required|min:8|confirmed', // La regla "confirmed" verifica que la contraseña coincida con la confirmación.
+            'password' => 'required|min:8',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -423,7 +426,16 @@ class UserController extends Controller
             'password' => bcrypt($request->input('password')),
             'must_change_password' => false,
         ]);
-        return redirect('/');
+
+        // Listado de usuarios si tiene permiso, en caso contrario el dashboard (/admin).
+        $redirectRoute = $user->hasPermission('browse_users')
+            ? 'voyager.users.index'
+            : 'voyager.dashboard';
+
+        return redirect()->route($redirectRoute)->with([
+            'message' => 'Su contrasena se actualizo con exito.',
+            'alert-type' => 'success',
+        ]);
     }
     // cambio de contraseña ->
 }

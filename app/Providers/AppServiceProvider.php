@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\ToggleUserStatusAction;
 use Illuminate\Support\ServiceProvider;
 // use TCG\Voyager\Voyager;
 use TCG\Voyager\Facades\Voyager;
@@ -31,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Voyager::addAction(ToggleUserStatusAction::class);
+
         if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
             URL::forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);
