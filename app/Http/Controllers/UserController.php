@@ -129,17 +129,23 @@ class UserController extends Controller
     // para obrtener las personas interna o externas
     public function getFuncionario(Request $request)
     {
-        $search = $request->search;
-        $type = $request->type;
+        $search = trim((string) $request->input('search', ''));
+        $type = (int) $request->input('type', 1);
+        $likeSearch = '%' . $search . '%';
+
         if ($type == 1) {
             $personas = DB::connection('mamore')->table('people as p')
                 ->join('contracts as c', 'c.person_id', 'p.id')
                 ->select('p.id', 'p.first_name as nombre', DB::raw("CONCAT(COALESCE(p.paternal_surname, ''), ' ', COALESCE(p.maternal_surname, '')) as apellido"), 'p.ci', DB::raw("CONCAT(p.first_name, ' ',  COALESCE(p.paternal_surname, ''), ' ', COALESCE(p.maternal_surname, '')) as nombre_completo"))
+                ->distinct()
                 ->where('c.status', 'firmado')
                 ->where('p.deleted_at', null)
                 ->where('c.deleted_at', null)
-                // ->where('p.ci', 'like', '%' .$search . '%')
-                ->whereRaw('(p.ci like "%' . $search . '%" or ' . DB::raw("CONCAT(COALESCE(p.first_name,''), ' ',  COALESCE(p.paternal_surname, ''), ' ', COALESCE(p.maternal_surname, ''))") . 'like "%' . $search . '%")')
+                ->where(function ($query) use ($likeSearch) {
+                    $query->where('p.ci', 'like', $likeSearch)
+                        ->orWhereRaw("CONCAT(COALESCE(p.first_name, ''), ' ', COALESCE(p.paternal_surname, ''), ' ', COALESCE(p.maternal_surname, '')) like ?", [$likeSearch]);
+                })
+                ->limit(20)
                 ->get();
             $response = array();
             foreach ($personas as $persona) {
@@ -165,9 +171,13 @@ class UserController extends Controller
                     DB::raw("CONCAT_WS(' ', m.paternal_surname, m.maternal_surname) as apellido"),
                     'm.ci',
                 )
-                ->whereRaw('(m.ci like "%' . $search . '%" or ' . DB::raw("CONCAT(m.first_name, ' ', COALESCE(m.paternal_surname, ''), ' ', COALESCE(m.maternal_surname, ''))") . ' like "%' . $search . '%")')
+                ->where(function ($query) use ($likeSearch) {
+                    $query->where('m.ci', 'like', $likeSearch)
+                        ->orWhereRaw("CONCAT(COALESCE(m.first_name, ''), ' ', COALESCE(m.paternal_surname, ''), ' ', COALESCE(m.maternal_surname, '')) like ?", [$likeSearch]);
+                })
                 ->where('s.status', 1)
                 ->where('s.deleted_at', null)
+                ->limit(20)
                 ->get();
 
             $response = array();
