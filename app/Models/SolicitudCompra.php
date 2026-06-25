@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SolicitudCompra extends Model implements Auditable
 {
-    use HasFactory, \OwenIt\Auditing\Auditable;
+    use HasFactory, \OwenIt\Auditing\Auditable, SoftDeletes;
 
     protected $fillable = [
         'sucursal_id',
@@ -22,6 +23,7 @@ class SolicitudCompra extends Model implements Auditable
         'gestion', 
         'condicion', 
         'deleteuser_id',
+        'deleted_at',
         'stock',
         'subSucursal_id'
                             

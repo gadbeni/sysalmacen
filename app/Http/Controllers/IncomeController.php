@@ -571,6 +571,7 @@ class IncomeController extends Controller
 
     public function destroy(Request $request)
     {    
+        // return $request;
         if(setting('configuracion.maintenance')&& !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('almacen_admin'))
         {
             Auth::logout();
@@ -587,7 +588,7 @@ class IncomeController extends Controller
             foreach ($fac as $factura) {
                 $factura->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now()]);
             }
-
+            // return $fac;
             DetalleFactura::where('factura_id', $fac[0]->id)->where('hist',0)->get()
                 ->each(fn($df) => $df->update(['deleteuser_id'=>$user->id,'deleted_at' => Carbon::now()]));
 
