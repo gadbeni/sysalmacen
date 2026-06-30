@@ -51,6 +51,10 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'root' =>  env('AWS_ROOT'),
+            'visibility' => 'public',
+            // Forzar separador '/' para URLs (en Windows DIRECTORY_SEPARATOR es '\\' y rompe la URL con %5C)
+            'directory_separator' => '/',
         ],
 
     ],

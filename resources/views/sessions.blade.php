@@ -14,38 +14,70 @@
 <div class="page-content browse container-fluid">
     <div class="row">
         <div class="col-lg-7">
-            <div class="panel panel-bordered">
-                <div class="panel-heading">
-                    <h2 class="page-title">
-                        <i class="fa fa-id-card"></i>Datos
-                    </h2>
+            @php
+                $u = Auth::user();
+                $avatar = $u->avatar;
+                $foto = (filter_var($avatar, FILTER_VALIDATE_URL)) ? $avatar : Voyager::image($avatar);
+            @endphp
+            <div class="profile-card">
+                <div class="profile-card__cover">
+                    <form id="photo-form" action="{{ route('update_photo') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <label class="profile-card__avatar-wrap" title="Cambiar foto">
+                            <img class="profile-card__avatar" id="avatar-preview" src="{{ $foto }}" alt="Foto de {{ $u->name }}">
+                            <span class="profile-card__avatar-overlay"><i class="fa fa-camera"></i></span>
+                            <input type="file" name="photo" id="photo-input" class="photo-input-hidden" accept="image/jpeg,image/png,image/webp" hidden>
+                        </label>
+                    </form>
                 </div>
-                <div class="panel-body">
-                    <div class="">
-                        <div class="form-group">
-                            <label class="h4">Nombre</label>
-                            <p>{{Auth::user()->name}}</p>
-                        </div>
-                        <div class="form-group">
-                            <hr>
-                            <label class="h4">Email</label>
-                            <p>{{Auth::user()->email}}</p>
-                        </div>
-                        @if (Auth::user()->direction)
-                        <div class="form-group">
-                            <hr>
-                            <label class="h4">Dirección Administrativa</label>
-                            <p>{{Auth::user()->direction->nombre}}</p>
-                        </div>
-                        @endif
-                        @if (Auth::user()->unit)
-                        <div class="form-group">
-                            <hr>
-                            <label class="h4">Unidad Administrativa</label>
-                            <p>{{Auth::user()->unit->nombre}}</p>
-                        </div>
-                        @endif                    
+                <div class="profile-card__head">
+                    <h3 class="profile-card__name">{{ ucwords($u->name) }}</h3>
+                    <span class="profile-card__mail"><i class="fa fa-envelope"></i> {{ $u->email }}</span>
+                    @if ($u->avatar && $u->avatar !== 'users/default.png')
+                    <div class="profile-card__actions">
+                        <button type="button" class="btn btn-link profile-card__remove" data-toggle="modal" data-target="#ModalQuitarFoto">
+                            <i class="fa fa-trash"></i> Quitar foto
+                        </button>
                     </div>
+                    @endif
+                </div>
+                <div class="profile-grid">
+                    @if ($u->direction)
+                    <div class="profile-item">
+                        <span class="profile-item__icon"><i class="fa fa-building"></i></span>
+                        <div>
+                            <span class="profile-item__label">Dirección Administrativa</span>
+                            <span class="profile-item__value">{{ $u->direction->nombre }}</span>
+                        </div>
+                    </div>
+                    @endif
+                    @if ($u->unit)
+                    <div class="profile-item">
+                        <span class="profile-item__icon"><i class="fa fa-sitemap"></i></span>
+                        <div>
+                            <span class="profile-item__label">Unidad Administrativa</span>
+                            <span class="profile-item__value">{{ $u->unit->nombre }}</span>
+                        </div>
+                    </div>
+                    @endif
+                    @if ($u->sucursal)
+                    <div class="profile-item">
+                        <span class="profile-item__icon"><i class="fa fa-archive"></i></span>
+                        <div>
+                            <span class="profile-item__label">Almacén</span>
+                            <span class="profile-item__value">{{ $u->sucursal->nombre }}</span>
+                        </div>
+                    </div>
+                    @endif
+                    @if ($u->subAlmacen)
+                    <div class="profile-item">
+                        <span class="profile-item__icon"><i class="fa fa-inbox"></i></span>
+                        <div>
+                            <span class="profile-item__label">Sub-almacén</span>
+                            <span class="profile-item__value">{{ $u->subAlmacen->name }}</span>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -168,13 +200,160 @@
                 
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancelar</button>
             </div>
-            {!! Form::close()!!} 
+            {!! Form::close()!!}
+        </div>
+    </div>
+</div>
+<div class="modal modal-danger fade" tabindex="-1" id="ModalQuitarFoto" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('remove_photo') }}" method="post">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><i class="voyager-trash"></i> - ¿Quitar foto de perfil?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center" style="text-transform:uppercase">
+                        <i class="voyager-trash" style="color: red; font-size: 5em;"></i>
+                        <br>
+                        <p><b>Se restaurará la imagen por defecto</b></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-danger pull-right" value="Sí, quitar">
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 @endsection
 @section('css')
 <style>
+    .profile-card{
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 6px 24px rgba(0,0,0,.08);
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    .profile-card__cover{
+        position: relative;
+        height: 110px;
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    }
+    .profile-card__avatar{
+        position: absolute;
+        left: 50%;
+        bottom: -55px;
+        transform: translateX(-50%);
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #fff;
+        box-shadow: 0 4px 14px rgba(0,0,0,.18);
+        background: #fff;
+    }
+    .profile-card__avatar-wrap{
+        position: absolute;
+        left: 50%;
+        bottom: -55px;
+        transform: translateX(-50%);
+        width: 110px;
+        height: 110px;
+        cursor: pointer;
+        margin: 0;
+        display: block;
+    }
+    .profile-card__avatar-wrap .profile-card__avatar{
+        position: static;
+        left: auto;
+        bottom: auto;
+        transform: none;
+        display: block;
+    }
+    .profile-card__avatar-overlay{
+        position: absolute;
+        inset: 5px;
+        border-radius: 50%;
+        background: rgba(0,0,0,.45);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        opacity: 0;
+        transition: opacity .18s ease;
+    }
+    .profile-card__avatar-wrap:hover .profile-card__avatar-overlay{ opacity: 1; }
+    .photo-input-hidden{ display: none !important; }
+    .profile-card__head{
+        text-align: center;
+        padding: 65px 20px 18px;
+    }
+    .profile-card__name{
+        margin: 0 0 6px;
+        font-weight: 700;
+        color: #1f2d3d;
+    }
+    .profile-card__mail{
+        color: #7f8c8d;
+        font-size: .95rem;
+    }
+    .profile-card__mail i{ color: #2ecc71; margin-right: 4px; }
+    .profile-card__actions{ margin-top: 10px; }
+    .profile-card__remove{
+        color: #e74c3c;
+        font-size: .85rem;
+        padding: 4px 8px;
+        text-decoration: none;
+    }
+    .profile-card__remove:hover,
+    .profile-card__remove:focus{ color: #c0392b; text-decoration: underline; }
+    .profile-grid{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: #eef2f5;
+        border-top: 1px solid #eef2f5;
+    }
+    @media (max-width: 600px){ .profile-grid{ grid-template-columns: 1fr; } }
+    .profile-item{
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #fff;
+        padding: 16px 18px;
+    }
+    .profile-item__icon{
+        flex-shrink: 0;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: rgba(46,204,113,.12);
+        color: #2ecc71;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+    .profile-item__label{
+        display: block;
+        font-size: .72rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: #95a5a6;
+        margin-bottom: 2px;
+    }
+    .profile-item__value{
+        display: block;
+        color: #1f2d3d;
+        font-weight: 600;
+        line-height: 1.25;
+    }
     .text-actual{
         display: flex;
         justify-content: center;
@@ -229,6 +408,21 @@
         var modal = $(this)
         modal.find('.modal-body #id').val(id);
     })
+
+    $('#photo-input').on('change', function () {
+        var file = this.files[0];
+        if (!file) return;
+        var max = 4 * 1024 * 1024;
+        if (file.size > max) {
+            alert('La imagen no debe superar los 4MB.');
+            this.value = '';
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (e) { $('#avatar-preview').attr('src', e.target.result); };
+        reader.readAsDataURL(file);
+        $('#photo-form').submit();
+    });
 
     $('#toggle-password').on('click', function () {
         var input = $('#password');

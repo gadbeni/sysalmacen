@@ -12,6 +12,7 @@ use App\Models\SucursalSubAlmacen;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -397,6 +398,72 @@ class UserController extends Controller
             ->get();
 
         return view('sessions', ['sessions' => $sessions]);
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|image|mimes:jpg,jpeg,png,webp|max:4096',
+        ], [
+            'photo.required' => 'Seleccione una imagen.',
+            'photo.image'    => 'El archivo debe ser una imagen.',
+            'photo.mimes'    => 'Formatos permitidos: jpg, jpeg, png, webp.',
+            'photo.max'      => 'La imagen no debe superar los 4MB.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('sessions')
+                ->with(['message' => $validator->errors()->first(), 'alert-type' => 'error']);
+        }
+
+        $user = User::find(Auth::id());
+        $disk = config('voyager.storage.disk');
+
+        try {
+            // Subir nueva foto al disco configurado (s3 en produccion, prefijo AWS_ROOT)
+            $path = $request->file('photo')->store('avatars', $disk);
+
+            // Eliminar la foto anterior si era personalizada (no la default ni una URL externa).
+            // delete() es idempotente en S3/Spaces; no usar exists() (lanza error en Spaces si falta).
+            $old = $user->avatar;
+            if ($old && $old !== 'users/default.png' && !filter_var($old, FILTER_VALIDATE_URL)) {
+                Storage::disk($disk)->delete($old);
+            }
+
+            $user->avatar = $path;
+            $user->save();
+
+            return redirect()->route('sessions')
+                ->with(['message' => 'Foto actualizada con éxito.', 'alert-type' => 'success']);
+        } catch (\Exception $e) {
+            return redirect()->route('sessions')
+                ->with(['message' => 'Error al subir la foto: ' . $e->getMessage(), 'alert-type' => 'error']);
+        }
+    }
+
+    public function removePhoto()
+    {
+        $user = User::find(Auth::id());
+        $disk = config('voyager.storage.disk');
+
+        try {
+            $old = $user->avatar;
+
+            // Borrar la foto personalizada (no la default ni una URL externa).
+            // delete() es idempotente; no usar exists() (lanza error en Spaces si falta).
+            if ($old && $old !== 'users/default.png' && !filter_var($old, FILTER_VALIDATE_URL)) {
+                Storage::disk($disk)->delete($old);
+            }
+
+            $user->avatar = 'users/default.png';
+            $user->save();
+
+            return redirect()->route('sessions')
+                ->with(['message' => 'Foto eliminada. Se restauró la imagen por defecto.', 'alert-type' => 'success']);
+        } catch (\Exception $e) {
+            return redirect()->route('sessions')
+                ->with(['message' => 'Error al quitar la foto: ' . $e->getMessage(), 'alert-type' => 'error']);
+        }
     }
 
     public function deleteSession(Request $request)

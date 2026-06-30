@@ -78,10 +78,13 @@
                                 $pathInfo = pathinfo($user->worker->image);
                                 $extension = strtolower($pathInfo['extension'] ?? '');
 
-                                if (str_contains($extension, 'avif')) {
-                                    $image = str_replace('.avif', '', $user->worker->image);
+                                $image = $extension === ''
+                                    ? $user->worker->image
+                                    : preg_replace('/\.' . preg_quote($pathInfo['extension'], '/') . '$/', '', $user->worker->image);
+
+                                if (file_exists(public_path('storage/' . $image . '-cropped.webp'))) {
+                                    $user_avatar = asset('storage/' . $image . '-cropped.webp');
                                 }
-                                $user_avatar = asset('storage/' . $image . '-cropped.webp');
                             }
                         }
                     @endphp

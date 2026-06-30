@@ -50,6 +50,16 @@ class User extends \TCG\Voyager\Models\User implements Auditable
         return $this->belongsTo(Direction::class, 'direccionAdministrativa_id');
     }
 
+    public function sucursal()
+    {
+        return $this->belongsTo(Sucursal::class, 'sucursal_id');
+    }
+
+    public function subAlmacen()
+    {
+        return $this->belongsTo(SucursalSubAlmacen::class, 'subSucursal_id');
+    }
+
     public function getFuncionarioIdBrowseAttribute()
     {
         if (!$this->funcionario_id) return null;

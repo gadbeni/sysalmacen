@@ -71,6 +71,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
         Route::get('/usuario/seguridad',[UserController::class,'showSessions'])->name('sessions');
         Route::delete('/usuario/sesion/',[UserController::class,'deleteSession'])->name('delete_session');
         Route::put('/usario/change-password/',[UserController::class,'changePassword'])->name('change_password');
+        Route::post('/usuario/foto',[UserController::class,'updatePhoto'])->name('update_photo');
+        Route::delete('/usuario/foto',[UserController::class,'removePhoto'])->name('remove_photo');
     });
 
     Route::resource('usuario', UserController::class);
