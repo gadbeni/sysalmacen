@@ -293,7 +293,7 @@ class SolicitudPedidoController extends Controller
                 'nropedido' => $request->nropedido,
                 'people_id'=> $funcionario->people_id,
                 'first_name'=>$funcionario->first_name,
-                'last_name'=>$funcionario->last_name,
+                'last_name'=>trim(($funcionario->paternal_surname ?? '') . ' ' . ($funcionario->maternal_surname ?? '')),
                 'job'=>$funcionario->cargo,
                 'direccion_name'=>$unidad->direction->nombre,
                 'direccion_id'=>$user->direccionAdministrativa_id,
@@ -351,7 +351,8 @@ class SolicitudPedidoController extends Controller
             }
                         
        
-            SolicitudPedidoDetalle::where('solicitudPedido_id', $sol->id)->update(['deleted_at'=> Carbon::now(), 'deletedUser_Id'=> $user->id]);
+            SolicitudPedidoDetalle::where('solicitudPedido_id', $sol->id)->get()
+                ->each(fn($d) => $d->update(['deleted_at'=> Carbon::now(), 'deletedUser_Id'=> $user->id]));
             $sol->update(['deleted_at'=> Carbon::now(), 'deletedUser_Id'=> $user->id]);
                
             DB::commit();
@@ -428,11 +429,13 @@ class SolicitudPedidoController extends Controller
             }
 
 
-            DetalleEgreso::where('solicitudegreso_id', $sol->id)->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now()]);
+            DetalleEgreso::where('solicitudegreso_id', $sol->id)->get()
+                ->each(fn($de) => $de->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now()]));
 
 
             $sol->update(['deleteuser_id'=>$user->id, 'deleted_at' => Carbon::now(), 'condicion'=>'eliminado']);
-            SolicitudPedidoDetalle::where('solicitudPedido_id', $pedido->id)->update(['deleted_at'=>Carbon::now(), 'deletedUser_Id'=>$user->id]);
+            SolicitudPedidoDetalle::where('solicitudPedido_id', $pedido->id)->get()
+                ->each(fn($d) => $d->update(['deleted_at'=>Carbon::now(), 'deletedUser_Id'=>$user->id]));
             $pedido->update(['deletedUser_Id'=>$user->id, 'deleted_at' => Carbon::now(), 'status'=>'eliminado']);
 
 

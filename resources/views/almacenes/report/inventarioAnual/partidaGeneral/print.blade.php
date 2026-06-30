@@ -36,7 +36,7 @@
         <thead>
             <tr>
                 <th style="width:5px">N&deg;</th>
-                <th style="text-align: center">DESCRIPCION</th>
+                <th style="text-align: center">PARTIDA</th>
                 <th style="text-align: center">CANTIDAD INICIAL <br>01/01/{{$gestion}}</th>
                 <th style="text-align: center">SALDO INICIAL<br>01/01/{{$gestion}}<br>(Bs)</th>
                 <th style="text-align: center">CANTIDAD FINAL <br>31/12/{{$gestion}}</th>

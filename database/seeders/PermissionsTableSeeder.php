@@ -44,49 +44,6 @@ class PermissionsTableSeeder extends Seeder
 
         Permission::generateFor('settings');
 
-        //---------- DONACIONES SEDEGES
-        Permission::generateFor('centro_categorias');
-        Permission::generateFor('centros');
-
-        Permission::generateFor('donacion_categorias');
-        Permission::generateFor('donacion_articulos');
-
-        Permission::generateFor('donador_personas');
-        Permission::generateFor('donador_empresas');
-
-        Permission::generateFor('incomedonor');
-        $keys = [
-            'browse_incomedonorstockview',
-        ];
-
-        foreach ($keys as $key) {
-            Permission::firstOrCreate([
-                'key'        => $key,
-                'table_name' => 'incomedonor',
-            ]);
-        }
-        Permission::generateFor('egressdonor');
-
-        $keys = [
-            'browse_view_stock_donacion',
-        ];
-
-        foreach ($keys as $key) {
-            Permission::firstOrCreate([
-                'key'        => $key,
-                'table_name' => 'view_stock_donacion',
-            ]);
-        }
-        //FIN DONACIONES SEDEGES
-
-
-
-
-
-        
- 
-
-
         //Persimo Desarrollador
         Permission::generateFor('partidas');       
         Permission::generateFor('articles');   
@@ -149,7 +106,9 @@ class PermissionsTableSeeder extends Seeder
         $keys = [
             // reportes anuales
             'browse_printalmacen-inventarioAnual-da',
+            'browse_printalmacen-inventarioAnual-da-central',
             'browse_printalmacen-inventarioAnual-partida',
+            'browse_printalmacen-inventarioAnual-partida-detallada',
             'browse_printalmacen-inventarioAnual-detalle',
         ];
 
@@ -216,8 +175,23 @@ class PermissionsTableSeeder extends Seeder
             ]);
         }
 
+        //generando permisos para la tabla de solicitudes de no existencia
+        Permission::generateFor('non_stock_requests');
 
-        
+        //Para las Solicitudes de non_stock_requests
+        $keys = [
+            'browse_noninbox',
+            'read_noninbox',
+            'approve_noninbox',
+            'reject_noninbox',
+        ];
+
+        foreach ($keys as $key) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'table_name' => 'no_stock_inbox',
+            ]);
+        }
 
         
     }

@@ -105,7 +105,7 @@ class Controller extends BaseController
             ->where('p.id', $id)
             ->where('p.deleted_at', null)
             ->select('p.id as id_funcionario', 'p.ci as N_Carnet', 'c.cargo_id', 'c.job_id', 'j.name as cargo',
-                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as nombre"), 'p.first_name', 'p.last_name', 'c.direccion_administrativa_id as id_direccion', 'd.nombre as direccion',
+                DB::raw("CONCAT_WS(' ', p.first_name, p.paternal_surname, p.maternal_surname) as nombre"), 'p.first_name', 'p.paternal_surname', 'p.maternal_surname', 'c.direccion_administrativa_id as id_direccion', 'd.nombre as direccion',
                     'c.unidad_administrativa_id as id_unidad', 'u.nombre as unidad')
             ->first();
 
@@ -140,7 +140,7 @@ class Controller extends BaseController
             ->where('p.id', $id)
             ->where('p.deleted_at', null)
             ->select('p.id as people_id', 'p.ci as ci', 'c.cargo_id', 'c.job_id', 'j.name as cargo',
-                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as nombre"), 'p.first_name', 'p.last_name', 'c.direccion_administrativa_id as id_direccion', 'd.nombre as direccion',
+                DB::raw("CONCAT_WS(' ', p.first_name, p.paternal_surname, p.maternal_surname) as nombre"), 'p.first_name', 'p.paternal_surname', 'p.maternal_surname', 'c.direccion_administrativa_id as id_direccion', 'd.nombre as direccion',
                     'c.unidad_administrativa_id as id_unidad', 'u.nombre as unidad')
             ->first();
 
@@ -170,7 +170,7 @@ class Controller extends BaseController
                 ->where('px.status',1)
                 ->where('px.deleted_at',null)
                 ->where('px.people_id', $id)
-                ->select('p.id as people_id', 'p.ci as ci', 'px.cargo', DB::raw("CONCAT(p.first_name, ' ', p.last_name) as nombre"), 'p.first_name', 'p.last_name')
+                ->select('p.id as people_id', 'p.ci as ci', 'px.cargo', DB::raw("CONCAT_WS(' ', p.first_name, p.paternal_surname, p.maternal_surname) as nombre"), 'p.first_name', 'p.paternal_surname', 'p.maternal_surname')
                 ->first();
         }
 

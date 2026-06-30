@@ -17,7 +17,7 @@
                     @endif
                     <th class="text-align: center">Estado</th>
                     @if(auth()->user()->hasPermission('read_egres')||auth()->user()->hasPermission('edit_egres')||auth()->user()->hasPermission('delete_egres'))
-                        <th>Accion</th>
+                        <th style="text-align: center">Accion</th>
                     @endif
                 </tr>
             </thead>
@@ -42,7 +42,7 @@
 
                     
                         @if(auth()->user()->hasRole(['admin']))
-                            <td style="text-align: center"><label class="label label-dark">{{$item->sucursal->nombre}}</label></td>
+                            <td style="text-align: center"><span class="badge-sucursal">{{$item->sucursal->nombre}}</span></td>
                         @endif
                         <td style="text-align: center">
                             @if ($item->status == 'Enviado')

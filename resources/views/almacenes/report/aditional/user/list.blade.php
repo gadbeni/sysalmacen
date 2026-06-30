@@ -43,15 +43,15 @@
                                         ->where('u.role_id', '!=', 1)
                                         ->where('su.sucursal_id', $item->sucursal_id)
 
-                                        ->select('p.id', 'p.ci', 'p.first_name', 'p.last_name', 'su.sucursal_id')
-                                        ->orderBy('p.last_name', 'asc')
+                                        ->select('p.id', 'p.ci', 'p.first_name', 'p.paternal_surname', 'p.maternal_surname', 'su.sucursal_id')
+                                        ->orderBy('p.paternal_surname', 'asc')
                                         ->get();
                             @endphp
 
 
                             <td style="text-align: left">
                                 @foreach ($funcionarios as $func)
-                                    {{$func->ci}} - {{$func->first_name}} {{$func->last_name}} <br>
+                                    {{$func->ci}} - {{$func->first_name}} {{$func->paternal_surname}} {{$func->maternal_surname}} <br>
                                 @endforeach
                             </td>
                             {{-- <td style="text-align: right">{{ $item->almacen}}</td> --}}

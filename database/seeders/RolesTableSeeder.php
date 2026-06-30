@@ -19,33 +19,6 @@ class RolesTableSeeder extends Seeder
             ])->save();
         }
 
-        //  DONACIONES SEDEGES ROLES
-        $role = Role::firstOrNew(['name' => 'sedeges_admin']);
-        if (!$role->exists) {
-            $role->fill([
-                'display_name' => __('administrador Sedeges'),
-            ])->save();
-        }
-
-        $role = Role::firstOrNew(['name' => 'sedeges_donacion_responsable']);
-        if (!$role->exists) {
-            $role->fill([
-                'display_name' => __('Responsable de Donacion SEDEGES'),
-            ])->save();
-        }
-
-        // $role = Role::firstOrNew(['name' => 'sedeges_donacion_view']);
-        // if (!$role->exists) {
-        //     $role->fill([
-        //         'display_name' => __('Ver Stock Donacion SEDEGES'),
-        //     ])->save();
-        // }
-
-
-
-
-        // FIN DONACIONES SEDEGES
-
         $role = Role::firstOrNew(['name' => 'almacen_admin']);
         if (!$role->exists) {
             $role->fill([
@@ -144,6 +117,21 @@ class RolesTableSeeder extends Seeder
         //         'display_name' => __('Contrataciones'),
         //     ])->save();
         // }
+
+        //Para ingreso y egreso y reporte y crear solicitud Del ALMACEN CENTRAL
+        $role = Role::firstOrNew(['name' => 'almacen_subadmin_central']);
+        if (!$role->exists) {
+            $role->fill([
+                'display_name' => __('Almacen - Responsable de almacen central "Ingreso & Egreso & Report & Aprobar Inexistencia & Solicitar Pedido"'),
+            ])->save();
+        }
+        // Para Reportes de contabilidad En el Almacen Central
+        $role = Role::firstOrNew(['name' => 'almacen_report_central']);
+        if (!$role->exists) {
+            $role->fill([
+                'display_name' => __('Almacen - Responsable de almacen central "Reports"'),
+            ])->save();
+        }
+
     }
 }
-

@@ -288,31 +288,50 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title"><i class="fa-solid fa-bag-shopping"></i> Entregar Solicitud</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="alert alert-warning">
-                            <strong>Aviso: </strong>
-                            <p>Revise bien la cantidad de articulo a entregar..</p>
-                        </div> 
+                    <div class="modal-body" style="padding: 24px 28px;">
+                        <div class="alert alert-warning" style="border-radius:6px; font-size:13px;">
+                            <strong><i class="fa fa-exclamation-triangle"></i> Aviso:</strong>
+                            Revise bien la cantidad de artículo a entregar.
+                        </div>
                         <input type="hidden" name="id" id="id" value="{{$data->id}}">
-    
-                        <div style="display: block;" id="icons" class="text-center icons" style="text-transform:uppercase">
-                            <i class="fa-solid fa-bag-shopping" style="color: rgb(134, 127, 127); font-size: 5em;"></i>
-                            <br>
-                            
-                            <p><b>Desea entregar la solicitud?</b></p>
-                        </div>
-                        <div style="display: none;" id="proce" class="text-center proce">
-                            <img src="{{ asset('images/proce.gif') }}" alt="Voyager Loader">
-                        </div>
-                        <label class="checkbox-inline"><input type="checkbox" value="1" required>Confirmar entrega..!</label>
-                    </div>                
-                    <div class="modal-footer">
-                        
-                        <input type="submit" class="btn btn-success pull-right btn_submit" value="Sí, entregar">
-                        {{-- <button type="submit" id="btn_submit" class="btn btn-success pull-right delete-confirm">Entregar Solicitud</button> --}}
 
-                        
-                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancelar</button>
+                        <div id="icons" class="text-center" style="padding: 16px 0 12px;">
+                            <style>
+                                @keyframes truck-forward {
+                                    0%   { transform: translateX(0)    translateY(0);  opacity: 1; }
+                                    20%  { transform: translateX(8px)  translateY(-4px); opacity: 1; }
+                                    40%  { transform: translateX(24px) translateY(0);  opacity: 1; }
+                                    60%  { transform: translateX(44px) translateY(-4px); opacity: 1; }
+                                    80%  { transform: translateX(70px) translateY(0);  opacity: 0.6; }
+                                    100% { transform: translateX(110px) translateY(0); opacity: 0; }
+                                }
+                                .truck-moving {
+                                    animation: truck-forward 0.85s ease-in forwards;
+                                    display: inline-block;
+                                }
+                            </style>
+                            <div style="margin-bottom:14px;">
+                                <i class="fa-solid fa-truck" id="truck-icon" style="color:#2e7d32; font-size:3em;"></i>
+                            </div>
+                            <h4 style="margin:0 0 6px; color:#333; font-weight:600;">¿Desea entregar la solicitud?</h4>
+                            <p class="text-muted" style="font-size:13px; margin:0;">Esta acción marcará el pedido como entregado.</p>
+                        </div>
+
+                        <div style="display: none;" id="proce" class="text-center">
+                            <img src="{{ asset('images/proce.gif') }}" alt="Cargando...">
+                        </div>
+
+                        <div style="margin-top:16px; padding: 10px 14px; background:#f9f9f9; border-radius:6px; border:1px solid #ddd;">
+                            <label class="checkbox-inline" style="font-size:13px; cursor:pointer;">
+                                <input type="checkbox" value="1" required> Confirmar entrega
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="background:#f5f5f5; border-top:1px solid #e0e0e0; padding:12px 20px;">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <i class="fa fa-times"></i> Cancelar
+                        </button>
+                        <input type="submit" class="btn btn-success btn_submit" value="Sí, entregar" style="margin-left:8px;">
                     </div>
                 </div>
             </div>
@@ -389,15 +408,18 @@
 
     $(document).ready(function(){
         $('#entregarP').submit(function(e){
-            $('.btn_submit').val('Guardando...');
-            $('.btn_submit').attr('disabled', true);
-            $('.proce').css('display', 'block');
-            $('.icons').css('display', 'none');
-            $('.checkbox-inline').css('display', 'none');
+            e.preventDefault();
+            var form = this;
 
-            
+            $('#truck-icon').addClass('truck-moving');
+            $('.btn_submit').val('Enviando...').attr('disabled', true);
+            $('.checkbox-inline').fadeOut(200);
 
-
+            setTimeout(function() {
+                $('.icons').hide();
+                $('.proce').css('display', 'block');
+                form.submit();
+            }, 900);
         });
     })
 

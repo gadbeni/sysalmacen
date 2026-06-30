@@ -9,8 +9,11 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/style/dataTableStyle.css') }}">
+    <!-- Importa la biblioteca Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
 
     <!-- Favicon -->
@@ -84,6 +87,11 @@
             color: rgb(12, 12, 12);
             font-weight: bold;
         }
+        /* Separacion entre los botones de accion en los listados BREAD */
+        td .btn.pull-right {
+            margin-left: 5px;
+            margin-bottom: 5px;
+        }
     </style>
 
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
@@ -105,11 +113,7 @@
 </div>
 
 <?php
-if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'https://')) {
-    $user_avatar = Auth::user()->avatar;
-} else {
-    $user_avatar = Voyager::image(Auth::user()->avatar);
-}
+$user_avatar = Auth::user()->photo_url;
 ?>
 
 <div id="bodyMain" class="app-container">
@@ -150,10 +154,27 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
                 <div id="voyager-notifications"></div>
                 @yield('content')
                 
+                {{-- <a href="https://api.whatsapp.com/send/?phone=59167285914" class="btn-wsp" target="_blank">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a> --}}
             </div>
         </div>
     </div>
+    {{-- <div class="social">
+        <ul>
+            <li><a href="https://www.facebook.com/GobernacionDelBeni" target="_blank" class="facebook"><i class="fa-brands fa-facebook"></i></a></li>
+            <li><a href="https://www.youtube.com/@gobernaciondelbeni145/featured" target="_blank" class="youtube"><i class="fa-brands fa-youtube"></i></a></li>
+            <li><a href="https://www.tiktok.com/@gobiernoautonomodelbeni" target="_blank" class="tiktok"><i class="fa-brands fa-tiktok"></i></a></li>
+            <li><a href="https://www.instagram.com/gobernacionbeni/?igshid=YmMyMTA2M2Y%3D" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i></a></li>
+        </ul>
+    </div> --}}
 </div>
+
+@auth
+    @if(auth()->user()->must_change_password && session()->pull('prompt_password_change'))
+        @include('partials.modal-change-password')
+    @endif
+@endauth
 
 @include('voyager::partials.app-footer')
 
@@ -172,7 +193,7 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
     <script type="text/javascript" src="{{asset('navidad/snow.js')}}"></script>
     <script type="text/javascript">
         $(function() {
-            $(document).snow({ SnowImage: "{{ asset('navidad/image/icon.png') }}" });
+            $(document).snow({ SnowImage: "{{ asset('navidad/image/icon.png') }}", SnowImage2: "{{ asset('navidad/image/caramelo.png') }}" });
         });
     </script>
 @endif
@@ -200,72 +221,6 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
     @endif
 </script>
 @include('voyager::media.manager')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
-    <script>
-        
-
-        $(function() {
-
-            // $(".select2").select2({theme: "classic"});
-
-
-
-            setInterval(            
-                function () 
-                {                
-                    $.get('{{route('donacion_notificacion')}}', function (data) {
-                        if(data.length > 0)
-                        {
-                            var luz = '<i class="voyager-basket text-danger" style="width: 20px; font-size: 1.5em;"></i>'
-                                luz+= '<span class="badge badge-warning navbar-badge" id="bandeja"></span>'
-                            $('#not').html(luz)
-                            $('#bandeja').text(data.length)
-                            const myTimeout1 = setTimeout(si, 400);
-                            
-                        }
-                        else
-                        {
-                            var luz = '<i class="voyager-bell text-primary" style="width: 20px; font-size: 1.5em;"></i>'
-                                luz+= '<span class="badge badge-warning navbar-badge" id="bandeja"></span>'
-                            $('#not').html(luz)
-                        }
-                        
-
-                        $('#listadoc').text(data.length + ' ' + 'Ariculo por Caducar, Revise sus ingresos registrado')
-                        var list = '';
-                        var j = '';
-                        list = '<table class="dataTable table-hover">'
-                        list+='<tbody>'
-                        for (var i = 0; i < data.length; ++i) {
-                            list+='<tr>'
-                            list+='<td>'+data[i].id+'</td>'
-                            list+='<td>'+data[i].nrosolicitud+'</td>'
-                            list+='<td>'+data[i].nombre+'</td>'
-                            list+='<td>'+data[i].caducidad+'</td>'
-                            list+='<tr>'                            
-                        }
-                        list+='</tbody>'
-                        list +='</table>'
-                        $('#notificaciones').html(list);
-                        
-
-
-
-                    });
-                }, 800 //en medio minuto se recargará solo la campana de notificación..
-            );
-           
-        });
-
-        function si()
-        {
-            var luz = '<i class="voyager-bell text-primary" style="width: 20px; font-size: 1.5em;"></i>'
-                                luz+= '<span class="badge badge-warning navbar-badge" id="bandeja"></span>'
-            $('#not').html(luz)
-        }
-
-    </script>
-
 
 @yield('javascript')
 @stack('javascript')

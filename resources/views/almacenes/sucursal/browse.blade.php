@@ -38,7 +38,7 @@
                                                 <th style="text-align: center">Sucursal</th>
                                                 <th style="text-align: center">Dirección</th>
                                                 <th style="text-align: center">Estado</th>
-                                                <th style="text-align: right">Acciones</th>
+                                                <th style="text-align: center">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
