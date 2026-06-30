@@ -60,6 +60,27 @@ class User extends \TCG\Voyager\Models\User implements Auditable
         return $this->belongsTo(SucursalSubAlmacen::class, 'subSucursal_id');
     }
 
+    /**
+     * URL de la foto de perfil.
+     * - Sin foto o default -> imagen local public/images/usuario.png (no depende de S3)
+     * - URL completa -> tal cual
+     * - Ruta relativa (foto subida) -> URL del disco de Voyager (S3)
+     */
+    public function getPhotoUrlAttribute()
+    {
+        $avatar = $this->avatar;
+
+        if (empty($avatar) || $avatar === 'users/default.png') {
+            return asset('images/usuario.png');
+        }
+
+        if (filter_var($avatar, FILTER_VALIDATE_URL)) {
+            return $avatar;
+        }
+
+        return \TCG\Voyager\Facades\Voyager::image($avatar);
+    }
+
     public function getFuncionarioIdBrowseAttribute()
     {
         if (!$this->funcionario_id) return null;

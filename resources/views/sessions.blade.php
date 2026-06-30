@@ -16,8 +16,7 @@
         <div class="col-lg-7">
             @php
                 $u = Auth::user();
-                $avatar = $u->avatar;
-                $foto = (filter_var($avatar, FILTER_VALIDATE_URL)) ? $avatar : Voyager::image($avatar);
+                $foto = $u->photo_url;
             @endphp
             <div class="profile-card">
                 <div class="profile-card__cover">

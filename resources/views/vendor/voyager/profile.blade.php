@@ -29,7 +29,7 @@
     <div style="height:160px; display:block; width:100%"></div>
     <div style="position:relative; z-index:9; text-align:center;">
         <div class="container_perfil">
-            <img src="@if( !filter_var(Auth::user()->avatar, FILTER_VALIDATE_URL)){{ Voyager::image( Auth::user()->avatar ) }}@else{{ Auth::user()->avatar }}@endif"
+            <img src="{{ Auth::user()->photo_url }}"
              class="avatar"
              style="border-radius:50%; width:150px; height:150px; border:5px solid #fff;"
              alt="{{ Auth::user()->name }} avatar">
