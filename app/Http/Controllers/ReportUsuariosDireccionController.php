@@ -78,7 +78,7 @@ class ReportUsuariosDireccionController extends Controller
                         'p.first_name',
                         'p.paternal_surname',
                         'p.maternal_surname',
-                        DB::raw("CONCAT_WS(' ', p.first_name, p.paternal_surname, p.maternal_surname) as nombre")
+                        DB::raw("CONCAT_WS(' ', p.first_name, p.middle_name, p.paternal_surname, p.maternal_surname, p.married_surname) as nombre")
                     )
                     ->orderBy('p.paternal_surname', 'asc')
                     ->get();
