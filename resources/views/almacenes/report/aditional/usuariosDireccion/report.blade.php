@@ -112,6 +112,12 @@
             $('#form-search').removeAttr('target');
             $('#form-search input[name="print"]').val('');
         }
+
+        function report_excel() {
+            $('#form-search input[name="print"]').val(2);
+            window.form_search.submit();
+            $('#form-search input[name="print"]').val('');
+        }
     </script>
 @stop
 

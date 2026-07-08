@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsuariosDireccionExport;
 use App\Models\Sucursal;
 
 class ReportUsuariosDireccionController extends Controller
@@ -70,6 +72,7 @@ class ReportUsuariosDireccionController extends Controller
                     ->select(
                         'u.id',
                         'u.email',
+                        'u.last_login_at',
                         'r.display_name as rol',
                         'p.ci',
                         'p.first_name',
@@ -94,6 +97,13 @@ class ReportUsuariosDireccionController extends Controller
 
         if ($request->print == 1) {
             return view('almacenes.report.aditional.usuariosDireccion.print', compact('data', 'sucursal'));
+        }
+
+        if ($request->print == 2) {
+            return Excel::download(
+                new UsuariosDireccionExport($data, $sucursal),
+                'Usuarios por Direccion - ' . $sucursal->nombre . '.xlsx'
+            );
         }
 
         return view('almacenes.report.aditional.usuariosDireccion.list', compact('data', 'sucursal'));
