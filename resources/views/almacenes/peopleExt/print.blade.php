@@ -23,8 +23,6 @@
             </td>
             <td style="text-align:right; width:18%; vertical-align:top">
                 <small style="font-size:9px; font-weight:normal">
-                    Impreso por:<br>
-                    <strong>{{ Auth::user()->name }}</strong><br>
                     {{ date('d/m/Y H:i:s') }}
                 </small>
             </td>
