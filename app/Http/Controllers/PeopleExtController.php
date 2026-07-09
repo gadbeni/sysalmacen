@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Person;
 use App\Models\Direction;
 use App\Models\PeopleExt;
+use App\Exports\PeopleExtExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PeopleExtController extends Controller
 {
@@ -35,14 +37,14 @@ class PeopleExtController extends Controller
             })->pluck('id')->toArray();
 
             // Luego filtrar people_ext por esos IDs
-            $data = PeopleExt::with(['people', 'direction'])
+            $data = PeopleExt::with(['people', 'direction', 'users.role', 'users.sucursal', 'users.subAlmacen', 'users.direction', 'users.unit'])
                 ->whereIn('people_id', $peopleIds)
                 ->where('deleted_at', NULL)
                 ->orderBy('id', 'DESC')
                 ->paginate($paginate);
         } else {
             // Sin búsqueda, mostrar todos
-            $data = PeopleExt::with(['people', 'direction'])
+            $data = PeopleExt::with(['people', 'direction', 'users.role', 'users.sucursal', 'users.subAlmacen', 'users.direction', 'users.unit'])
                 ->where('deleted_at', NULL)
                 ->orderBy('id', 'DESC')
                 ->paginate($paginate);
@@ -52,6 +54,30 @@ class PeopleExtController extends Controller
 
 
         return view('almacenes.peopleExt.list', compact('data'));
+    }
+
+    public function excel()
+    {
+        $search = request('search');
+
+        $query = PeopleExt::with(['people', 'direction', 'users.role', 'users.sucursal', 'users.subAlmacen', 'users.direction', 'users.unit'])
+            ->where('deleted_at', NULL)
+            ->orderBy('id', 'DESC');
+
+        if ($search) {
+            $peopleIds = Person::where(function ($q) use ($search) {
+                $q->where('first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('paternal_surname', 'LIKE', "%{$search}%")
+                    ->orWhere('maternal_surname', 'LIKE', "%{$search}%")
+                    ->orWhereRaw("CONCAT(COALESCE(first_name, ''), ' ', COALESCE(paternal_surname, ''), ' ', COALESCE(maternal_surname, '')) LIKE ?", ["%{$search}%"]);
+            })->pluck('id')->toArray();
+
+            $query->whereIn('people_id', $peopleIds);
+        }
+
+        $data = $query->get();
+
+        return Excel::download(new PeopleExtExport($data), 'Personas Externas.xlsx');
     }
 
     public function create()

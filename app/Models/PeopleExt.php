@@ -31,4 +31,8 @@ class PeopleExt extends Model implements Auditable
     {
         return $this->belongsTo(Direction::class, 'direccionAdministrativa_id');
     }
+    public function users()
+    {
+        return $this->hasMany(User::class, 'funcionario_id', 'people_id');
+    }
 }

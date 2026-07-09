@@ -190,6 +190,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
     // para crear personas externas en el sistemas
     Route::resource('people_ext', PeopleExtController::class);
     Route::get('people_ext/ajax/list', [PeopleExtController::class, 'list']);
+    Route::get('people_ext/excel/export', [PeopleExtController::class, 'excel'])->name('people_ext.excel');
     Route::get('people_ext/{people_ext}/baja', [PeopleExtController::class, 'finish'])->name('people_ext.baja');
 
 

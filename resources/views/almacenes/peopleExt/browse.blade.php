@@ -14,6 +14,9 @@
                             </h1>
                         </div>
                         <div class="col-md-4 text-right" style="margin-top: 30px">
+                            <a href="#" onclick="exportExcel(); return false;" class="btn btn-primary">
+                                <i class="voyager-download"></i> <span>Excel</span>
+                            </a>
                             @if(auth()->user()->hasPermission('add_people_ext'))
                             <a href="{{ route('people_ext.create') }}" class="btn btn-success">
                                 <i class="voyager-plus"></i> <span>Crear</span>
@@ -216,6 +219,12 @@
         function finishItem(url)
         {
             $('#finish_form').attr('action', url);
+        }
+
+        function exportExcel()
+        {
+            let search = $('#input-search').val() ? $('#input-search').val() : '';
+            window.location.href = '{{ route("people_ext.excel") }}?search=' + encodeURIComponent(search);
         }
 
        
