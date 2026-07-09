@@ -24,7 +24,7 @@
     <tbody>
         @foreach ($data as $item)
             @php
-                $nombre = trim(($item->people->first_name ?? '') . ' ' . ($item->people->paternal_surname ?? '') . ' ' . ($item->people->maternal_surname ?? ''));
+                $nombre = trim(($item->people->first_name ?? '') . ' ' . ($item->people->middle_name ?? '') . ' ' . ($item->people->paternal_surname ?? '') . ' ' . ($item->people->maternal_surname ?? '') . ' ' . ($item->people->married_surname ?? ''));
                 $estado = $item->status == 1 ? 'ACTIVO' : 'INACTIVO';
             @endphp
             @forelse ($item->users as $usuario)
