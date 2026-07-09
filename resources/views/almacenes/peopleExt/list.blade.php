@@ -19,7 +19,7 @@
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->people->ci }}</td>
-                    <td>{{ $item->people->first_name}} {{ $item->people->paternal_surname}} {{ $item->people->maternal_surname}}</td>
+                    <td>{{ $item->people->first_name}} {{ $item->people->middle_name}} {{ $item->people->paternal_surname}} {{ $item->people->maternal_surname}} {{ $item->people->married_surname}}</td>
                     <td>{{ $item->cargo}}</td>
                     {{-- <td>{{ $item->direction->nombre}}</td> --}}
                     <td>
