@@ -80,6 +80,39 @@ class PeopleExtController extends Controller
         return Excel::download(new PeopleExtExport($data), 'Personas Externas.xlsx');
     }
 
+    public function print()
+    {
+        $search = request('search');
+        $estado = request('estado', 'todos');
+
+        $query = PeopleExt::with(['people', 'direction', 'users.role', 'users.sucursal', 'users.subAlmacen', 'users.direction', 'users.unit'])
+            ->where('deleted_at', NULL)
+            ->orderBy('id', 'DESC');
+
+        if ($estado == 'activo') {
+            $query->where('status', 1);
+        } elseif ($estado == 'inactivo') {
+            $query->where('status', 0);
+        }
+
+        if ($search) {
+            $peopleIds = Person::where(function ($q) use ($search) {
+                $q->where('first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('paternal_surname', 'LIKE', "%{$search}%")
+                    ->orWhere('maternal_surname', 'LIKE', "%{$search}%")
+                    ->orWhereRaw("CONCAT(COALESCE(first_name, ''), ' ', COALESCE(paternal_surname, ''), ' ', COALESCE(maternal_surname, '')) LIKE ?", ["%{$search}%"]);
+            })->pluck('id')->toArray();
+
+            $query->whereIn('people_id', $peopleIds);
+        }
+
+        $data = $query->get();
+
+        $estadoLabel = $estado == 'activo' ? 'ACTIVOS' : ($estado == 'inactivo' ? 'INACTIVOS' : 'TODOS');
+
+        return view('almacenes.peopleExt.print', compact('data', 'estadoLabel'));
+    }
+
     public function create()
     {
         $direction = Direction::where('estado', 1)->where('deleted_at', null)->get();
