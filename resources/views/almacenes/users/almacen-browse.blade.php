@@ -1,6 +1,8 @@
 @php
-    $sucursal = \App\Models\Sucursal::find($data->sucursal_id);
-    $sub = \App\Models\SucursalSubAlmacen::find($data->subSucursal_id);
+    // browse: hereda $data (fila del listado); read (ver usuario): llega $dataTypeContent
+    $usuario = $data ?? $dataTypeContent ?? null;
+    $sucursal = $usuario ? \App\Models\Sucursal::find($usuario->sucursal_id) : null;
+    $sub = $usuario ? \App\Models\SucursalSubAlmacen::find($usuario->subSucursal_id) : null;
 @endphp
 <div>
     <small>{{ $sucursal ? $sucursal->nombre : '—' }}</small>

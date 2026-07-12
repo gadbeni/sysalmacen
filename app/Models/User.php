@@ -4,13 +4,55 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends \TCG\Voyager\Models\User implements Auditable
 {
-    use HasFactory, Notifiable, \OwenIt\Auditing\Auditable;
+    use HasFactory, Notifiable, SoftDeletes, \OwenIt\Auditing\Auditable;
+
+    /**
+     * Eliminación lógica (Voyager la usa automáticamente por el trait SoftDeletes):
+     * al eliminar se registra quién lo hizo y queda rastro en user_historials;
+     * al restaurar, lo mismo.
+     */
+    protected static function booted()
+    {
+        static::deleted(function (User $user) {
+            if ($user->isForceDeleting()) {
+                return;
+            }
+            $user->deleteuser_id = auth()->id();
+            $user->saveQuietly();
+
+            // Cerrar las sesiones del usuario eliminado
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+
+            UserHistorial::create([
+                'user_id' => $user->id,
+                'changed_by' => auth()->id(),
+                'accion' => 'eliminado',
+                'antes' => ['Estado' => $user->status ? 'Activo' : 'Inactivo'],
+                'despues' => ['Estado' => 'Eliminado'],
+            ]);
+        });
+
+        static::restored(function (User $user) {
+            $user->deleteuser_id = null;
+            $user->saveQuietly();
+
+            UserHistorial::create([
+                'user_id' => $user->id,
+                'changed_by' => auth()->id(),
+                'accion' => 'restaurado',
+                'antes' => ['Estado' => 'Eliminado'],
+                'despues' => ['Estado' => $user->status ? 'Activo' : 'Inactivo'],
+            ]);
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +62,7 @@ class User extends \TCG\Voyager\Models\User implements Auditable
     protected $fillable = [
         'name',
         'funcionario_id',
+        'registerUser_id',
         'email',
         'password',
         'role_id',
@@ -31,6 +74,7 @@ class User extends \TCG\Voyager\Models\User implements Auditable
         'last_login_at',
         'must_change_password',
         'status',
+        'deleteuser_id',
     ];
 
     protected $auditExclude = [
@@ -39,6 +83,11 @@ class User extends \TCG\Voyager\Models\User implements Auditable
         'api_token',
         'token',
     ];
+
+    public function registeredBy()
+    {
+        return $this->belongsTo(User::class, 'registerUser_id');
+    }
 
     public function unit()
     {

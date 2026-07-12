@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\ToggleUserStatusAction;
+use App\Actions\UserHistorialAction;
 use Illuminate\Support\ServiceProvider;
 // use TCG\Voyager\Voyager;
 use TCG\Voyager\Facades\Voyager;
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Voyager::addAction(ToggleUserStatusAction::class);
+        Voyager::addAction(UserHistorialAction::class);
 
         // Disco S3 tolerante a fallos de verificación de existencia (DigitalOcean Spaces
         // responde 403 en objetos inexistentes y Flysystem lanza excepción). Ver ResilientAwsS3V3Adapter.

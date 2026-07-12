@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\SucursalUser;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\UserHistorial;
 use App\Models\Contract;
 use App\Models\SucursalSubAlmacen;
+use TCG\Voyager\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -197,6 +199,46 @@ class UserController extends Controller
     }
 
 
+    /**
+     * Snapshot legible del estado actual del usuario, para el historial (user_historials).
+     * Se guardan nombres resueltos (no IDs) para que el historial sea legible
+     * aunque después cambien los catálogos.
+     */
+    private function snapshotUser(User $user)
+    {
+        return [
+            'Nombre' => $user->name,
+            'Email' => $user->email,
+            'Funcionario ID' => $user->funcionario_id,
+            'Rol' => optional(Role::find($user->role_id))->display_name,
+            'Almacén' => optional($user->sucursal)->nombre,
+            'Sub Almacén' => optional($user->subAlmacen)->name,
+            'Dirección Administrativa' => optional($user->direction)->nombre,
+            'Unidad Administrativa' => optional($user->unit)->nombre,
+            'Estado' => $user->status ? 'Activo' : 'Inactivo',
+        ];
+    }
+
+    /**
+     * Historial de cambios de un usuario (antes / después / quién).
+     */
+    public function historial(Request $request, User $user)
+    {
+        if (!$request->user()->hasPermission('browse_users')) {
+            return redirect()->route('voyager.dashboard')->with([
+                'message' => 'No tiene permiso para ver el historial de usuarios.',
+                'alert-type' => 'error',
+            ]);
+        }
+
+        $historial = UserHistorial::with('changedBy')
+            ->where('user_id', $user->id)
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
+
+        return view('almacenes.users.historial', compact('user', 'historial'));
+    }
+
     public function create_user(Request $request)
     {
         // return $request;
@@ -218,6 +260,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' =>  $request->name,
                 'funcionario_id' => $request->funcionario_id,
+                'registerUser_id' => $request->user()->id,
                 'role_id' => $request->role_id,
                 'email' => $request->email,
                 'sucursal_id' => $request->sucursal_id,
@@ -242,6 +285,14 @@ class UserController extends Controller
             }
 
             // return 1;
+
+            UserHistorial::create([
+                'user_id' => $user->id,
+                'changed_by' => $request->user()->id,
+                'accion' => 'creado',
+                'antes' => null,
+                'despues' => $this->snapshotUser($user),
+            ]);
 
             DB::commit();
             return redirect()->route('voyager.users.index')->with(['message' => "El usuario, se registro con exito.", 'alert-type' => 'success']);
@@ -279,6 +330,9 @@ class UserController extends Controller
         if ((int) $request->user()->id === (int) $user->id) {
             $status = true;
         }
+
+        // Estado del usuario ANTES de aplicar cambios (para user_historials)
+        $antes = $this->snapshotUser($user);
 
         // return $request;
         DB::beginTransaction();
@@ -339,6 +393,21 @@ class UserController extends Controller
                 SucursalUser::create(['sucursal_id' => $request->sucursal_id, 'user_id' => $user->id]);
             }
 
+            // Estado DESPUES de los cambios; snapshot completo (incluye campos sin cambios)
+            $user->refresh();
+            $despues = $this->snapshotUser($user);
+            if ($request->password != '') {
+                $antes['Contraseña'] = '••••••••';
+                $despues['Contraseña'] = 'Actualizada';
+            }
+            UserHistorial::create([
+                'user_id' => $user->id,
+                'changed_by' => $request->user()->id,
+                'accion' => 'actualizado',
+                'antes' => $antes,
+                'despues' => $despues,
+            ]);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -364,8 +433,18 @@ class UserController extends Controller
                 ]);
         }
 
+        $antes = $this->snapshotUser($user);
+
         $user->status = !$user->status;
         $user->save();
+
+        UserHistorial::create([
+            'user_id' => $user->id,
+            'changed_by' => auth()->id(),
+            'accion' => $user->status ? 'activado' : 'desactivado',
+            'antes' => $antes,
+            'despues' => $this->snapshotUser($user),
+        ]);
 
         if (!$user->status) {
             DB::table('sessions')

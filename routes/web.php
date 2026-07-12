@@ -200,6 +200,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'loggin'], function () {
         Route::post('register-users', [UserController::class, 'create_user'])->name('store.users');
         Route::put('update-user/{user}' ,[UserController::class ,'update_user'])->name('update.users');
         Route::get('users/{user}/toggle-status', [UserController::class, 'toggle_status'])->name('users.toggle-status');
+        Route::get('users/{user}/historial', [UserController::class, 'historial'])->name('users.historial');
         Route::get('search', [UserController::class, 'getFuncionario'])->name('user.getFuncionario');
     });
 

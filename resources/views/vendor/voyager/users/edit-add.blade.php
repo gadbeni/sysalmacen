@@ -11,6 +11,11 @@
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.(isset($dataTypeContent->id) ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
+    @if(isset($dataTypeContent->id) && auth()->user()->hasPermission('browse_users'))
+        <a href="{{ route('users.historial', $dataTypeContent->id) }}" class="btn btn-warning">
+            <i class="voyager-watch"></i> Ver historial de cambios
+        </a>
+    @endif
 @stop
 
 @section('content')
