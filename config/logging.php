@@ -101,9 +101,10 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
         'requests' => [
-            'driver' => 'single',
+            'driver' => 'daily',
             'path' => storage_path('logs/requests.log'),
             'level' => 'info',
+            'days' => 90, // archivos requests-AAAA-MM-DD.log, se conservan 90 días
         ],
     ],
 
