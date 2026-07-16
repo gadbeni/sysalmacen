@@ -22,72 +22,6 @@ class PermissionRoleTableSeeder extends Seeder
         $permissions = Permission::all();
         $role->permissions()->sync($permissions->pluck('id')->all());
 
-
-    
-
-
-         // Roles de Donacion en el Sedeges
-      
-         $role = Role::where('name', 'sedeges_admin')->firstOrFail();
-         $permissions = Permission::whereRaw('table_name = "admin" or
-                                            `key` = "browse_centro_categorias" or
-                                            `key` = "read_centro_categorias" or
-                                            `key` = "edit_centro_categorias" or
-                                            `key` = "add_centro_categorias" or
-
-                                            `key` = "browse_centros" or
-                                            `key` = "read_centros" or
-                                            `key` = "edit_centros" or
-                                            `key` = "add_centros" or
-
-                                            `key` = "browse_donacion_categorias" or
-                                            `key` = "read_donacion_categorias" or
-                                            `key` = "edit_donacion_categorias" or
-                                            `key` = "add_donacion_categorias" or
-
-                                            `key` = "browse_donacion_articulos" or
-                                            `key` = "read_donacion_articulos" or
-                                            `key` = "add_donacion_articulos" or
-                                            `key` = "edit_donacion_articulos" or
-
-                                            `key` = "browse_donador_personas" or
-                                            `key` = "read_donador_personas" or
-                                            `key` = "edit_donador_personas" or
-                                            `key` = "add_donador_personas" or
-
-                                            `key` = "browse_donador_empresas" or
-                                            `key` = "read_donador_empresas" or
-                                            `key` = "edit_donador_empresas" or
-                                            `key` = "add_donador_empresas" or
-
-                                            `key` = "browse_incomedonor" or
-                                            `key` = "read_incomedonor" or
-                                            `key` = "edit_incomedonor" or
-                                            `key` = "add_incomedonor" or
-                                            `key` = "browse_incomedonorstockview" or
-
-                                            `key` = "browse_egressdonor" or
-                                            `key` = "read_egressdonor" or
-                                            `key` = "edit_egressdonor" or
-                                            `key` = "add_egressdonor" or
-
-                                            table_name = "view_stock_donacion" or
-                                            `key` = "browse_clear-cache"')->get();
-         $role->permissions()->sync($permissions->pluck('id')->all());
-
-
-         $role = Role::where('name', 'sedeges_donacion_responsable')->firstOrFail();
-         $permissions = Permission::whereRaw('table_name = "admin" or
-                                             table_name = "incomedonor" or
-                                             table_name = "egressdonor" or
-                                             `key` = "browse_clear-cache"')->get();
-         $role->permissions()->sync($permissions->pluck('id')->all());
-
-
-
-        
-
-
          // ALAMACENES CENTRALES 
 
 
@@ -152,7 +86,10 @@ class PermissionRoleTableSeeder extends Seeder
                                             `key` = "edit_providers" or
                                             `key` = "add_providers" or
 
-                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-inventarioAnual-da" or
+                                            `key` = "browse_printalmacen-inventarioAnual-partida" or
+                                            `key` = "browse_printalmacen-inventarioAnual-detalle" or
                                             
                                             `key` = "browse_printalmacen-article-list" or
                                             `key` = "browse_printalmacen-article-stock" or
@@ -209,7 +146,10 @@ class PermissionRoleTableSeeder extends Seeder
 
                                             table_name = "inbox" or
 
-                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-inventarioAnual-da" or
+                                            `key` = "browse_printalmacen-inventarioAnual-partida" or
+                                            `key` = "browse_printalmacen-inventarioAnual-detalle" or
                                             
                                             `key` = "browse_printalmacen-article-list" or
                                             `key` = "browse_printalmacen-article-stock" or
@@ -240,7 +180,10 @@ class PermissionRoleTableSeeder extends Seeder
 
                                             table_name = "existingproducts" or 
 
-                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-inventarioAnual-da" or
+                                            `key` = "browse_printalmacen-inventarioAnual-partida" or
+                                            `key` = "browse_printalmacen-inventarioAnual-detalle" or
                                             
                                             `key` = "browse_printalmacen-article-list" or
                                             `key` = "browse_printalmacen-article-stock" or
@@ -269,7 +212,9 @@ class PermissionRoleTableSeeder extends Seeder
                                             table_name = "outbox" or
                                             table_name = "existingproducts" or 
 
-                                            table_name = "reports_anual" or
+                                            `key` = "browse_printalmacen-inventarioAnual-da" or
+                                            `key` = "browse_printalmacen-inventarioAnual-partida" or
+                                            `key` = "browse_printalmacen-inventarioAnual-detalle" or
                                             
                                             `key` = "browse_printalmacen-article-list" or
                                             `key` = "browse_printalmacen-article-stock" or
@@ -291,6 +236,7 @@ class PermissionRoleTableSeeder extends Seeder
         $role = Role::where('name', 'almacen_solicitud_pedido')->firstOrFail();
         $permissions = Permission::whereRaw('table_name = "admin" or
                                              table_name = "outbox" or
+                                             table_name = "non_stock_requests" or
                                              table_name = "existingproducts" or 
 
                                             
@@ -317,10 +263,55 @@ class PermissionRoleTableSeeder extends Seeder
                                             `key` = "browse_clear-cache"')->get();
         $role->permissions()->sync($permissions->pluck('id')->all());
 
-        //  // Roles de Donacion Sedeges 
-        //  $role = Role::where('name', 'sedeges_donacion_almacen')->firstOrFail();
-        //  $permissions = Permission::whereRaw('table_name = "admin" or
-        //                                      table_name = "egressdonor"')->get();
-        //  $role->permissions()->sync($permissions->pluck('id')->all());
+        //Para ingreso y egreso y reporte y crear solicitud ---- ALMACEN CENTRAL SUBADMIN
+        $role = Role::where('name', 'almacen_subadmin_central')->firstOrFail();
+        $permissions = Permission::whereRaw('table_name = "admin" or
+                                            table_name = "income" or
+                                            table_name = "egres" or
+
+                                            `key` = "browse_articles" or
+                                            `key` = "read_articles" or
+                                            `key` = "edit_articles" or
+                                            `key` = "add_articles" or
+
+                                            `key` = "browse_providers" or
+                                            `key` = "read_providers" or
+                                            `key` = "edit_providers" or
+                                            `key` = "add_providers" or
+
+                                            table_name = "outbox" or
+                                            table_name = "existingproducts" or
+                                            table_name = "no_stock_inbox" or
+                                            table_name = "non_stock_requests" or 
+
+                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-article-list" or
+                                            `key` = "browse_printalmacen-article-stock" or
+                                            `key` = "browse_printalmacen-article-incomeoffice" or     
+                                            `key` = "browse_printalmacen-article-egressoffice" or  
+
+                                            `key` = "browse_printalmacen-partida-incomearticle" or  
+                                            
+                                            `key` = "browse_printalmacen-provider-list" or
+                                            
+                                            `key` = "browse_clear-cache"')->get();
+        $role->permissions()->sync($permissions->pluck('id')->all());
+        //almacen_report_central
+        $role = Role::where('name', 'almacen_report_central')->firstOrFail();
+        $permissions = Permission::whereRaw('table_name = "admin" or
+                                            table_name = "reports_anual" or
+                                            
+                                            `key` = "browse_printalmacen-article-list" or
+                                            `key` = "browse_printalmacen-article-stock" or
+                                            `key` = "browse_printalmacen-article-incomeoffice" or     
+                                            `key` = "browse_printalmacen-article-egressoffice" or  
+
+                                            `key` = "browse_printalmacen-partida-incomearticle" or  
+                                            
+                                            `key` = "browse_printalmacen-provider-list" or
+                                            
+                                            `key` = "browse_clear-cache"')->get();
+        $role->permissions()->sync($permissions->pluck('id')->all());
     }
 }

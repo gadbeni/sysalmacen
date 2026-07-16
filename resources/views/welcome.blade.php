@@ -1,132 +1,1332 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SYSALMACEN — Sistema de Gestión de Almacenes</title>
 
-        <title>Laravel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary:    #5EAF4A;
+            --primary-dk: #4a8e38;
+            --primary-lt: #e8f5e4;
+            --dark:       #1e2a1c;
+            --gray:       #6b7280;
+            --gray-lt:    #f3f4f6;
+            --white:      #ffffff;
+            --border:     #e5e7eb;
+        }
 
-        <!-- Styles -->
-        <style>
-            /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}a{background-color:transparent}[hidden]{display:none}html{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}a{color:inherit;text-decoration:inherit}svg,video{display:block;vertical-align:middle}video{max-width:100%;height:auto}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.bg-gray-100{--bg-opacity:1;background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity))}.border-gray-200{--border-opacity:1;border-color:#edf2f7;border-color:rgba(237,242,247,var(--border-opacity))}.border-t{border-top-width:1px}.flex{display:flex}.grid{display:grid}.hidden{display:none}.items-center{align-items:center}.justify-center{justify-content:center}.font-semibold{font-weight:600}.h-5{height:1.25rem}.h-8{height:2rem}.h-16{height:4rem}.text-sm{font-size:.875rem}.text-lg{font-size:1.125rem}.leading-7{line-height:1.75rem}.mx-auto{margin-left:auto;margin-right:auto}.ml-1{margin-left:.25rem}.mt-2{margin-top:.5rem}.mr-2{margin-right:.5rem}.ml-2{margin-left:.5rem}.mt-4{margin-top:1rem}.ml-4{margin-left:1rem}.mt-8{margin-top:2rem}.ml-12{margin-left:3rem}.-mt-px{margin-top:-1px}.max-w-6xl{max-width:72rem}.min-h-screen{min-height:100vh}.overflow-hidden{overflow:hidden}.p-6{padding:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pt-8{padding-top:2rem}.fixed{position:fixed}.relative{position:relative}.top-0{top:0}.right-0{right:0}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.text-center{text-align:center}.text-gray-200{--text-opacity:1;color:#edf2f7;color:rgba(237,242,247,var(--text-opacity))}.text-gray-300{--text-opacity:1;color:#e2e8f0;color:rgba(226,232,240,var(--text-opacity))}.text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-gray-700{--text-opacity:1;color:#4a5568;color:rgba(74,85,104,var(--text-opacity))}.text-gray-900{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity))}.underline{text-decoration:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.w-5{width:1.25rem}.w-8{width:2rem}.w-auto{width:auto}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}@media (min-width:640px){.sm\:rounded-lg{border-radius:.5rem}.sm\:block{display:block}.sm\:items-center{align-items:center}.sm\:justify-start{justify-content:flex-start}.sm\:justify-between{justify-content:space-between}.sm\:h-20{height:5rem}.sm\:ml-0{margin-left:0}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pt-0{padding-top:0}.sm\:text-left{text-align:left}.sm\:text-right{text-align:right}}@media (min-width:768px){.md\:border-t-0{border-top-width:0}.md\:border-l{border-left-width:1px}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (prefers-color-scheme:dark){.dark\:bg-gray-800{--bg-opacity:1;background-color:#2d3748;background-color:rgba(45,55,72,var(--bg-opacity))}.dark\:bg-gray-900{--bg-opacity:1;background-color:#1a202c;background-color:rgba(26,32,44,var(--bg-opacity))}.dark\:border-gray-700{--border-opacity:1;border-color:#4a5568;border-color:rgba(74,85,104,var(--border-opacity))}.dark\:text-white{--text-opacity:1;color:#fff;color:rgba(255,255,255,var(--text-opacity))}.dark\:text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}}
-        </style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        <style>
-            body {
-                font-family: 'Nunito', sans-serif;
-            }
-        </style>
-    </head>
-    <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/home') }}" class="text-sm text-gray-700 underline">Home</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Log in</a>
+        html { scroll-behavior: smooth; }
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+            background: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                    <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto text-gray-700 sm:h-20">
-                        <g clip-path="url(#clip0)" fill="#EF3B2D">
-                            <path d="M248.032 44.676h-16.466v100.23h47.394v-14.748h-30.928V44.676zM337.091 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.431 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162-.001 2.863-.479 5.584-1.432 8.161zM463.954 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.432 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162 0 2.863-.479 5.584-1.432 8.161zM650.772 44.676h-15.606v100.23h15.606V44.676zM365.013 144.906h15.607V93.538h26.776V78.182h-42.383v66.724zM542.133 78.182l-19.616 51.096-19.616-51.096h-15.808l25.617 66.724h19.614l25.617-66.724h-15.808zM591.98 76.466c-19.112 0-34.239 15.706-34.239 35.079 0 21.416 14.641 35.079 36.239 35.079 12.088 0 19.806-4.622 29.234-14.688l-10.544-8.158c-.006.008-7.958 10.449-19.832 10.449-13.802 0-19.612-11.127-19.612-16.884h51.777c2.72-22.043-11.772-40.877-33.023-40.877zm-18.713 29.28c.12-1.284 1.917-16.884 18.589-16.884 16.671 0 18.697 15.598 18.813 16.884h-37.402zM184.068 43.892c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002-35.648-20.524a2.971 2.971 0 00-2.964 0l-35.647 20.522-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v38.979l-29.706 17.103V24.493a3 3 0 00-.103-.776c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002L40.098 1.396a2.971 2.971 0 00-2.964 0L1.487 21.919l-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v122.09c0 1.063.568 2.044 1.489 2.575l71.293 41.045c.156.089.324.143.49.202.078.028.15.074.23.095a2.98 2.98 0 001.524 0c.069-.018.132-.059.2-.083.176-.061.354-.119.519-.214l71.293-41.045a2.971 2.971 0 001.489-2.575v-38.979l34.158-19.666a2.971 2.971 0 001.489-2.575V44.666a3.075 3.075 0 00-.106-.774zM74.255 143.167l-29.648-16.779 31.136-17.926.001-.001 34.164-19.669 29.674 17.084-21.772 12.428-43.555 24.863zm68.329-76.259v33.841l-12.475-7.182-17.231-9.92V49.806l12.475 7.182 17.231 9.92zm2.97-39.335l29.693 17.095-29.693 17.095-29.693-17.095 29.693-17.095zM54.06 114.089l-12.475 7.182V46.733l17.231-9.92 12.475-7.182v74.537l-17.231 9.921zM38.614 7.398l29.693 17.095-29.693 17.095L8.921 24.493 38.614 7.398zM5.938 29.632l12.475 7.182 17.231 9.92v79.676l.001.005-.001.006c0 .114.032.221.045.333.017.146.021.294.059.434l.002.007c.032.117.094.222.14.334.051.124.088.255.156.371a.036.036 0 00.004.009c.061.105.149.191.222.288.081.105.149.22.244.314l.008.01c.084.083.19.142.284.215.106.083.202.178.32.247l.013.005.011.008 34.139 19.321v34.175L5.939 144.867V29.632h-.001zm136.646 115.235l-65.352 37.625V148.31l48.399-27.628 16.953-9.677v33.862zm35.646-61.22l-29.706 17.102V66.908l17.231-9.92 12.475-7.182v33.841z"/>
-                        </g>
-                    </svg>
-                </div>
+        a { text-decoration: none; color: inherit; }
 
-                <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                    <div class="grid grid-cols-1 md:grid-cols-2">
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel.com/docs" class="underline text-gray-900 dark:text-white">Documentation</a></div>
-                            </div>
+        /* ── KEYFRAMES ───────────────────────────────────── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(32px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-32px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(32px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-12px); }
+        }
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(94,175,74,.5); }
+            50%       { box-shadow: 0 0 0 8px rgba(94,175,74,0); }
+        }
+        @keyframes shimmer {
+            0%   { background-position: -400px 0; }
+            100% { background-position: 400px 0; }
+        }
+        @keyframes rotateSlow {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes progressLine {
+            from { width: 0; }
+            to   { width: 100%; }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes ripple {
+            0%   { transform: scale(1); opacity: .6; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes orb1 {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            33%       { transform: translate(40px,-30px) scale(1.1); }
+            66%       { transform: translate(-20px,20px) scale(.9); }
+        }
+        @keyframes orb2 {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            33%       { transform: translate(-50px,30px) scale(.85); }
+            66%       { transform: translate(30px,-40px) scale(1.15); }
+        }
+        @keyframes typewriter {
+            from { width: 0; }
+            to   { width: 100%; }
+        }
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+        @keyframes badge-pulse {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: .6; }
+        }
 
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel has wonderful, thorough documentation covering every aspect of the framework. Whether you are new to the framework or have previous experience with Laravel, we recommend reading all of the documentation from beginning to end.
-                                </div>
-                            </div>
-                        </div>
+        /* ── SCROLL REVEAL ───────────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .65s cubic-bezier(.4,0,.2,1), transform .65s cubic-bezier(.4,0,.2,1);
+        }
+        .reveal.from-left  { transform: translateX(-28px); }
+        .reveal.from-right { transform: translateX(28px); }
+        .reveal.visible {
+            opacity: 1;
+            transform: translate(0);
+        }
 
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laracasts.com" class="underline text-gray-900 dark:text-white">Laracasts</a></div>
-                            </div>
+        /* ── NAVBAR ──────────────────────────────────────── */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 200;
+            background: rgba(255,255,255,.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            height: 76px;
+            display: flex;
+            align-items: center;
+            transition: box-shadow .3s, background .3s;
+            animation: slideDown .5s ease both;
+        }
+        .navbar.scrolled {
+            box-shadow: 0 2px 20px rgba(0,0,0,.09);
+            background: rgba(255,255,255,.98);
+        }
+        .nav-inner {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-brand img {
+            height: 52px;
+            width: auto;
+            transition: transform .2s;
+        }
+        .nav-brand:hover img { transform: scale(1.06) rotate(-3deg); }
+        .nav-brand-text { display: flex; flex-direction: column; }
+        .nav-brand-text .sys-name {
+            font-size: 15px; font-weight: 700;
+            color: var(--primary-dk); letter-spacing: .5px; line-height: 1.2;
+        }
+        .nav-brand-text .sys-sub {
+            font-size: 10px; font-weight: 400;
+            color: var(--gray); text-transform: uppercase; letter-spacing: .8px;
+        }
+        .nav-links {
+            display: flex; align-items: center;
+            gap: 28px; list-style: none;
+        }
+        .nav-links a {
+            font-size: 14px; font-weight: 500;
+            color: #374151;
+            transition: color .2s;
+            position: relative;
+        }
+        .nav-links a:not(.nav-cta)::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -3px;
+            width: 0; height: 2px;
+            background: var(--primary);
+            transition: width .25s;
+            border-radius: 2px;
+        }
+        .nav-links a:not(.nav-cta):hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-cta {
+            background: var(--primary);
+            color: var(--white) !important;
+            padding: 9px 20px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            font-size: 14px;
+            transition: background .2s, transform .15s, box-shadow .2s !important;
+        }
+        .nav-cta:hover {
+            background: var(--primary-dk) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 16px rgba(94,175,74,.4) !important;
+        }
 
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                                </div>
-                            </div>
-                        </div>
+        /* ── HERO ────────────────────────────────────────── */
+        .hero {
+            margin-top: 76px;
+            background: linear-gradient(135deg, #1e2a1c 0%, #2d4a25 55%, #3a6030 100%);
+            padding: 100px 24px 90px;
+            position: relative;
+            overflow: hidden;
+            min-height: 700px;
+        }
+        /* Animated orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-orb-1 {
+            width: 500px; height: 500px;
+            top: -120px; right: -100px;
+            background: radial-gradient(circle, rgba(94,175,74,.22) 0%, transparent 68%);
+            animation: orb1 12s ease-in-out infinite;
+        }
+        .hero-orb-2 {
+            width: 360px; height: 360px;
+            bottom: -100px; left: -60px;
+            background: radial-gradient(circle, rgba(94,175,74,.15) 0%, transparent 68%);
+            animation: orb2 15s ease-in-out infinite;
+        }
+        .hero-orb-3 {
+            width: 200px; height: 200px;
+            top: 50%; left: 45%;
+            background: radial-gradient(circle, rgba(134,239,172,.08) 0%, transparent 68%);
+            animation: orb1 9s ease-in-out infinite reverse;
+        }
+        /* Particle canvas */
+        #hero-canvas {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: .4;
+        }
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 48px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        /* Hero content stagger */
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(94,175,74,.2);
+            border: 1px solid rgba(94,175,74,.4);
+            color: #86efac;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp .6s .2s ease both;
+        }
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: #86efac;
+            border-radius: 50%;
+            animation: pulseDot 2s infinite;
+            display: inline-block;
+        }
+        .hero h1 {
+            font-size: 46px;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 18px;
+            opacity: 0;
+            animation: fadeInUp .6s .4s ease both;
+        }
+        .hero h1 span { color: #86efac; }
+        .hero > .hero-inner > .hero-content > p {
+            font-size: 17px;
+            color: #9ca3af;
+            margin-bottom: 36px;
+            max-width: 480px;
+            opacity: 0;
+            animation: fadeInUp .6s .6s ease both;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp .6s .8s ease both;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            padding: 13px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background .2s, transform .15s, box-shadow .2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0);
+            transition: background .2s;
+        }
+        .btn-primary:hover { background: var(--primary-dk); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(94,175,74,.45); }
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            padding: 13px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            border: 1.5px solid rgba(255,255,255,.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: border-color .2s, background .2s, transform .15s;
+        }
+        .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.07); transform: translateY(-2px); }
+        .hero-img {
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInRight .8s .5s ease both;
+        }
+        .hero-img-card {
+            background: rgba(255,255,255,.07);
+            border: 1px solid rgba(255,255,255,.14);
+            border-radius: 20px;
+            padding: 18px;
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(6px);
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 30px 80px rgba(0,0,0,.4);
+        }
+        .hero-img-card img {
+            width: 100%;
+            height: 380px;
+            border-radius: 12px;
+            object-fit: cover;
+            display: block;
+        }
+        .hero-meta {
+            margin-top: 16px;
+            display: flex;
+            gap: 14px;
+        }
+        .hero-meta-item {
+            flex: 1;
+            background: rgba(255,255,255,.09);
+            border-radius: 8px;
+            padding: 10px 12px;
+            text-align: center;
+            transition: background .2s, transform .2s;
+        }
+        .hero-meta-item:hover { background: rgba(255,255,255,.15); transform: translateY(-3px); }
+        .hero-meta-item .val {
+            font-size: 20px; font-weight: 700;
+            color: #86efac; display: block;
+        }
+        .hero-meta-item .lbl {
+            font-size: 10px; color: #9ca3af;
+            text-transform: uppercase; letter-spacing: .5px;
+        }
 
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel-news.com/" class="underline text-gray-900 dark:text-white">Laravel News</a></div>
-                            </div>
+        /* ── STATS BAR ───────────────────────────────────── */
+        .stats-bar {
+            background: var(--primary-dk);
+            padding: 26px 24px;
+        }
+        .stats-bar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .stat-item {
+            text-align: center;
+            padding: 8px 16px;
+            border-right: 1px solid rgba(255,255,255,.2);
+            position: relative;
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-item .num {
+            display: block;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--white);
+            transition: transform .2s;
+        }
+        .stat-item:hover .num { transform: scale(1.12); }
+        .stat-item .desc {
+            font-size: 12px;
+            color: rgba(255,255,255,.75);
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
 
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
-                                </div>
-                            </div>
-                        </div>
+        /* ── SECTION BASE ────────────────────────────────── */
+        section { padding: 84px 24px; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-tag {
+            display: inline-block;
+            background: var(--primary-lt);
+            color: var(--primary-dk);
+            font-size: 12px; font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 100px;
+            text-transform: uppercase; letter-spacing: .8px;
+            margin-bottom: 14px;
+        }
+        .section-header h2 {
+            font-size: 34px; font-weight: 800;
+            color: #111827; margin-bottom: 12px;
+        }
+        .section-header p {
+            font-size: 16px; color: var(--gray);
+            max-width: 560px; margin: 0 auto;
+        }
 
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white">Vibrant Ecosystem</div>
-                            </div>
+        /* ── FEATURES ────────────────────────────────────── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 24px;
+            transition: box-shadow .3s, transform .3s, border-color .3s;
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #86efac);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .3s;
+        }
+        .feature-card:hover::before { transform: scaleX(1); }
+        .feature-card:hover {
+            box-shadow: 0 12px 40px rgba(0,0,0,.1);
+            transform: translateY(-6px);
+            border-color: rgba(94,175,74,.25);
+        }
+        .feature-icon {
+            width: 52px; height: 52px;
+            background: var(--primary-lt);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 18px;
+            transition: background .3s, transform .3s;
+        }
+        .feature-card:hover .feature-icon {
+            background: var(--primary);
+            transform: rotate(-6deg) scale(1.1);
+        }
+        .feature-icon i { font-size: 22px; color: var(--primary-dk); transition: color .3s; }
+        .feature-card:hover .feature-icon i { color: var(--white); }
+        .feature-card h3 {
+            font-size: 17px; font-weight: 700;
+            color: #111827; margin-bottom: 8px;
+        }
+        .feature-card p { font-size: 14px; color: var(--gray); line-height: 1.7; }
 
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="underline">Forge</a>, <a href="https://vapor.laravel.com" class="underline">Vapor</a>, <a href="https://nova.laravel.com" class="underline">Nova</a>, and <a href="https://envoyer.io" class="underline">Envoyer</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="underline">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="underline">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="underline">Echo</a>, <a href="https://laravel.com/docs/horizon" class="underline">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="underline">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="underline">Telescope</a>, and more.
-                                </div>
-                            </div>
-                        </div>
+        /* ── HOW IT WORKS ────────────────────────────────── */
+        .how-bg { background: var(--gray-lt); }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            position: relative;
+        }
+        .steps-line {
+            position: absolute;
+            top: 35px;
+            left: 12.5%; right: 12.5%;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .steps-line-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary) 0%, #86efac 100%);
+            transition: width 1.2s cubic-bezier(.4,0,.2,1);
+        }
+        .step-item {
+            text-align: center;
+            padding: 0 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .step-num {
+            width: 72px; height: 72px;
+            background: #e5e7eb;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 22px; font-weight: 800;
+            color: var(--gray);
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 3px #e5e7eb;
+            transition: background .5s, color .5s, box-shadow .5s, transform .3s;
+            position: relative;
+        }
+        .step-num.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 0 0 3px var(--primary-lt);
+        }
+        .step-num::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            opacity: 0;
+            transform: scale(1.3);
+            transition: opacity .4s, transform .4s;
+        }
+        .step-num.active::before { opacity: .3; transform: scale(1); }
+        .step-item h3 {
+            font-size: 15px; font-weight: 700;
+            color: #111827; margin-bottom: 8px;
+        }
+        .step-item p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+        /* ── MODULES ─────────────────────────────────────── */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .module-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px 20px;
+            transition: border-color .25s, box-shadow .25s, transform .25s;
+        }
+        .module-row:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 20px rgba(94,175,74,.12);
+            transform: translateX(4px);
+        }
+        .module-dot {
+            width: 42px; height: 42px; min-width: 42px;
+            background: var(--primary-lt);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .25s, transform .25s;
+        }
+        .module-row:hover .module-dot {
+            background: var(--primary);
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .module-dot i { font-size: 18px; color: var(--primary); transition: color .25s; }
+        .module-row:hover .module-dot i { color: var(--white); }
+        .module-row h4 {
+            font-size: 15px; font-weight: 700;
+            color: #111827; margin-bottom: 4px;
+        }
+        .module-row p { font-size: 13px; color: var(--gray); line-height: 1.55; }
+
+        /* ── CTA BANNER ──────────────────────────────────── */
+        .cta-section {
+            background: linear-gradient(135deg, #2d4a25 0%, #1e2a1c 100%);
+            text-align: center;
+            padding: 80px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            border: 1px solid rgba(94,175,74,.15);
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            animation: rotateSlow 20s linear infinite;
+        }
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            width: 700px; height: 700px;
+            border-radius: 50%;
+            border: 1px solid rgba(94,175,74,.08);
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            animation: rotateSlow 30s linear infinite reverse;
+        }
+        .cta-inner { position: relative; z-index: 1; }
+        .cta-section h2 {
+            font-size: 34px; font-weight: 800;
+            color: var(--white); margin-bottom: 14px;
+        }
+        .cta-section p {
+            font-size: 16px; color: #9ca3af;
+            margin-bottom: 32px;
+            max-width: 500px; margin-left: auto; margin-right: auto;
+        }
+
+        /* ── FOOTER ──────────────────────────────────────── */
+        footer { background: #111827; padding: 44px 24px 28px; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; }
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #1f2937;
+        }
+        .footer-brand img { height: 36px; margin-bottom: 14px; filter: brightness(0) invert(1); opacity: .8; }
+        .footer-brand p { font-size: 13px; color: #6b7280; line-height: 1.7; }
+        .footer-col h5 {
+            font-size: 12px; font-weight: 700;
+            color: #9ca3af; text-transform: uppercase;
+            letter-spacing: .8px; margin-bottom: 14px;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 8px; }
+        .footer-col ul li a {
+            font-size: 13px; color: #6b7280;
+            transition: color .2s, padding-left .2s;
+            display: inline-block;
+        }
+        .footer-col ul li a:hover { color: var(--primary); padding-left: 4px; }
+        .footer-bottom {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding-top: 24px; flex-wrap: wrap; gap: 10px;
+        }
+        .footer-bottom p { font-size: 12px; color: #4b5563; }
+        .footer-badge {
+            display: inline-flex; align-items: center;
+            gap: 6px; font-size: 12px; color: #4b5563;
+        }
+        .footer-badge i { color: var(--primary); }
+
+        /* ── SCROLL PROGRESS BAR ─────────────────────────── */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary), #86efac);
+            z-index: 300;
+            transition: width .1s;
+        }
+
+        /* ── BACK TO TOP ─────────────────────────────────── */
+        .back-top {
+            position: fixed;
+            bottom: 32px; right: 28px;
+            width: 44px; height: 44px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 20px rgba(94,175,74,.4);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .3s, transform .3s, background .2s;
+            z-index: 150;
+            border: none;
+        }
+        .back-top.visible { opacity: 1; transform: translateY(0); }
+        .back-top:hover { background: var(--primary-dk); }
+
+        /* ── ECOSISTEMA GOBE ─────────────────────────────── */
+        .gobe-bg { background: var(--gray-lt); }
+        .gobe-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .gobe-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px 20px 24px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            transition: border-color .25s, box-shadow .25s, transform .25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .gobe-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .3s;
+        }
+        .gobe-card:hover::after { transform: scaleX(1); }
+        .gobe-card:hover {
+            border-color: transparent;
+            box-shadow: 0 10px 40px rgba(0,0,0,.11);
+            transform: translateY(-6px);
+            color: inherit;
+        }
+        .gobe-icon {
+            width: 60px; height: 60px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            transition: transform .3s;
+        }
+        .gobe-card:hover .gobe-icon { transform: scale(1.12) rotate(-5deg); }
+        .gobe-card h4 { font-size: 16px; font-weight: 700; color: #111827; margin: 0; }
+        .gobe-card p  { font-size: 13px; color: var(--gray); margin: 0; line-height: 1.5; }
+        .gobe-card .gobe-link {
+            font-size: 12px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 5px;
+            margin-top: 4px;
+            opacity: .7;
+            transition: opacity .2s;
+        }
+        .gobe-card:hover .gobe-link { opacity: 1; }
+
+        /* colores por sistema */
+        .gobe-siscor   .gobe-icon { background: #e8f0fe; color: #1a73e8; }
+        .gobe-siscor::after       { background: #1a73e8; }
+        .gobe-siscor   .gobe-link { color: #1a73e8; }
+
+        .gobe-mamore   .gobe-icon { background: #fce8e6; color: #d93025; }
+        .gobe-mamore::after       { background: #d93025; }
+        .gobe-mamore   .gobe-link { color: #d93025; }
+
+        .gobe-auditoria .gobe-icon { background: #fef3cd; color: #b45309; }
+        .gobe-auditoria::after     { background: #b45309; }
+        .gobe-auditoria .gobe-link { color: #b45309; }
+
+        .gobe-gaceta   .gobe-icon { background: var(--primary-lt); color: var(--primary-dk); }
+        .gobe-gaceta::after       { background: var(--primary); }
+        .gobe-gaceta   .gobe-link { color: var(--primary-dk); }
+
+        @media (max-width: 900px) { .gobe-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 500px) { .gobe-grid { grid-template-columns: 1fr; } }
+
+        /* ── RIPPLE ──────────────────────────────────────── */
+        .ripple-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(94,175,74,.5);
+            width: 10px; height: 10px;
+            pointer-events: none;
+            animation: ripple .7s ease-out forwards;
+        }
+
+        /* ── RESPONSIVE ──────────────────────────────────── */
+        @media (max-width: 900px) {
+            .hero-inner { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 34px; }
+            .hero-img { display: none; }
+            .features-grid { grid-template-columns: 1fr 1fr; }
+            .steps-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .steps-line { display: none; }
+            .stats-bar-inner { grid-template-columns: 1fr 1fr; }
+            .footer-top { grid-template-columns: 1fr; gap: 28px; }
+        }
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .features-grid { grid-template-columns: 1fr; }
+            .modules-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 28px; }
+            .hero-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+{{-- Barra de progreso de scroll --}}
+<div class="scroll-progress" id="scrollProgress"></div>
+
+{{-- ── NAVBAR ────────────────────────────────────────────── --}}
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <img src="{{ asset('images/icon.png') }}" alt="SYSALMACEN">
+            <div class="nav-brand-text">
+                <span class="sys-name">SYSALMACEN</span>
+                <span class="sys-sub">Gobernación del Beni</span>
+            </div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#funcionalidades" class="nav-link">Funcionalidades</a></li>
+            <li><a href="#modulos" class="nav-link">Módulos</a></li>
+            <li><a href="#como-funciona" class="nav-link">¿Cómo funciona?</a></li>
+            <li><a href="#ecosistema" class="nav-link">Otros sistemas</a></li>
+            <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            <li><a href="{{ url('/admin') }}" class="nav-cta"><i class="fa-solid fa-right-to-bracket"></i> Ingresar</a></li>
+        </ul>
+    </div>
+</nav>
+
+{{-- ── HERO ──────────────────────────────────────────────── --}}
+<section class="hero" id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-inner">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span> Sistema Oficial — Gobernación del Beni
+            </div>
+            <h1>Sistema de Gestión de <span>Almacenes</span></h1>
+            <p>
+                Control integral de inventario, ingresos por compra, egresos, solicitudes entre unidades y reportes anuales para todas las sucursales de la institución.
+            </p>
+            <div class="hero-buttons">
+                <a href="{{ url('/admin') }}" class="btn-primary" id="heroBtn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Acceder al sistema
+                </a>
+                <a href="#funcionalidades" class="btn-outline">
+                    <i class="fa-solid fa-circle-info"></i> Conocer más
+                </a>
+            </div>
+        </div>
+        <div class="hero-img">
+            <div class="hero-img-card">
+                <img src="{{ asset('images/banner.jpg') }}" alt="Sistema de almacenes">
+                <div class="hero-meta">
+                    <div class="hero-meta-item">
+                        <span class="val"><i class="fa-solid fa-boxes-stacked"></i></span>
+                        <span class="lbl">Inventario</span>
                     </div>
-                </div>
-
-                <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
-                    <div class="text-center text-sm text-gray-500 sm:text-left">
-                        <div class="flex items-center">
-                            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" class="-mt-px w-5 h-5 text-gray-400">
-                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-
-                            <a href="https://laravel.bigcartel.com" class="ml-1 underline">
-                                Shop
-                            </a>
-
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="ml-4 -mt-px w-5 h-5 text-gray-400">
-                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-
-                            <a href="https://github.com/sponsors/taylorotwell" class="ml-1 underline">
-                                Sponsor
-                            </a>
-                        </div>
+                    <div class="hero-meta-item">
+                        <span class="val"><i class="fa-solid fa-truck-ramp-box"></i></span>
+                        <span class="lbl">Ingresos</span>
                     </div>
-
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+                    <div class="hero-meta-item">
+                        <span class="val"><i class="fa-solid fa-file-invoice"></i></span>
+                        <span class="lbl">Reportes</span>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</section>
+
+{{-- ── STATS BAR ─────────────────────────────────────────── --}}
+<div class="stats-bar">
+    <div class="stats-bar-inner">
+        <div class="stat-item">
+            <span class="num">Multi</span>
+            <span class="desc">Almacenes simultáneos</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">100%</span>
+            <span class="desc">Trazabilidad de stock</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">Anual</span>
+            <span class="desc">Gestión por gestión</span>
+        </div>
+        <div class="stat-item">
+            <span class="num">GOBE</span>
+            <span class="desc">Gobernación del Beni</span>
+        </div>
+    </div>
+</div>
+
+{{-- ── FUNCIONALIDADES ───────────────────────────────────── --}}
+<section id="funcionalidades">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-tag">Funcionalidades</span>
+            <h2>Todo lo que necesita su almacén</h2>
+            <p>Herramientas diseñadas para la gestión eficiente del inventario institucional en el contexto gubernamental boliviano.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card reveal" style="transition-delay:.05s">
+                <div class="feature-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                <h3>Ingresos por Compra</h3>
+                <p>Registro completo de solicitudes de compra con facturación, detalle por artículo y control de stock en tiempo real.</p>
+            </div>
+            <div class="feature-card reveal" style="transition-delay:.12s">
+                <div class="feature-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                <h3>Egresos y Salidas</h3>
+                <p>Control de salidas directas y por solicitud de pedido. Decremento automático de stock con trazabilidad completa.</p>
+            </div>
+            <div class="feature-card reveal" style="transition-delay:.19s">
+                <div class="feature-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                <h3>Bandeja de Solicitudes</h3>
+                <p>Flujo completo de solicitudes entre unidades: creación, envío, aprobación, entrega y anulación con estados auditables.</p>
+            </div>
+            <div class="feature-card reveal" style="transition-delay:.26s">
+                <div class="feature-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                <h3>Gestión Anual</h3>
+                <p>Apertura y cierre de gestiones por almacén. Traspaso automático de saldos al inicio del nuevo año fiscal.</p>
+            </div>
+            <div class="feature-card reveal" style="transition-delay:.33s">
+                <div class="feature-icon"><i class="fa-solid fa-chart-bar"></i></div>
+                <h3>Reportes y Exportación</h3>
+                <p>Reportes por dirección administrativa, partida presupuestaria y artículo. Exportación a Excel e impresión directa.</p>
+            </div>
+            <div class="feature-card reveal" style="transition-delay:.4s">
+                <div class="feature-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <h3>Módulo de Donaciones</h3>
+                <p>Gestión de ingresos y egresos por donación (SEDEGES), con donantes, centros de acogida y categorías.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ── CÓMO FUNCIONA ─────────────────────────────────────── --}}
+<section id="como-funciona" class="how-bg">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-tag">¿Cómo funciona?</span>
+            <h2>Flujo de trabajo simplificado</h2>
+            <p>El sistema guía a cada funcionario a través de un proceso claro y auditable.</p>
+        </div>
+        <div class="steps-grid" id="stepsGrid">
+            <div class="steps-line"><div class="steps-line-fill" id="stepsLineFill"></div></div>
+            <div class="step-item reveal" style="transition-delay:.05s">
+                <div class="step-num" id="step1">1</div>
+                <h3>Ingreso de material</h3>
+                <p>El almacenero registra la solicitud de compra con la factura y el detalle de artículos recibidos.</p>
+            </div>
+            <div class="step-item reveal" style="transition-delay:.18s">
+                <div class="step-num" id="step2">2</div>
+                <h3>Solicitud de pedido</h3>
+                <p>El funcionario solicita artículos desde su unidad. La solicitud se envía al almacén correspondiente.</p>
+            </div>
+            <div class="step-item reveal" style="transition-delay:.31s">
+                <div class="step-num" id="step3">3</div>
+                <h3>Aprobación y entrega</h3>
+                <p>El almacenero revisa la solicitud en su bandeja, la aprueba y registra la entrega descontando el stock.</p>
+            </div>
+            <div class="step-item reveal" style="transition-delay:.44s">
+                <div class="step-num" id="step4">4</div>
+                <h3>Reporte y cierre</h3>
+                <p>Al finalizar la gestión anual, se generan reportes y se traspasan los saldos al siguiente año.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ── MÓDULOS ───────────────────────────────────────────── --}}
+<section id="modulos">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-tag">Módulos del sistema</span>
+            <h2>Cobertura integral del almacén</h2>
+            <p>Cada módulo cubre una necesidad específica de la gestión de inventario institucional.</p>
+        </div>
+        <div class="modules-grid">
+            <div class="module-row reveal from-left" style="transition-delay:.05s">
+                <div class="module-dot"><i class="fa-solid fa-warehouse"></i></div>
+                <div>
+                    <h4>Almacenes y Sub-almacenes</h4>
+                    <p>Configuración de sucursales con sus direcciones administrativas y unidades principales. Soporte para múltiples sub-almacenes.</p>
+                </div>
+            </div>
+            <div class="module-row reveal from-right" style="transition-delay:.05s">
+                <div class="module-dot"><i class="fa-solid fa-tag"></i></div>
+                <div>
+                    <h4>Artículos y Partidas Presupuestarias</h4>
+                    <p>Catálogo de artículos organizados por partida presupuestaria (código boliviano tipo 3.x.x). Búsqueda y filtros avanzados.</p>
+                </div>
+            </div>
+            <div class="module-row reveal from-left" style="transition-delay:.14s">
+                <div class="module-dot"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <h4>Usuarios y Funcionarios</h4>
+                    <p>Registro de usuarios vinculados a funcionarios activos del sistema de personal (MAMORE). Roles y permisos por Voyager.</p>
+                </div>
+            </div>
+            <div class="module-row reveal from-right" style="transition-delay:.14s">
+                <div class="module-dot"><i class="fa-solid fa-truck"></i></div>
+                <div>
+                    <h4>Proveedores y Modalidades</h4>
+                    <p>Gestión de proveedores y modalidades de compra. Vinculación directa con las facturas de ingreso.</p>
+                </div>
+            </div>
+            <div class="module-row reveal from-left" style="transition-delay:.23s">
+                <div class="module-dot"><i class="fa-solid fa-print"></i></div>
+                <div>
+                    <h4>Reportes Oficiales</h4>
+                    <p>Kardex, inventarios anuales por DA, por partida y detalle general. Formato de impresión institucional.</p>
+                </div>
+            </div>
+            <div class="module-row reveal from-right" style="transition-delay:.23s">
+                <div class="module-dot"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <h4>Auditoría y Trazabilidad</h4>
+                    <p>Registro de cambios con Laravel Auditing. Historial de egresos, anulaciones y reaperturas de gestión.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ── ECOSISTEMA GOBE ──────────────────────────────────── --}}
+<section class="gobe-bg" id="ecosistema">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <span class="section-tag">Gobernación del Beni</span>
+            <h2>Ecosistema Digital GOBE</h2>
+            <p>Otros sistemas institucionales de la Gobernación del Departamento del Beni.</p>
+        </div>
+        <div class="gobe-grid">
+            <a href="https://siscor.beni.gob.bo/" target="_blank" rel="noopener"
+               class="gobe-card gobe-siscor reveal" style="transition-delay:.05s">
+                <div class="gobe-icon"><i class="fa-solid fa-file-lines"></i></div>
+                <h4>SISCOR</h4>
+                <p>Sistema de Correspondencia y gestión documental institucional.</p>
+                <span class="gobe-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> siscor.beni.gob.bo</span>
+            </a>
+            <a href="https://mamore.beni.gob.bo/" target="_blank" rel="noopener"
+               class="gobe-card gobe-mamore reveal" style="transition-delay:.13s">
+                <div class="gobe-icon"><i class="fa-solid fa-users-gear"></i></div>
+                <h4>MAMORÉ</h4>
+                <p>Sistema de gestión de personal y recursos humanos de la Gobernación.</p>
+                <span class="gobe-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> mamore.beni.gob.bo</span>
+            </a>
+            <a href="https://auditoria.beni.gob.bo/" target="_blank" rel="noopener"
+               class="gobe-card gobe-auditoria reveal" style="transition-delay:.21s">
+                <div class="gobe-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <h4>AUDITORÍA</h4>
+                <p>Sistema de control interno y auditoría gubernamental institucional.</p>
+                <span class="gobe-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> auditoria.beni.gob.bo</span>
+            </a>
+            <a href="https://gaceta.beni.gob.bo/" target="_blank" rel="noopener"
+               class="gobe-card gobe-gaceta reveal" style="transition-delay:.29s">
+                <div class="gobe-icon"><i class="fa-solid fa-newspaper"></i></div>
+                <h4>GACETA</h4>
+                <p>Gaceta oficial del Departamento del Beni — publicaciones y normativa.</p>
+                <span class="gobe-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> gaceta.beni.gob.bo</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+{{-- ── CTA ────────────────────────────────────────────────── --}}
+<section class="cta-section" id="contacto">
+    <div class="cta-inner">
+        <h2 class="reveal">¿Listo para gestionar su almacén?</h2>
+        <p class="reveal" style="transition-delay:.12s">Acceda al sistema con sus credenciales institucionales asignadas por el administrador.</p>
+        <div class="reveal" style="transition-delay:.24s">
+            <a href="{{ url('/admin') }}" class="btn-primary" style="display:inline-flex; font-size:16px; padding:15px 36px;">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
+            </a>
+        </div>
+    </div>
+</section>
+
+{{-- ── FOOTER ────────────────────────────────────────────── --}}
+<footer>
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand reveal from-left">
+                <img src="{{ asset('images/icon.png') }}" alt="SYSALMACEN">
+                <p>Sistema de Gestión de Almacenes de la Gobernación del Departamento del Beni — Bolivia. Administrado por la Unidad de Desarrollo de Software.</p>
+            </div>
+            <div class="footer-col reveal" style="transition-delay:.1s">
+                <h5>Acceso</h5>
+                <ul>
+                    <li><a href="{{ url('/admin') }}">Iniciar sesión</a></li>
+                    <li><a href="{{ url('/admin/login') }}">Panel administrativo</a></li>
+                </ul>
+            </div>
+            <div class="footer-col reveal" style="transition-delay:.2s">
+                <h5>Institución</h5>
+                <ul>
+                    <li><a href="https://www.beni.gob.bo" target="_blank">beni.gob.bo</a></li>
+                    <li><a href="https://siscor.beni.gob.bo/" target="_blank">SISCOR</a></li>
+                    <li><a href="https://mamore.beni.gob.bo/" target="_blank">MAMORÉ</a></li>
+                    <li><a href="https://auditoria.beni.gob.bo/" target="_blank">Auditoría</a></li>
+                    <li><a href="https://gaceta.beni.gob.bo/" target="_blank">Gaceta</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© {{ date('Y') }} Gobernación del Beni — SYSALMACEN v{{ config('app.version', '1.0') }}</p>
+            <span class="footer-badge">
+                <i class="fa-solid fa-leaf"></i> Desarrollado por Unidad de Software GOBE
+            </span>
+        </div>
+    </div>
+</footer>
+
+{{-- Botón back to top --}}
+<button class="back-top" id="backTop" title="Volver arriba">
+    <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ── SCROLL PROGRESS ─────────────────────────────── */
+    const progress = document.getElementById('scrollProgress');
+    const navbar   = document.getElementById('navbar');
+    const backTop  = document.getElementById('backTop');
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        const total    = document.body.scrollHeight - window.innerHeight;
+        progress.style.width = (scrolled / total * 100) + '%';
+
+        navbar.classList.toggle('scrolled', scrolled > 40);
+        backTop.classList.toggle('visible', scrolled > 400);
+    }, { passive: true });
+
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    /* ── SMOOTH SCROLL for nav links ─────────────────── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    /* ── ACTIVE NAV LINK on scroll ───────────────────── */
+    const sections  = document.querySelectorAll('section[id], div[id="contacto"]');
+    const navLinks  = document.querySelectorAll('.nav-link');
+    const observer  = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(l => l.style.color = '');
+                const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+                if (active) active.style.color = 'var(--primary)';
+            }
+        });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => observer.observe(s));
+
+    /* ── SCROLL REVEAL ───────────────────────────────── */
+    const revealObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* ── STEPS ANIMATION ─────────────────────────────── */
+    const stepsGrid    = document.getElementById('stepsGrid');
+    const stepsLineFill = document.getElementById('stepsLineFill');
+    const stepNums     = [1,2,3,4].map(n => document.getElementById('step'+n));
+    let stepsAnimated  = false;
+
+    const stepsObs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !stepsAnimated) {
+            stepsAnimated = true;
+            stepsLineFill.style.width = '100%';
+            stepNums.forEach((num, i) => {
+                setTimeout(() => num && num.classList.add('active'), 200 + i * 280);
+            });
+        }
+    }, { threshold: 0.3 });
+    if (stepsGrid) stepsObs.observe(stepsGrid);
+
+    /* ── RIPPLE on btn-primary ───────────────────────── */
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            const r    = document.createElement('span');
+            const rect = btn.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height) * 2;
+            r.className = 'ripple-ring';
+            r.style.cssText = `
+                width:${size}px; height:${size}px;
+                left:${e.clientX - rect.left - size/2}px;
+                top:${e.clientY - rect.top  - size/2}px;
+            `;
+            btn.style.position = 'relative';
+            btn.appendChild(r);
+            setTimeout(() => r.remove(), 700);
+        });
+    });
+
+    /* ── CANVAS PARTICLES (hero) ─────────────────────── */
+    const canvas = document.getElementById('hero-canvas');
+    const ctx    = canvas.getContext('2d');
+    let particles = [];
+    let W, H;
+
+    function resize() {
+        const hero = document.getElementById('hero');
+        W = canvas.width  = hero.offsetWidth;
+        H = canvas.height = hero.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function Particle() {
+        this.reset();
+    }
+    Particle.prototype.reset = function () {
+        this.x    = Math.random() * W;
+        this.y    = Math.random() * H;
+        this.r    = Math.random() * 2 + .5;
+        this.dx   = (Math.random() - .5) * .4;
+        this.dy   = (Math.random() - .5) * .4;
+        this.life = Math.random();
+        this.maxL = Math.random() * .6 + .2;
+    };
+    Particle.prototype.update = function () {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.life += .003;
+        if (this.life > 1 || this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    };
+    Particle.prototype.draw = function () {
+        const alpha = Math.sin(this.life * Math.PI) * this.maxL;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(134,239,172,${alpha})`;
+        ctx.fill();
+    };
+
+    for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+    /* Draw connecting lines between nearby particles */
+    function drawLines() {
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx   = particles[i].x - particles[j].x;
+                const dy   = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 100) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(94,175,74,${.12 * (1 - dist/100)})`;
+                    ctx.lineWidth   = .5;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, W, H);
+        drawLines();
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ── MOUSE PARALLAX on hero card ─────────────────── */
+    const heroSection = document.getElementById('hero');
+    const heroCard    = document.querySelector('.hero-img-card');
+    if (heroCard) {
+        heroSection.addEventListener('mousemove', e => {
+            const rect = heroSection.getBoundingClientRect();
+            const cx   = (e.clientX - rect.left) / rect.width  - .5;
+            const cy   = (e.clientY - rect.top)  / rect.height - .5;
+            heroCard.style.transform = `
+                translateY(${-12 + cy * -12}px)
+                rotateX(${cy * 6}deg)
+                rotateY(${cx * 6}deg)
+            `;
+        }, { passive: true });
+        heroSection.addEventListener('mouseleave', () => {
+            heroCard.style.transform = '';
+        });
+    }
+
+    /* ── FEATURE CARD tilt on hover ──────────────────── */
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const cx   = (e.clientX - rect.left) / rect.width  - .5;
+            const cy   = (e.clientY - rect.top)  / rect.height - .5;
+            card.style.transform = `translateY(-6px) rotateX(${cy * -5}deg) rotateY(${cx * 5}deg)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+
+})();
+</script>
+
+</body>
 </html>

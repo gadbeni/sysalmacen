@@ -8,6 +8,7 @@
                     <th>Nombre completo</th>                    
                     <th>Cargo</th>
                     {{-- <th>Dirección Administrativa</th> --}}
+                    <th>Usuarios</th>
                     <th>Fecha</th>
                     <th>Estado</th>
                     <th class="text-right">Acciones</th>
@@ -18,9 +19,30 @@
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->people->ci }}</td>
-                    <td>{{ $item->people->first_name}} {{ $item->people->last_name}}</td>
+                    <td>{{ $item->people->first_name}} {{ $item->people->middle_name}} {{ $item->people->paternal_surname}} {{ $item->people->maternal_surname}} {{ $item->people->married_surname}}</td>
                     <td>{{ $item->cargo}}</td>
                     {{-- <td>{{ $item->direction->nombre}}</td> --}}
+                    <td>
+                        @forelse ($item->users as $usuario)
+                            <div style="margin-bottom: 8px;">
+                                <i class="voyager-person"></i> <small class="text-muted">{{ $usuario->email }}</small>
+                                @if ($usuario->role)
+                                    <br><small class="label label-info">{{ $usuario->role->display_name }}</small>
+                                @endif
+                                @if ($usuario->sucursal)
+                                    <br><small><strong>Almacén:</strong> {{ $usuario->sucursal->nombre }}@if ($usuario->subAlmacen) — {{ $usuario->subAlmacen->name }}@endif</small>
+                                @endif
+                                @if ($usuario->direction)
+                                    <br><small><strong>Dirección:</strong> {{ $usuario->direction->nombre }}</small>
+                                @endif
+                                @if ($usuario->unit)
+                                    <br><small><strong>Unidad:</strong> {{ $usuario->unit->nombre }}</small>
+                                @endif
+                            </div>
+                        @empty
+                            <small class="text-muted">Sin usuario asignado</small>
+                        @endforelse
+                    </td>
                     <td>
                         <small>Inicio: {{$item->start}}</small><br>
                         <small>Fin: {{$item->finish}}</small>
@@ -56,7 +78,7 @@
                 </tr>
                 @empty
                     <tr style="text-align: center">
-                        <td colspan="7" class="dataTables_empty">No hay datos disponibles en la tabla</td>
+                        <td colspan="8" class="dataTables_empty">No hay datos disponibles en la tabla</td>
                     </tr>
                 @endforelse
             </tbody>

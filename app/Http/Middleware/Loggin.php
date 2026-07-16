@@ -26,30 +26,32 @@ class Loggin
         try {
             $obj = new Controller();
             $user  = Auth::user();
+            $isSecurityRoute = $request->routeIs('sessions', 'change_password', 'delete_session', 'voyager.logout');
             // dd($user);
-            if(setting('configuracion.maintenance') && !auth()->user()->hasRole('admin')){
+            if(!$isSecurityRoute && setting('configuracion.maintenance') && !auth()->user()->hasRole('admin')){
                 return redirect()->route('maintenance');
             }
 
             // $sucursal = SucursalUser::where('user_id', Auth::user()->id)->where('condicion', 1)->where('deleted_at', null)->first();
             $sucursal = Auth::user()->sucursal_id;
         
-            if(!$sucursal && !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('almacen_admin'))
+            if(!$isSecurityRoute && !$sucursal && !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('almacen_admin'))
             {
                 return redirect()->route('error');
             }
 
 
             //si el usuario no tiene direcion y unidad  no accedera al sistema
-            if((!$user->unidadAdministrativa_id || !$user->direccionAdministrativa_id) && !auth()->user()->hasRole('admin'))
+            if(!$isSecurityRoute && (!$user->unidadAdministrativa_id || !$user->direccionAdministrativa_id) && !auth()->user()->hasRole('admin'))
             {
                 return redirect()->route('contact');
             }
 
             // dd($obj->getWorker($user->funcionario_id));
             //Para ver si no existe la personas con contrato no accedera al sistema
-            if(!$obj->getWorker($user->funcionario_id) && !auth()->user()->hasRole('admin'))
+            if(!$isSecurityRoute && !$obj->getWorker($user->funcionario_id) && !auth()->user()->hasRole('admin'))
             {
+                Auth::logout();
                 return redirect()->route('notpeople');
             }
 

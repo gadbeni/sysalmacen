@@ -27,7 +27,7 @@
 
                         <td style="text-align: center">
                             <p><small>Gestion: {{$item->gestion}}</small></p>
-                            <p><small>{{$item->unidad_name}}</small></p>
+                            <p><small style="text-transform: uppercase">{{$item->unidad_name}}</small></p>
                             <p><small>{{$item->direccion_name}}</small></p>
                         </td>
                         <td>
@@ -40,7 +40,7 @@
 
                     
                         @if(auth()->user()->hasRole(['admin']))
-                            <td style="text-align: center"><label class="label label-dark">{{$item->sucursal->nombre}}</label></td>
+                            <td style="text-align: center"><span class="badge-sucursal">{{$item->sucursal->nombre}}</span></td>
                         @endif
                         <td style="text-align: center">
                             @if ($item->status == 'Enviado')

@@ -33,111 +33,125 @@
                     <div class="col-md-12">
                         <div class="panel panel-bordered">
                             <div class="panel-body">
-                                <div class="table-responsive">
+                                <div class="row" style="margin-bottom:20px;">
+                                    {{-- Card: Unidades Principales --}}
                                     <div class="col-md-6">
-                                        <a data-toggle="modal" data-target="#modal-almacen" title="Agregar Almacen Principal" class="btn btn-sm btn-success view">
-                                            <i class="fa-solid fa-shop"></i> <span class="hidden-xs hidden-sm"></span>
-                                        </a>  
-                                        <br>
-                                        <br>
-                                        <table id="dataTable" class="table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th style="text-align: center">Unidad</th>
-                                                    <th style="text-align: right">Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($principal as $item)
-                                                    <tr>
-                                                        <td style="text-align: center">{{$item->unidad->nombre}}</td>
-                                                        <td style="text-align: right">
-                                                            <div class="no-sort no-click bread-actions text-right">  
-                                                                <a data-toggle="modal" data-target="#modal-deleteUnidad" title="Eliminar Unidad Principal" data-id="{{$item->id}}" class="btn btn-sm btn-danger view">
-                                                                    <i class="fa-solid fa-trash"></i> <span class="hidden-xs hidden-sm"></span>
-                                                                </a> 
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach                              
-                                            </tbody>
-                                        </table>
+                                        <div class="panel panel-default" style="border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,.08);">
+                                            <div class="panel-heading" style="background:#f8f9fa; border-bottom:1px solid #e0e0e0; padding:10px 15px; display:flex; justify-content:space-between; align-items:center; border-radius:6px 6px 0 0;">
+                                                <span style="font-weight:600; font-size:13px;"><i class="fa-solid fa-shop" style="color:#00874C;"></i> Unidades Principales</span>
+                                                <a data-toggle="modal" data-target="#modal-almacen" class="btn btn-xs btn-success">
+                                                    <i class="voyager-plus"></i> Agregar
+                                                </a>
+                                            </div>
+                                            <div class="panel-body" style="padding:0;">
+                                                <table class="table table-hover table-condensed" style="margin:0;">
+                                                    <thead style="background:#00874C; color:white;">
+                                                        <tr>
+                                                            <th style="padding:8px 12px;">Unidad</th>
+                                                            <th style="padding:8px 12px; text-align:center; width:60px;">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @forelse ($principal as $item)
+                                                            <tr>
+                                                                <td style="padding:8px 12px; font-size:13px;">{{$item->unidad->nombre}}</td>
+                                                                <td style="text-align:center; padding:6px;">
+                                                                    <a data-toggle="modal" data-target="#modal-deleteUnidad" data-id="{{$item->id}}" class="btn btn-xs btn-danger view" title="Eliminar">
+                                                                        <i class="fa-solid fa-trash"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr><td colspan="2" class="text-center text-muted" style="padding:14px; font-size:12px;">Sin unidades asignadas</td></tr>
+                                                        @endforelse
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    {{-- Card: Sub Almacenes --}}
                                     <div class="col-md-6">
-                                        <a data-toggle="modal" data-target="#modal-subalmacen" title="Agregar Almacen Principal" class="btn btn-sm btn-success view">
-                                            <i class="fa-solid fa-shop"></i> <span class="hidden-xs hidden-sm"></span>
-                                        </a>  
-                                        <br>
-                                        <br>
-                                        <table id="dataTable" class="table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th style="text-align: center">Nombre</th>
-                                                    <th style="text-align: right">Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($sub as $item)
-                                                    <tr>
-                                                        <td style="text-align: center">{{$item->name}}</td>
-                                                        <td style="text-align: right">
-                                                            <div class="no-sort no-click bread-actions text-right">  
-                                                                <a data-toggle="modal" data-target="#modal-deleteSubalmacen" title="Eliminar Sub almacen" data-id="{{$item->id}}" class="btn btn-sm btn-danger view">
-                                                                    <i class="fa-solid fa-trash"></i> <span class="hidden-xs hidden-sm"></span>
-                                                                </a> 
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach                              
-                                            </tbody>
-                                        </table>
+                                        <div class="panel panel-default" style="border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,.08);">
+                                            <div class="panel-heading" style="background:#f8f9fa; border-bottom:1px solid #e0e0e0; padding:10px 15px; display:flex; justify-content:space-between; align-items:center; border-radius:6px 6px 0 0;">
+                                                <span style="font-weight:600; font-size:13px;"><i class="fa-solid fa-warehouse" style="color:#00874C;"></i> Sub Almacenes</span>
+                                                <a data-toggle="modal" data-target="#modal-subalmacen" class="btn btn-xs btn-success">
+                                                    <i class="voyager-plus"></i> Agregar
+                                                </a>
+                                            </div>
+                                            <div class="panel-body" style="padding:0;">
+                                                <table class="table table-hover table-condensed" style="margin:0;">
+                                                    <thead style="background:#00874C; color:white;">
+                                                        <tr>
+                                                            <th style="padding:8px 12px;">Nombre</th>
+                                                            <th style="padding:8px 12px; text-align:center; width:60px;">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @forelse ($sub as $item)
+                                                            <tr>
+                                                                <td style="padding:8px 12px; font-size:13px;">{{$item->name}}</td>
+                                                                <td style="text-align:center; padding:6px;">
+                                                                    <a data-toggle="modal" data-target="#modal-deleteSubalmacen" data-id="{{$item->id}}" class="btn btn-xs btn-danger view" title="Eliminar">
+                                                                        <i class="fa-solid fa-trash"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr><td colspan="2" class="text-center text-muted" style="padding:14px; font-size:12px;">Sin sub almacenes</td></tr>
+                                                        @endforelse
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <br><br><br><br><br><br><br><br><br><br>
+                                </div>
+
+                                {{-- Tabla principal: Direcciones Administrativas --}}
+                                <div class="row">
                                     <div class="col-md-12">
                                         <table id="dataTable" class="dataTable table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th style="text-align: center">Nro&deg;</th>
-                                                    <th style="text-align: center">Dirección Administrativa</th>
-                                                    <th style="text-align: center">Estado</th>
-                                                    <th style="text-align: right">Acciones</th>
+                                                    <th style="text-align:center">Nro&deg;</th>
+                                                    <th style="text-align:center">Dirección Administrativa</th>
+                                                    <th style="text-align:center">Estado</th>
+                                                    <th style="text-align:center">Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($data as $item)
                                                     <tr>
                                                         <td>{{$item->id}}</td>
-                                                        <td style="text-align: center">{{$item->nombre}}</td>
-                                                        <td style="text-align: center">
+                                                        <td style="text-align:center">{{$item->nombre}}</td>
+                                                        <td style="text-align:center">
                                                             @if ($item->status == 1)
                                                                 <label class="label label-success">Activo</label>
                                                             @else
                                                                 <label class="label label-danger">Inactivo</label>
                                                             @endif
                                                         </td>
-                                                        <td style="text-align: right">
-                                                            <div class="no-sort no-click bread-actions text-right">                                                                                                                            
+                                                        <td style="text-align:center">
+                                                            <div class="no-sort no-click bread-actions text-right">
                                                                 @if($item->status == 1)
-                                                                    <a data-toggle="modal" data-target="#modal-inhabilitar" title="Inhabilitar Dirección" data-id="{{$item->id}}" class="btn btn-sm btn-warning view">
-                                                                        <i class="fa-solid fa-thumbs-down"></i> <span class="hidden-xs hidden-sm">Inhabilitar</span>
-                                                                    </a>                                                          
+                                                                    <a data-toggle="modal" data-target="#modal-inhabilitar" data-id="{{$item->id}}" class="btn btn-sm btn-warning view">
+                                                                        <i class="fa-solid fa-thumbs-down"></i> Inhabilitar
+                                                                    </a>
                                                                 @else
-                                                                    <a data-toggle="modal" data-target="#modal-habilitar" title="Habilitar Dirección" data-id="{{$item->id}}" class="btn btn-sm btn-success view">
-                                                                        <i class="fa-solid fa-thumbs-up"></i> <span class="hidden-xs hidden-sm">Habilitar</span>
-                                                                    </a> 
+                                                                    <a data-toggle="modal" data-target="#modal-habilitar" data-id="{{$item->id}}" class="btn btn-sm btn-success view">
+                                                                        <i class="fa-solid fa-thumbs-up"></i> Habilitar
+                                                                    </a>
                                                                 @endif
-                                                                <a data-toggle="modal" data-target="#myModalEliminar" title="Habilitar Dirección" data-id="{{$item->id}}" class="btn btn-sm btn-danger view">
-                                                                    <i class="fa-solid fa-trash"></i> <span class="hidden-xs hidden-sm">Eliminar</span>
-                                                                </a> 
+                                                                <a data-toggle="modal" data-target="#myModalEliminar" data-id="{{$item->id}}" class="btn btn-sm btn-danger view">
+                                                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                                                </a>
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                @endforeach                              
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
-                                    
-                                    
                                 </div>
                             </div>
                         </div>

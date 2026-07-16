@@ -113,7 +113,7 @@ class SucursalController extends Controller
         // return $request;
         DB::beginTransaction();
         try {
-            SucursalDireccion::where('id',$request->id)->update(['deleted_at'=>Carbon::now()]);
+            SucursalDireccion::find($request->id)->update(['deleted_at'=>Carbon::now()]);
             DB::commit();
             return redirect()->route('sucursal-da.index',['sucursal'=>$request->sucursal_id])->with(['message' => 'Registrado exitosamente.', 'alert-type' => 'success']);
         } catch (\Throwable $th) {
@@ -194,7 +194,7 @@ class SucursalController extends Controller
         // return $request;
         DB::beginTransaction();
         try {
-            SucursalUnidadPrincipal::where('id',$request->id)->update(['deleted_at'=>Carbon::now(), 'deleteUser_id' => Auth::user()->id]);
+            SucursalUnidadPrincipal::find($request->id)->update(['deleted_at'=>Carbon::now(), 'deleteUser_id' => Auth::user()->id]);
             DB::commit();
             return redirect()->route('sucursal-da.index',['sucursal'=>$request->sucursal_id])->with(['message' => 'Registrado exitosamente.', 'alert-type' => 'success']);
         } catch (\Throwable $th) {
@@ -226,10 +226,7 @@ class SucursalController extends Controller
         // return $request;
         DB::beginTransaction();
         try {
-            SucursalSubAlmacen::where('id',$request->id)
-                ->update(['deleted_at'=>Carbon::now(), 
-                        // 'deleteUser_id' => Auth::user()->id
-                ]);
+            SucursalSubAlmacen::find($request->id)->update(['deleted_at'=>Carbon::now()]);
             DB::commit();
             return redirect()->route('sucursal-da.index',['sucursal'=>$request->sucursal_id])->with(['message' => 'Sub Almacen Eliminado Exitosamente', 'alert-type' => 'success']);
         } catch (\Throwable $th) {

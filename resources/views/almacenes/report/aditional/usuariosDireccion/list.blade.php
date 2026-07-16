@@ -1,4 +1,7 @@
 <div class="col-md-12 text-right" style="margin-bottom: 8px">
+    <button type="button" onclick="report_excel()" class="btn btn-success">
+        <i class="glyphicon glyphicon-list-alt"></i> Exportar Excel
+    </button>
     <button type="button" onclick="report_print()" class="btn btn-dark">
         <i class="glyphicon glyphicon-print"></i> Imprimir
     </button>
@@ -58,7 +61,7 @@
                                                 </td>
                                             @endif
                                             <td style="text-align:center; vertical-align:middle">{{ $usr->ci ?? '—' }}</td>
-                                            <td style="vertical-align:middle">{{ trim(($usr->first_name ?? '') . ' ' . ($usr->last_name ?? '')) }}</td>
+                                            <td style="vertical-align:middle">{{ $usr->nombre ?? '' }}</td>
                                             <td style="vertical-align:middle">{{ $usr->email ?? '—' }}</td>
                                             <td style="vertical-align:middle">
                                                 @if($usr->rol)

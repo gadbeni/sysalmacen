@@ -25,6 +25,7 @@ use App\Models\SucursalUnidadPrincipal;
 use PhpParser\Node\Stmt\Break_;
 use App\Models\SucursalSubAlmacen;
 use Facade\Ignition\DumpRecorder\Dump;
+use Luecano\NumeroALetras\NumeroALetras; // Para convertir numeros a su equivalente en palabras
 
 class EgressController extends Controller
 {
@@ -172,6 +173,10 @@ class EgressController extends Controller
                     ->whereRaw($search ? "(gestion like '%$search%' or nropedido like '%$search%' or id like '%$search%')" : 1)
 
                     ->orderBy('id', 'DESC')->paginate($paginate);
+
+                    // dump($data);
+
+                    // return 1;
                     return view('almacenes.egress.listEgreso', compact('data', 'gestion'));
 
                     break;
@@ -192,6 +197,22 @@ class EgressController extends Controller
                     ->whereRaw($query_filter)
                     ->orderBy('id', 'DESC')->paginate($paginate);
                 return view('almacenes.egress.listSolicitud', compact('data', 'gestion'));
+
+                    break;
+
+            case 'eliminado':
+                $data = SolicitudEgreso::with(['sucursal', 'unidad', 'direccion'])
+                    ->where('condicion', 'eliminado')
+                    ->whereRaw($query_filter)
+                    ->where(function ($query) use ($search) {
+                        if ($search) {
+                            $query->OrWhereRaw("gestion like '%$search%'")
+                                ->OrWhereRaw("nropedido like '%$search%'")
+                                ->OrWhereRaw("id like '%$search%'");
+                        }
+                    })
+                    ->orderBy('id', 'DESC')->paginate($paginate);
+                return view('almacenes.egress.listEgreso', compact('data', 'gestion'));
 
                     break;
         }
@@ -532,8 +553,8 @@ class EgressController extends Controller
         DB::beginTransaction();
         try {
             $sol = SolicitudEgreso::find($request->id);
-            SolicitudEgreso::where('id', $sol->id)->update(['deleteuser_id' => $user->id, 'deleted_at' => Carbon::now(), 'condicion' => 'eliminado']);
-
+            $sol->update(['deleteuser_id' => $user->id, 'deleted_at' => Carbon::now(), 'condicion' => 'eliminado']);
+            
             $detalle = DetalleEgreso::where('solicitudegreso_id', $sol->id)->where('deleted_at', null)->where('condicion', 1)->get();
             $i = 0;
 
@@ -571,7 +592,8 @@ class EgressController extends Controller
             }
 
 
-            DetalleEgreso::where('solicitudegreso_id', $sol->id)->update(['deleteuser_id' => $user->id, 'deleted_at' => Carbon::now()]);
+            DetalleEgreso::where('solicitudegreso_id', $sol->id)->get()
+                ->each(fn($de) => $de->update(['deleteuser_id' => $user->id, 'deleted_at' => Carbon::now()]));
 
 
             DB::commit();
@@ -660,9 +682,12 @@ class EgressController extends Controller
 
         // return $detalle;
 
+        //Para convertir letras a palabras
+        $formatter = new NumeroALetras();
+        $formatter->apocope = true;
 
 
-        return view('almacenes.egress.report', compact('sol', 'unidad', 'detalle'));
+        return view('almacenes.egress.report', compact('sol', 'unidad', 'detalle','formatter'));
     }
 
 

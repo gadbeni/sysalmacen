@@ -14,7 +14,7 @@
                     @endif
                     <th class="text-align: center">Estado</th>
                     {{-- @if(auth()->user()->hasPermission('read_egres')||auth()->user()->hasPermission('edit_egres')||auth()->user()->hasPermission('delete_egres')) --}}
-                    <th style="width: 150px">Accion</th>
+                    <th style="text-align: center">Accion</th>
                     {{-- @endif --}}
                 </tr>
             </thead>
@@ -37,7 +37,7 @@
 
                     
                         @if(auth()->user()->hasRole(['admin']))
-                            <td style="text-align: center"><label class="label label-dark">{{$item->sucursal->nombre}}</label></td>
+                            <td style="text-align: center"><span class="badge-sucursal">{{$item->sucursal->nombre}}</span></td>
                         @endif
                         <td style="text-align: center">
                             @if ($item->status == 'Pendiente')
@@ -96,7 +96,7 @@
                                         @endif
                                         @if(auth()->user()->hasPermission('delete_outbox'))
                                             <a data-toggle="modal" data-id="{{$item->id}}" data-target="#myModalEliminar" title="Eliminar" class="btn btn-sm btn-danger view">
-                                                <i class="voyager-trash"></i> <span class="hidden-xs hidden-sm">Eliminar</span>
+                                                <i class="voyager-trash"></i>
                                             </a>
                                         @endif
                                     @endif

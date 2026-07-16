@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsuariosDireccionExport;
 use App\Models\Sucursal;
 
 class ReportUsuariosDireccionController extends Controller
@@ -70,12 +72,15 @@ class ReportUsuariosDireccionController extends Controller
                     ->select(
                         'u.id',
                         'u.email',
+                        'u.last_login_at',
                         'r.display_name as rol',
                         'p.ci',
                         'p.first_name',
-                        'p.last_name'
+                        'p.paternal_surname',
+                        'p.maternal_surname',
+                        DB::raw("CONCAT_WS(' ', p.first_name, p.middle_name, p.paternal_surname, p.maternal_surname, p.married_surname) as nombre")
                     )
-                    ->orderBy('p.last_name', 'asc')
+                    ->orderBy('p.paternal_surname', 'asc')
                     ->get();
 
                 $unidades_data[] = [
@@ -92,6 +97,13 @@ class ReportUsuariosDireccionController extends Controller
 
         if ($request->print == 1) {
             return view('almacenes.report.aditional.usuariosDireccion.print', compact('data', 'sucursal'));
+        }
+
+        if ($request->print == 2) {
+            return Excel::download(
+                new UsuariosDireccionExport($data, $sucursal),
+                'Usuarios por Direccion - ' . $sucursal->nombre . '.xlsx'
+            );
         }
 
         return view('almacenes.report.aditional.usuariosDireccion.list', compact('data', 'sucursal'));

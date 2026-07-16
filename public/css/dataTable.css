@@ -18,6 +18,36 @@
     padding-top: 12px;
     padding-bottom: 12px;
     /* text-align: left; */
-    background-color: #41d07e;
+    background-color: #00874C;
     color: white;
+}
+
+/* Voyager BREAD actions column */
+th.no-sort.no-click {
+    text-align: center;
+    white-space: nowrap;
+    width: 1%;
+}
+
+.bread-actions {
+    white-space: nowrap;
+    text-align: center !important;
+}
+
+td:has(.bread-actions) {
+    text-align: center;
+    white-space: nowrap;
+    width: 1%;
+}
+
+.badge-sucursal {
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: #f0f4f8;
+    color: #4a5568;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid #cbd5e0;
+    line-height: 1.5;
 }

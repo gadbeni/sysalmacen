@@ -11,6 +11,11 @@
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.(isset($dataTypeContent->id) ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
+    @if(isset($dataTypeContent->id) && auth()->user()->hasPermission('browse_users'))
+        <a href="{{ route('users.historial', $dataTypeContent->id) }}" class="btn btn-warning">
+            <i class="voyager-watch"></i> Ver historial de cambios
+        </a>
+    @endif
 @stop
 
 @section('content')
@@ -132,42 +137,43 @@
                                     @endforeach
                                 </select>
                             </div>
-                            @if ($dataTypeContent->id)
-                                @php
+                            @php
+                                $sub = $direction = $unidad = collect();
+                                if ($dataTypeContent->id) {
+                                    $sub = \App\Models\SucursalSubAlmacen::where('sucursal_id', $dataTypeContent->sucursal_id)->where('deleted_at', null)->get();
                                     $direction = \App\Models\SucursalDireccion::with(['direction'])->where('sucursal_id', $dataTypeContent->sucursal_id)->where('status', 1)->where('deleted_at', null)->get();
                                     $unidad = \App\Models\Unit::where('direccion_id', $dataTypeContent->direccionAdministrativa_id)->where('estado', 1)->where('deleted_at', null)->get();
-                                    $sub = \App\Models\SucursalSubAlmacen::where('sucursal_id', $dataTypeContent->sucursal_id)->where('deleted_at', null)->get();
+                                }
+                            @endphp
+                            <div class="form-group">
+                                <label for="subSucursal_id">Sub Almacen</label>
+                                <select name="subSucursal_id" id="subSucursal_id" class="form-control select2">
+                                    <option value="">--Seleccione una opción--</option>
+                                    @foreach ($sub as $item)
+                                        <option value="{{$item->id}}" {{($dataTypeContent->id && $dataTypeContent->subSucursal_id==$item->id)?'selected':''}}>{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                                @endphp 
-                                <div class="form-group">
-                                    <label for="subSucursal_id">Sub Almacen</label>
-                                    <select name="subSucursal_id" id="subSucursal_id" class="form-control select2">                                   
-                                        <option value="" >--Seleccione una opción--</option>
-                                        @foreach ($sub as $item)
-                                            <option value="{{$item->id}}" {{$dataTypeContent->subSucursal_id==$item->id?'selected':''}}>{{$item->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>  
-                                  
-                                <div class="form-group">
-                                    <label for="direction_id">Dirección Administrativa</label>
-                                    <select name="direction_id" id="direction_id" class="form-control select2">                                   
-                                        <option value="" >--Seleccione una opción--</option>
-                                        @foreach ($direction as $item)
-                                            <option value="{{$item->direction->id}}" {{$dataTypeContent->direccionAdministrativa_id==$item->direction->id?'selected':''}}>{{$item->direction->nombre}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>  
-                                <div class="form-group">
-                                    <label for="unit_id">Unidad Administrativa</label>
-                                    <select name="unit_id" id="unit_id" class="form-control select2">   
-                                        <option value="" >--Seleccione una opción--</option>
-                                        @foreach ($unidad as $item)
-                                            <option value="{{$item->id}}" {{$dataTypeContent->unidadAdministrativa_id==$item->id?'selected':''}}>{{$item->nombre}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endif
+                            <div class="form-group">
+                                <label for="direction_id">Dirección Administrativa</label>
+                                <select name="direction_id" id="direction_id" class="form-control select2">
+                                    <option value="">--Seleccione una opción--</option>
+                                    @foreach ($direction as $item)
+                                        <option value="{{$item->direction->id}}" {{($dataTypeContent->id && $dataTypeContent->direccionAdministrativa_id==$item->direction->id)?'selected':''}}>{{$item->direction->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="unit_id">Unidad Administrativa</label>
+                                <select name="unit_id" id="unit_id" class="form-control select2">
+                                    <option value="">--Seleccione una opción--</option>
+                                    @foreach ($unidad as $item)
+                                        <option value="{{$item->id}}" {{($dataTypeContent->id && $dataTypeContent->unidadAdministrativa_id==$item->id)?'selected':''}}>{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                          
                             @php
@@ -192,18 +198,6 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="panel panel panel-bordered panel-warning">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                @if(isset($dataTypeContent->avatar))
-                                    <img src="{{ filter_var($dataTypeContent->avatar, FILTER_VALIDATE_URL) ? $dataTypeContent->avatar : Voyager::image( $dataTypeContent->avatar ) }}" style="width:200px; height:auto; clear:both; display:block; padding:2px; border:1px solid #ddd; margin-bottom:10px;" />
-                                @endif
-                                <input type="file" data-name="avatar" name="avatar">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             {{-- @if (auth()->user()->isAdmin()) --}}
             <button type="submit" class="btn btn-primary pull-right save">

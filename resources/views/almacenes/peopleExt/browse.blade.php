@@ -14,6 +14,12 @@
                             </h1>
                         </div>
                         <div class="col-md-4 text-right" style="margin-top: 30px">
+                            <a href="#" onclick="exportExcel(); return false;" class="btn btn-primary">
+                                <i class="voyager-download"></i> <span>Excel</span>
+                            </a>
+                            <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#modal_print">
+                                <i class="voyager-file-text"></i> <span>Imprimir</span>
+                            </a>
                             @if(auth()->user()->hasPermission('add_people_ext'))
                             <a href="{{ route('people_ext.create') }}" class="btn btn-success">
                                 <i class="voyager-plus"></i> <span>Crear</span>
@@ -106,7 +112,30 @@
             </div>
         </div>
     </div>
- 
+
+    <div class="modal modal-warning fade" data-backdrop="static" tabindex="-1" id="modal_print" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><i class="voyager-file-text"></i> Imprimir Personas Externas</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Estado a imprimir:</label>
+                    <select id="print-estado" class="form-control">
+                        <option value="todos">Todos</option>
+                        <option value="activo">Activos</option>
+                        <option value="inactivo">Inactivos</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" onclick="printReport()"><i class="voyager-file-text"></i> Imprimir</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @stop
 
 @section('css')
@@ -195,12 +224,17 @@
             let search = $('#input-search').val() ? $('#input-search').val() : '';
 
             $.ajax({
-                url: `${url}/${search}?paginate=${countPage}&page=${page}`,
+                url: url,
                 type: 'get',
-                
+                data: {
+                    search: search,
+                    paginate: countPage,
+                    page: page
+                },
                 success: function(result){
-                $("#div-results").html(result);
-            }});
+                    $("#div-results").html(result);
+                }
+            });
 
         }
         
@@ -211,6 +245,21 @@
         function finishItem(url)
         {
             $('#finish_form').attr('action', url);
+        }
+
+        function exportExcel()
+        {
+            let search = $('#input-search').val() ? $('#input-search').val() : '';
+            window.location.href = '{{ route("people_ext.excel") }}?search=' + encodeURIComponent(search);
+        }
+
+        function printReport()
+        {
+            let search = $('#input-search').val() ? $('#input-search').val() : '';
+            let estado = $('#print-estado').val();
+            let url = '{{ route("people_ext.print") }}?estado=' + estado + '&search=' + encodeURIComponent(search);
+            window.open(url, '_blank');
+            $('#modal_print').modal('hide');
         }
 
        

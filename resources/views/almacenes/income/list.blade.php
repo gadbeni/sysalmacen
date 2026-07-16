@@ -13,7 +13,7 @@
                     @if(auth()->user()->hasRole(['admin']))
                     <th style="text-align: center">Sucursal</th>
                     @endif
-                    <th style="text-align: right">Acciones</th>
+                    <th style="text-align: center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +46,7 @@
                             @endif
                         </td>
                         @if(auth()->user()->hasRole(['admin']))
-                            <td style="text-align: center"><label class="label label-dark">{{$item->sucursal->nombre}}</label></td>
+                            <td style="text-align: center"><span class="badge-sucursal">{{$item->sucursal->nombre}}</span></td>
                         @endif
                         <td style="text-align: right">
                             <div class="no-sort no-click bread-actions text-right">
