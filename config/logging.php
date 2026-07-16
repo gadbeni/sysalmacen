@@ -104,7 +104,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/requests.log'),
             'level' => 'info',
-            'days' => 90, // archivos requests-AAAA-MM-DD.log, se conservan 90 días
+            'days' => 0, // archivos requests-AAAA-MM-DD.log, 0 = nunca se eliminan
         ],
     ],
 
